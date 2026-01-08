@@ -102,14 +102,64 @@ export default function FavoritesPage() {
 
   if (items.length === 0) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
-        <div className="text-center">
-          <p className="text-foreground/50 body-text text-lg">No favorites yet</p>
-          <p className="text-foreground/30 body-text text-sm mt-2">
-            Save quotes by tapping the heart icon
-          </p>
+      <PageTransition>
+        <div className="flex min-h-screen items-center justify-center px-4">
+          <div className="text-center max-w-sm">
+            {/* Decorative heart icon */}
+            <div className="mb-8 flex justify-center">
+              <div className="w-20 h-20 rounded-full bg-foreground/5 flex items-center justify-center">
+                <svg
+                  className="w-10 h-10 text-foreground/20"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={1.5}
+                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                  />
+                </svg>
+              </div>
+            </div>
+
+            {/* Main message */}
+            <h2 className="quote-text text-xl sm:text-2xl text-foreground/70 mb-3">
+              Your collection awaits
+            </h2>
+
+            {/* Helper text */}
+            <p className="body-text text-foreground/40 text-sm mb-8 leading-relaxed">
+              When a quote speaks to you, tap the heart to save it here.
+              Build a personal treasury of wisdom.
+            </p>
+
+            {/* CTA link */}
+            <a
+              href="/"
+              className="inline-flex items-center gap-2 body-text text-sm text-foreground/60 hover:text-foreground/80 transition-colors btn-nav px-4 py-2"
+            >
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                />
+              </svg>
+              Find your first quote
+            </a>
+          </div>
         </div>
-      </div>
+      </PageTransition>
     );
   }
 

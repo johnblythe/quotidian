@@ -289,3 +289,21 @@ Started: 2026-01-08
   - Quote helpers for author filtering are in src/lib/quotes.ts
   - Session-only state uses React useState (not localStorage) so it resets on refresh
 ---
+
+## 2026-01-08 - US-B19: Add first-favorite confetti
+- Created Confetti component in src/components/Confetti.tsx
+- Generates 30 confetti pieces that fall with CSS animation (1.2-2s duration)
+- Uses localStorage to track if first favorite confetti has been shown (key: quotidian_first_favorite_shown)
+- Checks both localStorage flag AND current favorites count to ensure it's truly the first favorite
+- Animation includes rotation and horizontal drift via CSS custom properties
+- Auto-dismisses after 2.5s with cleanup callback
+- Integrated into both click and keyboard (s key) save handlers
+- Added prefers-reduced-motion support (shows brief gradient flash instead)
+- Files created: src/components/Confetti.tsx
+- Files modified: src/app/globals.css, src/app/page.tsx
+- **Learnings for future iterations:**
+  - Confetti component exports: Confetti, hasShownFirstFavoriteConfetti, markFirstFavoriteConfettiShown
+  - CSS animation uses nth-child selectors with custom properties for variation
+  - Double-check first-time logic: check both localStorage flag AND database state
+  - For one-time events, localStorage is simpler than IndexedDB schema changes
+---
