@@ -68,7 +68,182 @@
     "text": "The greatest remedy for anger is delay.",
     "author": "Seneca",
     "source": "On Anger, Book 2",
-    "themes": []
+    "themes": ["discipline", "wisdom"]
+  },
+  {
+    "id": "seneca-011",
+    "text": "It is not the man who has too little, but the man who craves more, that is poor.",
+    "author": "Seneca",
+    "source": "Letters to Lucilius, Letter 2",
+    "themes": ["simplicity", "wisdom"]
+  },
+  {
+    "id": "seneca-012",
+    "text": "Life is long if you know how to use it.",
+    "author": "Seneca",
+    "source": "On the Shortness of Life",
+    "themes": ["time", "wisdom"]
+  },
+  {
+    "id": "seneca-013",
+    "text": "No person has the power to have everything they want, but it is in their power not to want what they don't have.",
+    "author": "Seneca",
+    "source": "Letters to Lucilius, Letter 123",
+    "themes": ["simplicity", "discipline"]
+  },
+  {
+    "id": "seneca-014",
+    "text": "We are more often frightened than hurt; and we suffer more from imagination than from reality.",
+    "author": "Seneca",
+    "source": "Letters to Lucilius, Letter 13",
+    "themes": ["adversity", "wisdom"]
+  },
+  {
+    "id": "seneca-015",
+    "text": "Hang on to your youthful enthusiasms — you'll be able to use them better when you're older.",
+    "author": "Seneca",
+    "source": "Letters to Lucilius, Letter 68",
+    "themes": ["time", "joy"]
+  },
+  {
+    "id": "seneca-016",
+    "text": "Every night before going to sleep, we must ask ourselves: what weakness did I overcome today? What virtue did I acquire?",
+    "author": "Seneca",
+    "source": "On Anger, Book 3",
+    "themes": ["discipline", "wisdom"]
+  },
+  {
+    "id": "seneca-017",
+    "text": "The mind that is anxious about future events is miserable.",
+    "author": "Seneca",
+    "source": "Letters to Lucilius, Letter 98",
+    "themes": ["time", "adversity"]
+  },
+  {
+    "id": "seneca-018",
+    "text": "Associate with those who will make a better man of you. Welcome those whom you yourself can improve.",
+    "author": "Seneca",
+    "source": "Letters to Lucilius, Letter 7",
+    "themes": ["relationships", "wisdom"]
+  },
+  {
+    "id": "seneca-019",
+    "text": "While we are postponing, life speeds by.",
+    "author": "Seneca",
+    "source": "Letters to Lucilius, Letter 1",
+    "themes": ["time", "discipline"]
+  },
+  {
+    "id": "seneca-020",
+    "text": "Nothing is burdensome if taken lightly, and nothing need arouse irritation so long as it doesn't set off our anger.",
+    "author": "Seneca",
+    "source": "On Anger, Book 2",
+    "themes": ["adversity", "discipline"]
+  },
+  {
+    "id": "seneca-021",
+    "text": "It is quality rather than quantity that matters.",
+    "author": "Seneca",
+    "source": "Letters to Lucilius, Letter 45",
+    "themes": ["simplicity", "wisdom"]
+  },
+  {
+    "id": "seneca-022",
+    "text": "He suffers more than necessary, who suffers before it is necessary.",
+    "author": "Seneca",
+    "source": "Letters to Lucilius, Letter 98",
+    "themes": ["adversity", "time"]
+  },
+  {
+    "id": "seneca-023",
+    "text": "A gem cannot be polished without friction, nor a man perfected without trials.",
+    "author": "Seneca",
+    "source": "On Providence",
+    "themes": ["adversity", "discipline"]
+  },
+  {
+    "id": "seneca-024",
+    "text": "There is no genius without a touch of madness.",
+    "author": "Seneca",
+    "source": "On Tranquility of Mind",
+    "themes": ["identity", "wisdom"]
+  },
+  {
+    "id": "seneca-025",
+    "text": "To wish to be well is a part of becoming well.",
+    "author": "Seneca",
+    "source": "Letters to Lucilius, Letter 95",
+    "themes": ["discipline", "wisdom"]
+  },
+  {
+    "id": "seneca-026",
+    "text": "You act like mortals in all that you fear, and like immortals in all that you desire.",
+    "author": "Seneca",
+    "source": "On the Shortness of Life",
+    "themes": ["death", "time"]
+  },
+  {
+    "id": "seneca-027",
+    "text": "The greatest obstacle to living is expectancy, which hangs upon tomorrow and loses today.",
+    "author": "Seneca",
+    "source": "On the Shortness of Life",
+    "themes": ["time", "simplicity"]
+  },
+  {
+    "id": "seneca-028",
+    "text": "It is not that we have so little time but that we lose so much.",
+    "author": "Seneca",
+    "source": "On the Shortness of Life",
+    "themes": ["time", "discipline"]
+  },
+  {
+    "id": "seneca-029",
+    "text": "The whole future lies in uncertainty: live immediately.",
+    "author": "Seneca",
+    "source": "Letters to Lucilius, Letter 101",
+    "themes": ["time", "death"]
+  },
+  {
+    "id": "seneca-030",
+    "text": "As long as you live, keep learning how to live.",
+    "author": "Seneca",
+    "source": "Letters to Lucilius, Letter 76",
+    "themes": ["wisdom", "time"]
+  },
+  {
+    "id": "seneca-031",
+    "text": "Anger, if not restrained, is frequently more hurtful to us than the injury that provokes it.",
+    "author": "Seneca",
+    "source": "On Anger, Book 1",
+    "themes": ["discipline", "adversity"]
+  },
+  {
+    "id": "seneca-032",
+    "text": "We should every night call ourselves to account: What infirmity have I mastered today? What passion opposed?",
+    "author": "Seneca",
+    "source": "On Anger, Book 3",
+    "themes": ["discipline", "identity"]
+  },
+  {
+    "id": "seneca-033",
+    "text": "The bravest sight in the world is to see a great man struggling against adversity.",
+    "author": "Seneca",
+    "source": "On Providence",
+    "themes": ["adversity", "discipline"]
+  },
+  {
+    "id": "seneca-034",
+    "text": "Religion is regarded by the common people as true, by the wise as false, and by rulers as useful.",
+    "author": "Seneca",
+    "source": "Letters to Lucilius",
+    "themes": ["wisdom", "identity"]
+  },
+  {
+    "id": "seneca-035",
+    "text": "Enjoy present pleasures in such a way as not to injure future ones.",
+    "author": "Seneca",
+    "source": "Letters to Lucilius, Letter 15",
+    "themes": ["time", "discipline"]
   },
   {
     "id": "marcus-001",
