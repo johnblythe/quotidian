@@ -495,70 +495,210 @@
     "text": "It's not what happens to you, but how you react to it that matters.",
     "author": "Epictetus",
     "source": "Enchiridion",
-    "themes": []
+    "themes": ["adversity", "discipline"]
   },
   {
     "id": "epictetus-002",
     "text": "First say to yourself what you would be; and then do what you have to do.",
     "author": "Epictetus",
     "source": "Discourses, Book 3",
-    "themes": []
+    "themes": ["identity", "discipline"]
   },
   {
     "id": "epictetus-003",
     "text": "No man is free who is not master of himself.",
     "author": "Epictetus",
     "source": "Discourses",
-    "themes": []
+    "themes": ["discipline", "identity"]
   },
   {
     "id": "epictetus-004",
     "text": "Make the best use of what is in your power, and take the rest as it happens.",
     "author": "Epictetus",
     "source": "Enchiridion",
-    "themes": []
+    "themes": ["wisdom", "adversity"]
   },
   {
     "id": "epictetus-005",
     "text": "Wealth consists not in having great possessions, but in having few wants.",
     "author": "Epictetus",
     "source": "Discourses",
-    "themes": []
+    "themes": ["simplicity", "wisdom"]
   },
   {
     "id": "epictetus-006",
     "text": "Don't explain your philosophy. Embody it.",
     "author": "Epictetus",
     "source": "Enchiridion",
-    "themes": []
+    "themes": ["discipline", "identity"]
   },
   {
     "id": "epictetus-007",
     "text": "He who laughs at himself never runs out of things to laugh at.",
     "author": "Epictetus",
     "source": "Enchiridion",
-    "themes": []
+    "themes": ["joy", "wisdom"]
   },
   {
     "id": "epictetus-008",
     "text": "If you want to improve, be content to be thought foolish and stupid.",
     "author": "Epictetus",
     "source": "Enchiridion",
-    "themes": []
+    "themes": ["wisdom", "identity"]
   },
   {
     "id": "epictetus-009",
     "text": "Circumstances don't make the man, they only reveal him to himself.",
     "author": "Epictetus",
     "source": "Discourses, Book 1",
-    "themes": []
+    "themes": ["adversity", "identity"]
   },
   {
     "id": "epictetus-010",
     "text": "You are not your body and hair-style, but your capacity for choosing well.",
     "author": "Epictetus",
     "source": "Discourses, Book 3",
-    "themes": []
+    "themes": ["identity", "wisdom"]
+  },
+  {
+    "id": "epictetus-011",
+    "text": "Any person capable of angering you becomes your master; he can anger you only when you permit yourself to be disturbed by him.",
+    "author": "Epictetus",
+    "source": "Enchiridion",
+    "themes": ["discipline", "adversity"]
+  },
+  {
+    "id": "epictetus-012",
+    "text": "It is impossible for a man to learn what he thinks he already knows.",
+    "author": "Epictetus",
+    "source": "Discourses, Book 2",
+    "themes": ["wisdom", "identity"]
+  },
+  {
+    "id": "epictetus-013",
+    "text": "We have two ears and one mouth so that we can listen twice as much as we speak.",
+    "author": "Epictetus",
+    "source": "Discourses",
+    "themes": ["wisdom", "relationships"]
+  },
+  {
+    "id": "epictetus-014",
+    "text": "Seek not the good in external things; seek it in yourselves.",
+    "author": "Epictetus",
+    "source": "Discourses, Book 1",
+    "themes": ["simplicity", "identity"]
+  },
+  {
+    "id": "epictetus-015",
+    "text": "Only the educated are free.",
+    "author": "Epictetus",
+    "source": "Discourses, Book 2",
+    "themes": ["wisdom", "discipline"]
+  },
+  {
+    "id": "epictetus-016",
+    "text": "Men are disturbed not by things, but by the views which they take of them.",
+    "author": "Epictetus",
+    "source": "Enchiridion",
+    "themes": ["wisdom", "adversity"]
+  },
+  {
+    "id": "epictetus-017",
+    "text": "If you would be a reader, read; if a writer, write.",
+    "author": "Epictetus",
+    "source": "Discourses, Book 2",
+    "themes": ["discipline", "work"]
+  },
+  {
+    "id": "epictetus-018",
+    "text": "Know, first, who you are, and then adorn yourself accordingly.",
+    "author": "Epictetus",
+    "source": "Discourses, Book 3",
+    "themes": ["identity", "wisdom"]
+  },
+  {
+    "id": "epictetus-019",
+    "text": "We cannot choose our external circumstances, but we can always choose how we respond to them.",
+    "author": "Epictetus",
+    "source": "Enchiridion",
+    "themes": ["adversity", "discipline"]
+  },
+  {
+    "id": "epictetus-020",
+    "text": "Caretake this moment. Immerse yourself in its particulars. Respond to this person, this challenge, this deed.",
+    "author": "Epictetus",
+    "source": "Enchiridion",
+    "themes": ["time", "discipline"]
+  },
+  {
+    "id": "epictetus-021",
+    "text": "Freedom is the only worthy goal in life. It is won by disregarding things that lie beyond our control.",
+    "author": "Epictetus",
+    "source": "Discourses, Book 1",
+    "themes": ["simplicity", "wisdom"]
+  },
+  {
+    "id": "epictetus-022",
+    "text": "He is a wise man who does not grieve for the things which he has not, but rejoices for those which he has.",
+    "author": "Epictetus",
+    "source": "Enchiridion",
+    "themes": ["joy", "simplicity"]
+  },
+  {
+    "id": "epictetus-023",
+    "text": "The key is to keep company only with people who uplift you, whose presence calls forth your best.",
+    "author": "Epictetus",
+    "source": "Discourses, Book 3",
+    "themes": ["relationships", "wisdom"]
+  },
+  {
+    "id": "epictetus-024",
+    "text": "Practice yourself, for heaven's sake, in little things; and thence proceed to greater.",
+    "author": "Epictetus",
+    "source": "Discourses, Book 1",
+    "themes": ["discipline", "work"]
+  },
+  {
+    "id": "epictetus-025",
+    "text": "Remember that you are an actor in a drama, of such a kind as the author pleases to make it.",
+    "author": "Epictetus",
+    "source": "Enchiridion",
+    "themes": ["identity", "adversity"]
+  },
+  {
+    "id": "epictetus-026",
+    "text": "When someone is properly grounded in life, they shouldn't have to look outside themselves for approval.",
+    "author": "Epictetus",
+    "source": "Discourses, Book 1",
+    "themes": ["identity", "wisdom"]
+  },
+  {
+    "id": "epictetus-027",
+    "text": "Suffering arises from trying to control what is uncontrollable, or from neglecting what is within our power.",
+    "author": "Epictetus",
+    "source": "Enchiridion",
+    "themes": ["adversity", "discipline"]
+  },
+  {
+    "id": "epictetus-028",
+    "text": "Other people's views and troubles can be contagious. Don't sabotage yourself by unwittingly adopting negative attitudes.",
+    "author": "Epictetus",
+    "source": "Enchiridion",
+    "themes": ["relationships", "wisdom"]
+  },
+  {
+    "id": "epictetus-029",
+    "text": "Be not swept off your feet by the vividness of the impression, but say, 'Wait for me a little; let me see what you are.'",
+    "author": "Epictetus",
+    "source": "Discourses, Book 2",
+    "themes": ["discipline", "wisdom"]
+  },
+  {
+    "id": "epictetus-030",
+    "text": "What would have become of Hercules do you think if there had been no lion, hydra, stag or boar? What would he have done in the absence of such challenges?",
+    "author": "Epictetus",
+    "source": "Discourses, Book 1",
+    "themes": ["adversity", "identity"]
   },
   {
     "id": "naval-001",
