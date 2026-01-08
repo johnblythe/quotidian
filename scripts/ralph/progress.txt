@@ -1,0 +1,7 @@
+# Ralph Progress Log
+Started: 2026-01-08
+
+## Codebase Patterns
+(Discovered patterns will be added here as Ralph iterates)
+
+---

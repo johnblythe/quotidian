@@ -1,0 +1,481 @@
+{
+  "project": "Quotidian",
+  "branchName": "ralph/quotidian-mvp",
+  "description": "Daily philosophical quote reflection PWA with Medium-inspired aesthetic",
+  "userStories": [
+    {
+      "id": "US-001",
+      "title": "Initialize Next.js project with TypeScript and Tailwind",
+      "description": "As a developer, I need a Next.js 14 project scaffold with TypeScript and Tailwind CSS.",
+      "acceptanceCriteria": [
+        "Run: npx create-next-app@latest . --typescript --tailwind --eslint --app --src-dir --import-alias '@/*'",
+        "Update package.json scripts to use port 3005: dev and start commands",
+        "npm run dev starts without errors at localhost:3005",
+        "npm run build completes without errors",
+        "npm run typecheck passes"
+      ],
+      "priority": 1,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-002",
+      "title": "Configure PWA with manifest and service worker",
+      "description": "As a user, I want to install the app on my device like a native app.",
+      "acceptanceCriteria": [
+        "Install next-pwa package",
+        "Create public/manifest.json with name 'Quotidian', theme_color '#fafaf8', background_color '#fafaf8'",
+        "Add placeholder icon references in manifest (192x192, 512x512)",
+        "Configure next.config.js with withPWA wrapper",
+        "npm run build creates service worker files in .next/",
+        "npm run typecheck passes"
+      ],
+      "priority": 2,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-003",
+      "title": "Set up typography and base styles",
+      "description": "As a user, I want beautiful Medium-inspired typography with warm colors.",
+      "acceptanceCriteria": [
+        "Install @fontsource/lora and @fontsource/inter packages",
+        "Import fonts in src/app/layout.tsx",
+        "Update globals.css: background #fafaf8, text color #1a1a1a",
+        "Configure Tailwind config with fontFamily: serif (Lora), sans (Inter)",
+        "Create utility classes for quote-text (serif, large) and body-text (sans)",
+        "Homepage displays with correct fonts and colors",
+        "npm run typecheck passes"
+      ],
+      "priority": 3,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-004",
+      "title": "Set up IndexedDB with Dexie",
+      "description": "As a developer, I need a typed IndexedDB wrapper for local data storage.",
+      "acceptanceCriteria": [
+        "Install dexie package",
+        "Create src/lib/db.ts with Dexie database class",
+        "Define tables: preferences, journalEntries, favorites, quoteHistory",
+        "Export typed database instance",
+        "Create src/types/index.ts with Quote, JournalEntry, UserPreferences, FavoriteQuote, QuoteHistory interfaces",
+        "npm run typecheck passes"
+      ],
+      "priority": 4,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-005",
+      "title": "Create seed quotes JSON file",
+      "description": "As a developer, I need initial quote data to display.",
+      "acceptanceCriteria": [
+        "Create src/data/quotes.json with 15 seed quotes",
+        "Each quote has: id, text, author, source (optional), context (optional)",
+        "Include quotes from: Seneca, Marcus Aurelius, Epictetus, Naval, Alan Watts",
+        "Quotes are properly attributed with sources where known",
+        "npm run typecheck passes"
+      ],
+      "priority": 5,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-006",
+      "title": "Create Quote display component",
+      "description": "As a user, I want to see quotes displayed beautifully with proper typography.",
+      "acceptanceCriteria": [
+        "Create src/components/Quote.tsx",
+        "Props: quote object (text, author, source)",
+        "Render: centered text with max-width 65ch",
+        "Use serif font for quote text, elegant line-height (1.6+)",
+        "Display author with em dash prefix",
+        "Display source in smaller text if present",
+        "Generous padding/margin for breathing room",
+        "Component renders correctly in browser",
+        "npm run typecheck passes"
+      ],
+      "priority": 6,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-007",
+      "title": "Create quote selection logic",
+      "description": "As a developer, I need functions to select today's quote and random quotes.",
+      "acceptanceCriteria": [
+        "Create src/lib/quotes.ts",
+        "getTodaysQuote(): returns deterministic quote based on current date",
+        "getRandomQuote(excludeId): returns random quote excluding specified id",
+        "Import quotes from quotes.json",
+        "Export functions for use in pages",
+        "npm run typecheck passes"
+      ],
+      "priority": 7,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-008",
+      "title": "Build basic Today's Quote page",
+      "description": "As a user, I want to see today's quote on the homepage.",
+      "acceptanceCriteria": [
+        "Update src/app/page.tsx to display today's quote",
+        "Use Quote component with getTodaysQuote()",
+        "Center content vertically and horizontally",
+        "Page renders quote beautifully at localhost:3005",
+        "npm run typecheck passes"
+      ],
+      "priority": 8,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-009",
+      "title": "Create Onboarding component - name input",
+      "description": "As a new user, I want to enter my name during onboarding.",
+      "acceptanceCriteria": [
+        "Create src/components/Onboarding.tsx",
+        "Step 1: 'What should we call you?' with text input",
+        "Styled consistently with app aesthetic (centered, minimal, warm)",
+        "Next button to proceed (disabled if empty)",
+        "Component renders correctly",
+        "npm run typecheck passes"
+      ],
+      "priority": 9,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-010",
+      "title": "Add notification time picker to Onboarding",
+      "description": "As a new user, I want to set my preferred notification time.",
+      "acceptanceCriteria": [
+        "Add Step 2 to Onboarding: 'When would you like your daily reflection?'",
+        "Time picker input (default 08:00)",
+        "Complete button to finish onboarding",
+        "Component shows both steps correctly",
+        "npm run typecheck passes"
+      ],
+      "priority": 10,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-011",
+      "title": "Create preferences helper functions",
+      "description": "As a developer, I need functions to save and retrieve user preferences.",
+      "acceptanceCriteria": [
+        "Create src/lib/preferences.ts",
+        "savePreferences(prefs): saves to IndexedDB",
+        "getPreferences(): retrieves from IndexedDB, returns null if not set",
+        "isOnboarded(): returns boolean",
+        "Functions work with Dexie database",
+        "npm run typecheck passes"
+      ],
+      "priority": 11,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-012",
+      "title": "Wire up Onboarding to save preferences",
+      "description": "As a new user, completing onboarding should save my preferences.",
+      "acceptanceCriteria": [
+        "Onboarding calls savePreferences on complete",
+        "Saves name and notificationTime to IndexedDB",
+        "Onboarding accepts onComplete callback prop",
+        "npm run typecheck passes"
+      ],
+      "priority": 12,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-013",
+      "title": "Add onboarding check to homepage",
+      "description": "As a new user, I should see onboarding before the quote page.",
+      "acceptanceCriteria": [
+        "Homepage checks isOnboarded() on mount",
+        "If not onboarded, show Onboarding component",
+        "After onboarding completes, show today's quote",
+        "If already onboarded, show quote immediately",
+        "Flow works correctly in browser",
+        "npm run typecheck passes"
+      ],
+      "priority": 13,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-014",
+      "title": "Create Greeting component",
+      "description": "As a user, I want a personalized greeting based on time of day.",
+      "acceptanceCriteria": [
+        "Create src/components/Greeting.tsx",
+        "Props: name string",
+        "Shows 'Good morning/afternoon/evening, {name}'",
+        "Morning: 5am-12pm, Afternoon: 12pm-5pm, Evening: 5pm-5am",
+        "Styled subtly above the quote",
+        "npm run typecheck passes"
+      ],
+      "priority": 14,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-015",
+      "title": "Add Greeting to homepage",
+      "description": "As a returning user, I want to see my personalized greeting.",
+      "acceptanceCriteria": [
+        "Homepage displays Greeting component above quote",
+        "Fetches user name from preferences",
+        "Greeting changes based on current time of day",
+        "Renders correctly in browser",
+        "npm run typecheck passes"
+      ],
+      "priority": 15,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-016",
+      "title": "Create ReflectionEditor component",
+      "description": "As a user, I want a beautiful editor to write reflections.",
+      "acceptanceCriteria": [
+        "Create src/components/ReflectionEditor.tsx",
+        "Textarea with placeholder 'What does this stir in you?'",
+        "Props: quoteId, initialContent, onSave callback",
+        "Styled with serif font, generous padding",
+        "Auto-grows with content",
+        "Component renders correctly",
+        "npm run typecheck passes"
+      ],
+      "priority": 16,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-017",
+      "title": "Add adaptive states to ReflectionEditor",
+      "description": "As a user, the editor should adapt to my content length.",
+      "acceptanceCriteria": [
+        "Track content length in component state",
+        "< 100 chars: minimal styling, compact feel",
+        "100-500 chars: standard paragraph view",
+        "> 500 chars: focused mode - subtle word count appears",
+        "Smooth CSS transitions between states",
+        "npm run typecheck passes"
+      ],
+      "priority": 17,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-018",
+      "title": "Create journal entry helper functions",
+      "description": "As a developer, I need functions to save and retrieve journal entries.",
+      "acceptanceCriteria": [
+        "Create src/lib/journal.ts",
+        "saveJournalEntry(quoteId, content): saves/updates entry in IndexedDB",
+        "getJournalEntry(quoteId): retrieves entry for quote",
+        "getRecentEntries(limit): retrieves recent entries",
+        "Functions work with Dexie database",
+        "npm run typecheck passes"
+      ],
+      "priority": 18,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-019",
+      "title": "Wire ReflectionEditor to save entries",
+      "description": "As a user, my reflections should auto-save as I type.",
+      "acceptanceCriteria": [
+        "ReflectionEditor calls saveJournalEntry on change (debounced 1s)",
+        "Shows subtle 'Saved' indicator after save",
+        "Loads existing entry on mount if present",
+        "npm run typecheck passes"
+      ],
+      "priority": 19,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-020",
+      "title": "Add action buttons to quote page",
+      "description": "As a user, I want buttons to save, reflect, and get another quote.",
+      "acceptanceCriteria": [
+        "Add button row below quote: Save (heart), Reflect (pencil), Another (arrow)",
+        "Buttons styled minimally with icons or text",
+        "Reflect button toggles ReflectionEditor visibility",
+        "Buttons render correctly",
+        "npm run typecheck passes"
+      ],
+      "priority": 20,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-021",
+      "title": "Create favorites helper functions",
+      "description": "As a developer, I need functions to manage favorite quotes.",
+      "acceptanceCriteria": [
+        "Create src/lib/favorites.ts",
+        "addFavorite(quoteId): saves to IndexedDB",
+        "removeFavorite(quoteId): removes from IndexedDB",
+        "isFavorite(quoteId): returns boolean",
+        "getFavorites(): returns all favorites",
+        "npm run typecheck passes"
+      ],
+      "priority": 21,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-022",
+      "title": "Wire up Save button for favorites",
+      "description": "As a user, I want to save quotes to my favorites.",
+      "acceptanceCriteria": [
+        "Save button checks isFavorite on mount",
+        "Shows filled heart if favorited, outline if not",
+        "Clicking toggles favorite status",
+        "Visual feedback on toggle",
+        "npm run typecheck passes"
+      ],
+      "priority": 22,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-023",
+      "title": "Create quote history helper functions",
+      "description": "As a developer, I need to track shown quotes and daily limits.",
+      "acceptanceCriteria": [
+        "Create src/lib/history.ts",
+        "recordQuoteShown(quoteId): saves to history",
+        "getQuoteHistory(): returns all history",
+        "getFreshPullsToday(): returns count of 'another' pulls today",
+        "incrementFreshPulls(): increments today's count",
+        "canGetAnother(): returns true if < 3 pulls today",
+        "npm run typecheck passes"
+      ],
+      "priority": 23,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-024",
+      "title": "Wire up Another button with daily limit",
+      "description": "As a user, I want to get another quote (max 3 per day).",
+      "acceptanceCriteria": [
+        "Another button checks canGetAnother on mount",
+        "Shows remaining count: 'Another (2 left)'",
+        "Clicking gets random different quote",
+        "Updates display and decrements count",
+        "Disabled when 0 remaining",
+        "npm run typecheck passes"
+      ],
+      "priority": 24,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-025",
+      "title": "Create Navigation component",
+      "description": "As a user, I want to navigate between pages.",
+      "acceptanceCriteria": [
+        "Create src/components/Navigation.tsx",
+        "Links: Today (home), Archive, Favorites, Settings",
+        "Styled subtly at bottom (mobile) or top (desktop)",
+        "Current page highlighted",
+        "Component renders correctly",
+        "npm run typecheck passes"
+      ],
+      "priority": 25,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-026",
+      "title": "Add Navigation to layout",
+      "description": "As a user, I want navigation visible on all pages.",
+      "acceptanceCriteria": [
+        "Add Navigation component to src/app/layout.tsx",
+        "Positioned appropriately (bottom on mobile, top on desktop)",
+        "Navigation visible on all pages",
+        "npm run typecheck passes"
+      ],
+      "priority": 26,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-027",
+      "title": "Create Archive page",
+      "description": "As a user, I want to see my past quotes and reflections.",
+      "acceptanceCriteria": [
+        "Create src/app/archive/page.tsx",
+        "List past quotes from history, newest first",
+        "Show reflection snippet if exists for each quote",
+        "Show date quote was displayed",
+        "Empty state: 'No quotes yet'",
+        "Page renders correctly",
+        "npm run typecheck passes"
+      ],
+      "priority": 27,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-028",
+      "title": "Create Favorites page",
+      "description": "As a user, I want to see all my saved quotes.",
+      "acceptanceCriteria": [
+        "Create src/app/favorites/page.tsx",
+        "List all favorited quotes with date saved",
+        "Use Quote component for display",
+        "Empty state: 'No favorites yet'",
+        "Page renders correctly",
+        "npm run typecheck passes"
+      ],
+      "priority": 28,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-029",
+      "title": "Create Settings page",
+      "description": "As a user, I want to edit my name and notification time.",
+      "acceptanceCriteria": [
+        "Create src/app/settings/page.tsx",
+        "Name input pre-filled from preferences",
+        "Notification time picker pre-filled from preferences",
+        "Save button updates preferences in IndexedDB",
+        "Shows 'Saved!' confirmation",
+        "Page renders correctly",
+        "npm run typecheck passes"
+      ],
+      "priority": 29,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-030",
+      "title": "Expand quote seed data",
+      "description": "As a user, I want variety in my daily quotes.",
+      "acceptanceCriteria": [
+        "Expand src/data/quotes.json to 50+ quotes",
+        "Include more from: Seneca, Marcus Aurelius, Epictetus",
+        "Add quotes from: Naval Ravikant, James Stockdale, Alan Watts",
+        "Each quote properly attributed with source where known",
+        "npm run typecheck passes"
+      ],
+      "priority": 30,
+      "passes": false,
+      "notes": ""
+    }
+  ]
+}
