@@ -2,6 +2,39 @@
 Started: 2026-01-08
 
 ## Codebase Patterns
-(Discovered patterns will be added here as Ralph iterates)
+- Next.js 14 with App Router, TypeScript, Tailwind CSS
+- Port 3005 configured in package.json (dev and start scripts)
+- Use `npm run typecheck` to verify TS, `npm run build` for production build
+- Source files in src/, pages in src/app/, globals.css has Tailwind imports
+- PWA: manifest.json in public/, icons in public/icons/
+- Build uses webpack mode (--webpack flag) for next-pwa compatibility
+- Custom type declarations in src/types/ for untyped packages
 
+---
+
+## 2026-01-08 - US-001: Initialize Next.js project with TypeScript and Tailwind
+- Created Next.js 14 project scaffold with TypeScript, Tailwind, ESLint, App Router
+- Updated package.json: name to "quotidian", dev/start to use port 3005, added typecheck script
+- Files created: package.json, tsconfig.json, next.config.ts, eslint.config.mjs, postcss.config.mjs, src/app/*, public/*
+- **Learnings for future iterations:**
+  - Can't run create-next-app in dir with existing files - must use temp dir and copy
+  - After copying node_modules, symlinks break - always run `npm install` fresh
+  - Default Next.js now uses Turbopack for builds
+---
+
+## 2026-01-08 - US-002: Configure PWA with manifest and service worker
+- Installed next-pwa package
+- Created public/manifest.json with Quotidian name, warm colors (#fafaf8)
+- Generated placeholder PNG icons (192x192, 512x512) via Node script
+- Configured next.config.ts with withPWA wrapper
+- Added src/types/next-pwa.d.ts for TypeScript compatibility
+- Updated build script to use --webpack flag (Turbopack doesn't support next-pwa's webpack config)
+- Added SW files to .gitignore (sw.js, workbox-*.js are build artifacts)
+- Files created: public/manifest.json, public/icons/icon-*.png, src/types/next-pwa.d.ts, scripts/generate-icons.js
+- Files modified: next.config.ts, package.json, .gitignore
+- **Learnings for future iterations:**
+  - next-pwa requires webpack mode in Next.js 16+ (use --webpack flag in build)
+  - @types/next-pwa only supports Next 12/13 - create custom .d.ts for Next 16
+  - next-pwa generates sw.js in public/, not .next/
+  - Add turbopack: {} to next.config.ts to silence webpack/turbopack config warning
 ---

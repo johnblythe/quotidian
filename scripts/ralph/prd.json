@@ -15,8 +15,8 @@
         "npm run typecheck passes"
       ],
       "priority": 1,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Completed 2026-01-08"
     },
     {
       "id": "US-002",
@@ -31,8 +31,8 @@
         "npm run typecheck passes"
       ],
       "priority": 2,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Completed 2026-01-08. SW files generated in public/ not .next/ with next-pwa."
     },
     {
       "id": "US-003",
