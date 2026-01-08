@@ -2,6 +2,52 @@
 
 All notable changes to Quotidian will be documented in this file.
 
+## [0.2.0] - 2026-01-08 (Beta)
+
+### Added
+
+#### Content Expansion
+- 150+ curated quotes (up from 55)
+- Theme tagging on all quotes (adversity, death, discipline, joy, etc.)
+- Quotes from: Seneca, Marcus Aurelius, Epictetus, Naval, Alan Watts, Stockdale, Lao Tzu, Buddha, Rumi
+
+#### Polish & Animations
+- Page transition animations (fade in/out)
+- Button hover and active states
+- Loading skeletons for async content
+- Heart fill animation on favorite
+- Toast notification system
+- Smooth textarea auto-resize
+
+#### Easter Eggs & Delight
+- Milestone celebration at 100 reflections
+- Seasonal greeting variants
+- Konami code easter egg (philosopher mode)
+- First-favorite confetti
+
+#### Empty States
+- Beautiful empty states for favorites, archive, and reflections
+
+#### Keyboard Shortcuts
+- j/k: navigate quotes
+- s: toggle save
+- r: open reflection
+- Escape: close modals
+
+#### Accessibility (WCAG AA)
+- Color contrast fixes
+- Focus indicators
+- Screen reader support
+- Keyboard navigation
+- Reduced motion support
+
+#### Performance
+- Lighthouse score 95+
+- Optimized bundle size
+- Image optimization
+
+---
+
 ## [0.1.0] - 2026-01-08
 
 ### Added
