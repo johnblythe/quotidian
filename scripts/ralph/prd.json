@@ -270,8 +270,8 @@
         "npm run typecheck passes"
       ],
       "priority": 17,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Completed 2026-01-08. Three adaptive states with CSS transitions, word count in focused mode."
     },
     {
       "id": "US-018",
@@ -286,8 +286,8 @@
         "npm run typecheck passes"
       ],
       "priority": 18,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Completed 2026-01-08. saveJournalEntry, getJournalEntry, getRecentEntries in src/lib/journal.ts"
     },
     {
       "id": "US-019",
@@ -300,8 +300,8 @@
         "npm run typecheck passes"
       ],
       "priority": 19,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Completed 2026-01-08. Debounced 1s auto-save, 'Saved' indicator shows 2s after save, loads existing entry on mount."
     },
     {
       "id": "US-020",

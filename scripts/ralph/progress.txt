@@ -226,3 +226,45 @@ Started: 2026-01-08
   - Auto-grow pattern: set height to 'auto' then to scrollHeight in useEffect
   - Uses data-quote-id attribute for potential future DOM querying
 ---
+
+## 2026-01-08 - US-017: Add adaptive states to ReflectionEditor
+- Added EditorState type: "minimal" | "standard" | "focused"
+- getEditorState(length) returns state based on character count thresholds
+- < 100 chars: minimal - smaller padding (py-4), text-base, min-h-[80px]
+- 100-500 chars: standard - medium padding (py-8), text-lg, min-h-[120px]
+- > 500 chars: focused - larger padding (py-10), text-xl, leading-loose, min-h-[160px]
+- Word count appears only in focused mode (opacity-0 to opacity-100 transition)
+- All transitions use duration-300 ease-in-out for smooth state changes
+- countWords() helper splits on whitespace and filters empty strings
+- Files modified: src/components/ReflectionEditor.tsx
+- **Learnings for future iterations:**
+  - useMemo for derived state like editorState and wordCount to avoid recalc
+  - Tailwind transition-all covers padding, font-size, min-height changes
+  - Word count singular/plural handling: "1 word" vs "N words"
+---
+
+## 2026-01-08 - US-018: Create journal entry helper functions
+- Created src/lib/journal.ts with three functions
+- saveJournalEntry(quoteId, content): creates or updates entry in IndexedDB
+- getJournalEntry(quoteId): retrieves entry for a specific quote, returns null if none
+- getRecentEntries(limit): retrieves recent entries ordered by updatedAt descending
+- All functions use Dexie's where() and orderBy() methods
+- Files created: src/lib/journal.ts
+- **Learnings for future iterations:**
+  - Journal helper at src/lib/journal.ts - import { saveJournalEntry, getJournalEntry, getRecentEntries } from '@/lib/journal'
+  - Use where('field').equals(value).first() for single record lookup by indexed field
+  - Use orderBy('field').reverse() for descending sort
+---
+
+## 2026-01-08 - US-019: Wire ReflectionEditor to save entries
+- Modified src/components/ReflectionEditor.tsx to auto-save entries
+- Added debounced save (1 second) using useCallback and useRef for timeout
+- Added showSaved state with "Saved" text that appears for 2 seconds after save
+- Added useEffect to load existing journal entry on mount via getJournalEntry(quoteId)
+- Footer now shows "Saved" on left and word count on right (in focused mode)
+- Files modified: src/components/ReflectionEditor.tsx
+- **Learnings for future iterations:**
+  - Debounce pattern: useRef for timeout + useCallback for the debounced function
+  - Cleanup timeouts in useEffect return to avoid memory leaks
+  - "Saved" indicator shows via opacity transition, auto-hides after 2 seconds
+---
