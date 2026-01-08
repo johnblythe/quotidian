@@ -173,3 +173,16 @@ Started: 2026-01-08
   - onComplete callback still fires after save, allowing parent to react (e.g., hide onboarding)
   - async/await needed in handleComplete since savePreferences returns Promise
 ---
+
+## 2026-01-08 - US-013: Add onboarding check to homepage
+- Converted src/app/page.tsx to client component ("use client")
+- Added useState for pageState: "loading" | "onboarding" | "quote"
+- Added useEffect to check isOnboarded() on mount
+- Shows "Loading..." during initial check, Onboarding if not onboarded, Quote if onboarded
+- Onboarding onComplete callback transitions to quote state
+- Files modified: src/app/page.tsx
+- **Learnings for future iterations:**
+  - Homepage is now a client component due to IndexedDB async check
+  - PageState pattern (loading/onboarding/quote) handles async data gracefully
+  - getTodaysQuote() is still sync, works in client components too
+---
