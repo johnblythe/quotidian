@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { Quote } from "@/components/Quote";
 import { Onboarding } from "@/components/Onboarding";
 import { Greeting } from "@/components/Greeting";
@@ -9,6 +9,8 @@ import { ReflectionEditor } from "@/components/ReflectionEditor";
 import { PageTransition } from "@/components/PageTransition";
 import { QuoteSkeleton } from "@/components/Skeleton";
 import { useToast } from "@/components/Toast";
+import { KeyboardShortcutsHelp } from "@/components/KeyboardShortcutsHelp";
+import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
 import { getTodaysQuote, getRandomQuote } from "@/lib/quotes";
 import { getPreferences } from "@/lib/preferences";
 import { isFavorite, addFavorite, removeFavorite } from "@/lib/favorites";
@@ -24,7 +26,46 @@ export default function Home() {
   const [showReflection, setShowReflection] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
   const [remainingPulls, setRemainingPulls] = useState<number>(3);
+  const [showShortcutsHelp, setShowShortcutsHelp] = useState(false);
   const { showToast } = useToast();
+
+  // Keyboard shortcut handlers
+  const handleKeyboardSave = useCallback(async () => {
+    if (pageState !== "quote") return;
+    if (isSaved) {
+      await removeFavorite(currentQuote.id);
+      setIsSaved(false);
+      showToast("Removed from favorites");
+    } else {
+      await addFavorite(currentQuote.id);
+      setIsSaved(true);
+      showToast("Saved to favorites");
+    }
+  }, [pageState, isSaved, currentQuote.id, showToast]);
+
+  const handleKeyboardReflect = useCallback(() => {
+    if (pageState !== "quote") return;
+    setShowReflection((prev) => !prev);
+  }, [pageState]);
+
+  const handleKeyboardEscape = useCallback(() => {
+    if (showShortcutsHelp) {
+      setShowShortcutsHelp(false);
+    } else if (showReflection) {
+      setShowReflection(false);
+    }
+  }, [showShortcutsHelp, showReflection]);
+
+  const handleKeyboardHelp = useCallback(() => {
+    setShowShortcutsHelp((prev) => !prev);
+  }, []);
+
+  useKeyboardShortcuts({
+    onSave: handleKeyboardSave,
+    onReflect: handleKeyboardReflect,
+    onEscape: handleKeyboardEscape,
+    onHelp: handleKeyboardHelp,
+  });
 
   useEffect(() => {
     const checkOnboarding = async () => {
@@ -106,24 +147,31 @@ export default function Home() {
   }
 
   return (
-    <PageTransition>
-      <div className="flex min-h-screen items-center justify-center">
-        <main className="w-full">
-          {userName && <Greeting name={userName} />}
-          <Quote quote={currentQuote} />
-          <ActionButtons
-            onSave={handleSave}
-            onReflect={handleReflect}
-            onAnother={handleAnother}
-            isSaved={isSaved}
-            isReflecting={showReflection}
-            remainingPulls={remainingPulls}
-          />
-          {showReflection && (
-            <ReflectionEditor quoteId={currentQuote.id} />
-          )}
-        </main>
-      </div>
-    </PageTransition>
+    <>
+      <PageTransition>
+        <div className="flex min-h-screen items-center justify-center">
+          <main className="w-full">
+            {userName && <Greeting name={userName} />}
+            <Quote quote={currentQuote} />
+            <ActionButtons
+              onSave={handleSave}
+              onReflect={handleReflect}
+              onAnother={handleAnother}
+              isSaved={isSaved}
+              isReflecting={showReflection}
+              remainingPulls={remainingPulls}
+            />
+            {showReflection && (
+              <ReflectionEditor quoteId={currentQuote.id} />
+            )}
+          </main>
+        </div>
+      </PageTransition>
+      <KeyboardShortcutsHelp
+        isOpen={showShortcutsHelp}
+        onClose={() => setShowShortcutsHelp(false)}
+        context="home"
+      />
+    </>
   );
 }

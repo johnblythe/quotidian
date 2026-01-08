@@ -1,0 +1,15 @@
+I've completed **US-B14: Improve textarea auto-resize smoothness**. 
+
+**Summary of changes:**
+- Rewrote the auto-resize logic in ReflectionEditor.tsx using a flicker-free measurement technique
+- Added `.textarea-smooth-resize` CSS class with 150ms height transition and overflow:hidden
+- Added window resize listener to handle responsive font size changes
+- Respects prefers-reduced-motion for accessibility
+
+**UI behavior:**
+- Textarea now grows and shrinks smoothly as content is added/removed
+- No visual jump or flash during resize
+- Maintains minimum height based on editor state (80px, 120px, or 160px)
+- Works correctly on both mobile and desktop
+
+There are still stories with `passes: false` remaining (US-B15 through US-B25).

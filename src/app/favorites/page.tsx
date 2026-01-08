@@ -1,11 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { getFavorites } from "@/lib/favorites";
 import { getQuoteById } from "@/lib/quotes";
 import { Quote } from "@/components/Quote";
 import { PageTransition } from "@/components/PageTransition";
 import { FavoriteItemSkeleton } from "@/components/Skeleton";
+import { KeyboardShortcutsHelp } from "@/components/KeyboardShortcutsHelp";
+import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
 import type { Quote as QuoteType, FavoriteQuote } from "@/types";
 
 interface FavoriteItem {
@@ -16,6 +18,47 @@ interface FavoriteItem {
 export default function FavoritesPage() {
   const [items, setItems] = useState<FavoriteItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedIndex, setSelectedIndex] = useState<number>(-1);
+  const [showShortcutsHelp, setShowShortcutsHelp] = useState(false);
+  const itemRefs = useRef<(HTMLElement | null)[]>([]);
+
+  // Keyboard navigation handlers
+  const handleNavigateDown = useCallback(() => {
+    if (items.length === 0) return;
+    setSelectedIndex((prev) => {
+      const next = prev < items.length - 1 ? prev + 1 : 0;
+      itemRefs.current[next]?.scrollIntoView({ behavior: "smooth", block: "center" });
+      return next;
+    });
+  }, [items.length]);
+
+  const handleNavigateUp = useCallback(() => {
+    if (items.length === 0) return;
+    setSelectedIndex((prev) => {
+      const next = prev > 0 ? prev - 1 : items.length - 1;
+      itemRefs.current[next]?.scrollIntoView({ behavior: "smooth", block: "center" });
+      return next;
+    });
+  }, [items.length]);
+
+  const handleEscape = useCallback(() => {
+    if (showShortcutsHelp) {
+      setShowShortcutsHelp(false);
+    } else {
+      setSelectedIndex(-1);
+    }
+  }, [showShortcutsHelp]);
+
+  const handleHelp = useCallback(() => {
+    setShowShortcutsHelp((prev) => !prev);
+  }, []);
+
+  useKeyboardShortcuts({
+    onNavigateDown: handleNavigateDown,
+    onNavigateUp: handleNavigateUp,
+    onEscape: handleEscape,
+    onHelp: handleHelp,
+  });
 
   useEffect(() => {
     const loadFavorites = async () => {
@@ -71,37 +114,51 @@ export default function FavoritesPage() {
   }
 
   return (
-    <PageTransition>
-      <div className="min-h-screen py-8 px-4">
-        <div className="max-w-2xl mx-auto">
-          <h1 className="quote-text text-2xl text-center mb-8 text-foreground/80">
-            Favorites
-          </h1>
+    <>
+      <PageTransition>
+        <div className="min-h-screen py-8 px-4">
+          <div className="max-w-2xl mx-auto">
+            <h1 className="quote-text text-2xl text-center mb-8 text-foreground/80">
+              Favorites
+            </h1>
 
-          <div className="space-y-8">
-            {items.map((item) => (
-              <article
-                key={item.favorite.id}
-                className="border-b border-foreground/10 pb-6"
-              >
-                {item.quote ? (
-                  <Quote quote={item.quote} />
-                ) : (
-                  <p className="body-text text-foreground/40 italic mb-2 text-center py-8">
-                    Quote no longer available
-                  </p>
-                )}
+            <div className="space-y-8">
+              {items.map((item, index) => (
+                <article
+                  key={item.favorite.id}
+                  ref={(el) => { itemRefs.current[index] = el; }}
+                  className={`border-b border-foreground/10 pb-6 transition-all duration-150 rounded-lg ${
+                    selectedIndex === index
+                      ? "bg-foreground/5 -mx-4 px-4 py-4 border-foreground/20"
+                      : ""
+                  }`}
+                  tabIndex={0}
+                  onClick={() => setSelectedIndex(index)}
+                >
+                  {item.quote ? (
+                    <Quote quote={item.quote} />
+                  ) : (
+                    <p className="body-text text-foreground/40 italic mb-2 text-center py-8">
+                      Quote no longer available
+                    </p>
+                  )}
 
-                <div className="text-center text-sm text-foreground/40 body-text mt-2">
-                  <time dateTime={new Date(item.favorite.savedAt).toISOString()}>
-                    Saved {formatDate(item.favorite.savedAt)}
-                  </time>
-                </div>
-              </article>
-            ))}
+                  <div className="text-center text-sm text-foreground/40 body-text mt-2">
+                    <time dateTime={new Date(item.favorite.savedAt).toISOString()}>
+                      Saved {formatDate(item.favorite.savedAt)}
+                    </time>
+                  </div>
+                </article>
+              ))}
+            </div>
           </div>
         </div>
-      </div>
-    </PageTransition>
+      </PageTransition>
+      <KeyboardShortcutsHelp
+        isOpen={showShortcutsHelp}
+        onClose={() => setShowShortcutsHelp(false)}
+        context="list"
+      />
+    </>
   );
 }

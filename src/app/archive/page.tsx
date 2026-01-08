@@ -1,11 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { getQuoteHistory } from "@/lib/history";
 import { getJournalEntry } from "@/lib/journal";
 import { getQuoteById } from "@/lib/quotes";
 import { PageTransition } from "@/components/PageTransition";
 import { ArchiveItemSkeleton } from "@/components/Skeleton";
+import { KeyboardShortcutsHelp } from "@/components/KeyboardShortcutsHelp";
+import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
 import type { Quote, QuoteHistory, JournalEntry } from "@/types";
 
 interface ArchiveItem {
@@ -17,6 +19,47 @@ interface ArchiveItem {
 export default function ArchivePage() {
   const [items, setItems] = useState<ArchiveItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedIndex, setSelectedIndex] = useState<number>(-1);
+  const [showShortcutsHelp, setShowShortcutsHelp] = useState(false);
+  const itemRefs = useRef<(HTMLElement | null)[]>([]);
+
+  // Keyboard navigation handlers
+  const handleNavigateDown = useCallback(() => {
+    if (items.length === 0) return;
+    setSelectedIndex((prev) => {
+      const next = prev < items.length - 1 ? prev + 1 : 0;
+      itemRefs.current[next]?.scrollIntoView({ behavior: "smooth", block: "center" });
+      return next;
+    });
+  }, [items.length]);
+
+  const handleNavigateUp = useCallback(() => {
+    if (items.length === 0) return;
+    setSelectedIndex((prev) => {
+      const next = prev > 0 ? prev - 1 : items.length - 1;
+      itemRefs.current[next]?.scrollIntoView({ behavior: "smooth", block: "center" });
+      return next;
+    });
+  }, [items.length]);
+
+  const handleEscape = useCallback(() => {
+    if (showShortcutsHelp) {
+      setShowShortcutsHelp(false);
+    } else {
+      setSelectedIndex(-1);
+    }
+  }, [showShortcutsHelp]);
+
+  const handleHelp = useCallback(() => {
+    setShowShortcutsHelp((prev) => !prev);
+  }, []);
+
+  useKeyboardShortcuts({
+    onNavigateDown: handleNavigateDown,
+    onNavigateUp: handleNavigateUp,
+    onEscape: handleEscape,
+    onHelp: handleHelp,
+  });
 
   useEffect(() => {
     const loadArchive = async () => {
@@ -89,49 +132,63 @@ export default function ArchivePage() {
   }
 
   return (
-    <PageTransition>
-      <div className="min-h-screen py-8 px-4">
-        <div className="max-w-2xl mx-auto">
-          <h1 className="quote-text text-2xl text-center mb-8 text-foreground/80">
-            Archive
-          </h1>
+    <>
+      <PageTransition>
+        <div className="min-h-screen py-8 px-4">
+          <div className="max-w-2xl mx-auto">
+            <h1 className="quote-text text-2xl text-center mb-8 text-foreground/80">
+              Archive
+            </h1>
 
-          <div className="space-y-6">
-            {items.map((item) => (
-              <article
-                key={item.history.id}
-                className="border-b border-foreground/10 pb-6"
-              >
-                {item.quote ? (
-                  <>
-                    <blockquote className="quote-text text-lg mb-3">
-                      "{item.quote.text}"
-                    </blockquote>
-                    <p className="body-text text-foreground/60 text-sm mb-2">
-                      — {item.quote.author}
+            <div className="space-y-6">
+              {items.map((item, index) => (
+                <article
+                  key={item.history.id}
+                  ref={(el) => { itemRefs.current[index] = el; }}
+                  className={`border-b border-foreground/10 pb-6 transition-all duration-150 rounded-lg ${
+                    selectedIndex === index
+                      ? "bg-foreground/5 -mx-4 px-4 py-4 border-foreground/20"
+                      : ""
+                  }`}
+                  tabIndex={0}
+                  onClick={() => setSelectedIndex(index)}
+                >
+                  {item.quote ? (
+                    <>
+                      <blockquote className="quote-text text-lg mb-3">
+                        &ldquo;{item.quote.text}&rdquo;
+                      </blockquote>
+                      <p className="body-text text-foreground/60 text-sm mb-2">
+                        — {item.quote.author}
+                      </p>
+                    </>
+                  ) : (
+                    <p className="body-text text-foreground/40 italic mb-2">
+                      Quote no longer available
                     </p>
-                  </>
-                ) : (
-                  <p className="body-text text-foreground/40 italic mb-2">
-                    Quote no longer available
-                  </p>
-                )}
-
-                <div className="flex items-center justify-between text-sm text-foreground/40 body-text">
-                  <time dateTime={new Date(item.history.shownAt).toISOString()}>
-                    {formatDate(item.history.shownAt)}
-                  </time>
-                  {item.reflection && (
-                    <span className="text-foreground/50 italic ml-4 text-right flex-1">
-                      {truncateReflection(item.reflection.content)}
-                    </span>
                   )}
-                </div>
-              </article>
-            ))}
+
+                  <div className="flex items-center justify-between text-sm text-foreground/40 body-text">
+                    <time dateTime={new Date(item.history.shownAt).toISOString()}>
+                      {formatDate(item.history.shownAt)}
+                    </time>
+                    {item.reflection && (
+                      <span className="text-foreground/50 italic ml-4 text-right flex-1">
+                        {truncateReflection(item.reflection.content)}
+                      </span>
+                    )}
+                  </div>
+                </article>
+              ))}
+            </div>
           </div>
         </div>
-      </div>
-    </PageTransition>
+      </PageTransition>
+      <KeyboardShortcutsHelp
+        isOpen={showShortcutsHelp}
+        onClose={() => setShowShortcutsHelp(false)}
+        context="list"
+      />
+    </>
   );
 }

@@ -7,6 +7,7 @@ Started: 2026-01-08
 - Quote interface now has optional themes: Theme[] field
 - Button CSS utilities: .btn-icon (scale), .btn-primary (glow), .btn-nav (background) in globals.css
 - Skeleton components in src/components/Skeleton.tsx: Skeleton (base), QuoteSkeleton, ArchiveItemSkeleton, FavoriteItemSkeleton
+- Toast system: ToastProvider in layout.tsx, useToast() hook for showToast(message)
 
 ---
 
@@ -180,4 +181,41 @@ Started: 2026-01-08
   - Use getBoundingClientRect() (not offsetWidth) to force reflow on SVG elements for TypeScript
   - Track previous state with useRef to only animate on actual changes
   - Animation timing: 300ms for emphasis (favorite), 200ms for de-emphasis (unfavorite)
+---
+
+## 2026-01-08 - US-B13: Add toast notification system
+- Created Toast component with ToastProvider context in src/components/Toast.tsx
+- Toast appears at bottom of screen (bottom-20 on mobile to avoid nav, bottom-6 on desktop)
+- Auto-dismisses after 3 seconds with dismissable X button
+- Added toast-enter animation (200ms slide-up fade-in) in globals.css
+- Wrapped app in ToastProvider in layout.tsx
+- Added toast triggers on:
+  - Save/remove favorite (home page)
+  - Save reflection (ReflectionEditor - on debounced save)
+  - Update settings (settings page)
+- Added prefers-reduced-motion support for toast animation
+- Files created: src/components/Toast.tsx
+- Files modified: src/app/globals.css, src/app/layout.tsx, src/app/page.tsx, src/app/settings/page.tsx, src/components/ReflectionEditor.tsx
+- **Learnings for future iterations:**
+  - Toast component exports: ToastProvider (wrapper), useToast (hook)
+  - Use useToast() hook to call showToast(message) from any component
+  - Toast container uses fixed positioning with z-50 for overlay
+  - Supports multiple simultaneous toasts stacked vertically
+  - Counter-based IDs avoid React key issues with rapid toasts
+---
+
+## 2026-01-08 - US-B14: Improve textarea auto-resize smoothness
+- Rewrote auto-resize logic in ReflectionEditor.tsx to eliminate jumpiness
+- New approach: temporarily disable CSS transition during measurement, measure with height:auto, restore original height, re-enable transition, then animate to target
+- Uses requestAnimationFrame to ensure smooth transition between frames
+- Added .textarea-smooth-resize CSS class in globals.css with 150ms height transition
+- Added overflow: hidden to prevent scroll during resize
+- Added window resize listener to handle responsive font size changes
+- Added prefers-reduced-motion support to disable transition for accessibility
+- Files modified: src/components/ReflectionEditor.tsx, src/app/globals.css
+- **Learnings for future iterations:**
+  - Auto-resize pattern: disable transition → measure → restore → enable transition → animate
+  - Use getBoundingClientRect() to force reflow before re-enabling transition
+  - CSS class .textarea-smooth-resize provides 150ms height transition + overflow:hidden
+  - Always add resize event listener for textareas when font sizes change responsively
 ---
