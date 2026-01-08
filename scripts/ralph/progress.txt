@@ -162,3 +162,14 @@ Started: 2026-01-08
   - savePreferences takes Omit<UserPreferences, 'id' | 'onboardedAt'> - only name and notificationTime
   - Uses toCollection().first() to get single record since there's only one user preferences row
 ---
+
+## 2026-01-08 - US-012: Wire up Onboarding to save preferences
+- Modified src/components/Onboarding.tsx to import savePreferences from @/lib/preferences
+- Changed handleComplete to async, calls savePreferences before onComplete callback
+- Data shape { name, notificationTime } matches what savePreferences expects
+- Files modified: src/components/Onboarding.tsx
+- **Learnings for future iterations:**
+  - Onboarding component now saves to IndexedDB automatically on complete
+  - onComplete callback still fires after save, allowing parent to react (e.g., hide onboarding)
+  - async/await needed in handleComplete since savePreferences returns Promise
+---
