@@ -705,70 +705,210 @@
     "text": "The three big ones in life are wealth, health, and happiness. We pursue them in that order, but their importance is reverse.",
     "author": "Naval Ravikant",
     "source": "The Almanack of Naval Ravikant",
-    "themes": []
+    "themes": ["wisdom", "simplicity"]
   },
   {
     "id": "naval-002",
     "text": "A calm mind, a fit body, and a house full of love. These things cannot be bought — they must be earned.",
     "author": "Naval Ravikant",
     "source": "Twitter/X, 2018",
-    "themes": []
+    "themes": ["discipline", "relationships"]
   },
   {
     "id": "naval-003",
     "text": "Learn to sell. Learn to build. If you can do both, you will be unstoppable.",
     "author": "Naval Ravikant",
     "source": "How to Get Rich (tweetstorm)",
-    "themes": []
+    "themes": ["work", "discipline"]
   },
   {
     "id": "naval-004",
     "text": "Desire is a contract you make with yourself to be unhappy until you get what you want.",
     "author": "Naval Ravikant",
     "source": "The Almanack of Naval Ravikant",
-    "themes": []
+    "themes": ["simplicity", "joy"]
   },
   {
     "id": "naval-005",
     "text": "All the real benefits in life come from compound interest.",
     "author": "Naval Ravikant",
     "source": "The Almanack of Naval Ravikant",
-    "themes": []
+    "themes": ["time", "discipline"]
   },
   {
     "id": "naval-006",
     "text": "The most important skill for getting rich is becoming a perpetual learner.",
     "author": "Naval Ravikant",
     "source": "The Almanack of Naval Ravikant",
-    "themes": []
+    "themes": ["wisdom", "work"]
   },
   {
     "id": "naval-007",
     "text": "If you can't see yourself working with someone for life, don't work with them for a day.",
     "author": "Naval Ravikant",
     "source": "Twitter/X, 2019",
-    "themes": []
+    "themes": ["relationships", "work"]
   },
   {
     "id": "naval-008",
     "text": "Reading is the ultimate meta-skill and can be traded for anything else.",
     "author": "Naval Ravikant",
     "source": "The Almanack of Naval Ravikant",
-    "themes": []
+    "themes": ["wisdom", "discipline"]
   },
   {
     "id": "naval-009",
     "text": "Happiness is the absence of striving for happiness.",
     "author": "Naval Ravikant",
     "source": "The Almanack of Naval Ravikant",
-    "themes": []
+    "themes": ["joy", "simplicity"]
   },
   {
     "id": "naval-010",
     "text": "Specific knowledge is found by pursuing your genuine curiosity and passion rather than whatever is hot right now.",
     "author": "Naval Ravikant",
     "source": "How to Get Rich (tweetstorm)",
-    "themes": []
+    "themes": ["identity", "work"]
+  },
+  {
+    "id": "naval-011",
+    "text": "Play long-term games with long-term people. All returns in life come from compound interest over many turns of the game.",
+    "author": "Naval Ravikant",
+    "source": "How to Get Rich (tweetstorm)",
+    "themes": ["time", "relationships"]
+  },
+  {
+    "id": "naval-012",
+    "text": "Free education is abundant, all over the internet. It's the desire to learn that's scarce.",
+    "author": "Naval Ravikant",
+    "source": "Twitter/X, 2019",
+    "themes": ["wisdom", "discipline"]
+  },
+  {
+    "id": "naval-013",
+    "text": "The hardest thing is not doing what you want — it's knowing what you want.",
+    "author": "Naval Ravikant",
+    "source": "The Almanack of Naval Ravikant",
+    "themes": ["identity", "wisdom"]
+  },
+  {
+    "id": "naval-014",
+    "text": "You're not going to get rich renting out your time. You must own equity to gain your financial freedom.",
+    "author": "Naval Ravikant",
+    "source": "How to Get Rich (tweetstorm)",
+    "themes": ["work", "wisdom"]
+  },
+  {
+    "id": "naval-015",
+    "text": "Escape competition through authenticity. When you're competing with others, it's because you're copying them.",
+    "author": "Naval Ravikant",
+    "source": "How to Get Rich (tweetstorm)",
+    "themes": ["identity", "work"]
+  },
+  {
+    "id": "naval-016",
+    "text": "If you're not willing to be misunderstood, you will never do anything new.",
+    "author": "Naval Ravikant",
+    "source": "The Almanack of Naval Ravikant",
+    "themes": ["identity", "adversity"]
+  },
+  {
+    "id": "naval-017",
+    "text": "Retirement is when you stop sacrificing today for an imaginary tomorrow. You've reached retirement when you're doing what you would do even if you weren't getting paid.",
+    "author": "Naval Ravikant",
+    "source": "The Almanack of Naval Ravikant",
+    "themes": ["time", "work"]
+  },
+  {
+    "id": "naval-018",
+    "text": "The modern struggle: Lone individuals summoning inhuman willpower, fasting, meditating, and exercising, up against armies of scientists and statisticians weaponizing abundant food, screens, and medicine.",
+    "author": "Naval Ravikant",
+    "source": "Twitter/X, 2020",
+    "themes": ["discipline", "adversity"]
+  },
+  {
+    "id": "naval-019",
+    "text": "Peace is happiness at rest. Happiness is peace in motion.",
+    "author": "Naval Ravikant",
+    "source": "The Almanack of Naval Ravikant",
+    "themes": ["joy", "simplicity"]
+  },
+  {
+    "id": "naval-020",
+    "text": "If you have everything you want, are you happy right this second? If not, why not?",
+    "author": "Naval Ravikant",
+    "source": "The Almanack of Naval Ravikant",
+    "themes": ["joy", "wisdom"]
+  },
+  {
+    "id": "naval-021",
+    "text": "Seek wealth, not money or status. Wealth is having assets that earn while you sleep.",
+    "author": "Naval Ravikant",
+    "source": "How to Get Rich (tweetstorm)",
+    "themes": ["work", "wisdom"]
+  },
+  {
+    "id": "naval-022",
+    "text": "The best founders I've found are the ones who are very long-term thinkers. They have a strong vision for the world.",
+    "author": "Naval Ravikant",
+    "source": "The Almanack of Naval Ravikant",
+    "themes": ["time", "work"]
+  },
+  {
+    "id": "naval-023",
+    "text": "Judgment — especially demonstrated judgment, with high accountability and a clear track record — is critical.",
+    "author": "Naval Ravikant",
+    "source": "How to Get Rich (tweetstorm)",
+    "themes": ["wisdom", "work"]
+  },
+  {
+    "id": "naval-024",
+    "text": "You should be too busy to have dinner parties with your friends every week, but not so busy that you never have dinner with your friends.",
+    "author": "Naval Ravikant",
+    "source": "The Almanack of Naval Ravikant",
+    "themes": ["relationships", "simplicity"]
+  },
+  {
+    "id": "naval-025",
+    "text": "We spend our whole life trying to be great at something. The great are just ones who work endlessly at getting great at one thing.",
+    "author": "Naval Ravikant",
+    "source": "The Almanack of Naval Ravikant",
+    "themes": ["discipline", "work"]
+  },
+  {
+    "id": "naval-026",
+    "text": "The reality is life is a single-player game. You're born alone. You die alone. All of your interpretations are alone.",
+    "author": "Naval Ravikant",
+    "source": "The Almanack of Naval Ravikant",
+    "themes": ["identity", "death"]
+  },
+  {
+    "id": "naval-027",
+    "text": "Cynicism is easy. Mimicry is easy. Optimistic contrarians are the rarest breed.",
+    "author": "Naval Ravikant",
+    "source": "Twitter/X, 2019",
+    "themes": ["identity", "wisdom"]
+  },
+  {
+    "id": "naval-028",
+    "text": "No one can compete with you on being you. Most of life is a search for who and what needs you the most.",
+    "author": "Naval Ravikant",
+    "source": "The Almanack of Naval Ravikant",
+    "themes": ["identity", "relationships"]
+  },
+  {
+    "id": "naval-029",
+    "text": "A happy person isn't someone who's happy all the time. It's someone who effortlessly interprets events in such a way that they don't lose their innate peace.",
+    "author": "Naval Ravikant",
+    "source": "The Almanack of Naval Ravikant",
+    "themes": ["joy", "adversity"]
+  },
+  {
+    "id": "naval-030",
+    "text": "If you want to be successful, surround yourself with people who are more successful than you. If you want to be happy, surround yourself with people who are less successful than you.",
+    "author": "Naval Ravikant",
+    "source": "The Almanack of Naval Ravikant",
+    "themes": ["relationships", "joy"]
   },
   {
     "id": "watts-001",
