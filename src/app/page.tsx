@@ -7,6 +7,7 @@ import { Greeting } from "@/components/Greeting";
 import { ActionButtons } from "@/components/ActionButtons";
 import { ReflectionEditor } from "@/components/ReflectionEditor";
 import { PageTransition } from "@/components/PageTransition";
+import { QuoteSkeleton } from "@/components/Skeleton";
 import { getTodaysQuote, getRandomQuote } from "@/lib/quotes";
 import { getPreferences } from "@/lib/preferences";
 import { isFavorite, addFavorite, removeFavorite } from "@/lib/favorites";
@@ -79,7 +80,9 @@ export default function Home() {
   if (pageState === "loading") {
     return (
       <div className="flex min-h-screen items-center justify-center">
-        <div className="text-foreground/30 body-text">Loading...</div>
+        <main className="w-full">
+          <QuoteSkeleton />
+        </main>
       </div>
     );
   }

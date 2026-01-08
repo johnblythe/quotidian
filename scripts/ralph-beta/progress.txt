@@ -5,6 +5,7 @@ Started: 2026-01-08
 (Inherited from alpha - see scripts/ralph/progress.txt)
 - Theme type in src/types/index.ts - 10 theme categories for quotes
 - Quote interface now has optional themes: Theme[] field
+- Button CSS utilities: .btn-icon (scale), .btn-primary (glow), .btn-nav (background) in globals.css
 
 ---
 
@@ -122,4 +123,24 @@ Started: 2026-01-08
   - Animation classes: .page-transition (initial hidden) + .page-transition-enter (visible)
   - For Next.js App Router, client-side navigation doesn't trigger full page reload, so transitions apply on initial load
   - Always respect prefers-reduced-motion for accessibility compliance
+---
+
+## 2026-01-08 - US-B10: Add button hover and active states
+- Added 3 CSS utility classes in globals.css:
+  - `.btn-icon` - for icon buttons (ActionButtons) - subtle scale on hover (1.05), scale down on active (0.95)
+  - `.btn-primary` - for primary action buttons (Onboarding, Settings) - subtle glow/shadow on hover, scale on active
+  - `.btn-nav` - for navigation links - subtle background color on hover/active
+- All transitions are 150ms ease-out for smooth feel
+- Applied classes to all interactive elements:
+  - ActionButtons.tsx: Save, Reflect, Another buttons
+  - Navigation.tsx: nav links
+  - Onboarding.tsx: Next, Complete buttons
+  - settings/page.tsx: Save button
+- Added prefers-reduced-motion support to disable transforms for accessibility
+- Files modified: src/app/globals.css, src/components/ActionButtons.tsx, src/components/Navigation.tsx, src/components/Onboarding.tsx, src/app/settings/page.tsx
+- **Learnings for future iterations:**
+  - Three button utility classes: .btn-icon (scale), .btn-primary (glow + scale), .btn-nav (background)
+  - All button transitions should be 150ms for consistency
+  - Always add prefers-reduced-motion support when adding animations
+  - Remove redundant `transition-colors` or `transition-opacity` classes when using custom btn-* classes
 ---

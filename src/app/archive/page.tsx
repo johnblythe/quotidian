@@ -5,6 +5,7 @@ import { getQuoteHistory } from "@/lib/history";
 import { getJournalEntry } from "@/lib/journal";
 import { getQuoteById } from "@/lib/quotes";
 import { PageTransition } from "@/components/PageTransition";
+import { ArchiveItemSkeleton } from "@/components/Skeleton";
 import type { Quote, QuoteHistory, JournalEntry } from "@/types";
 
 interface ArchiveItem {
@@ -59,8 +60,17 @@ export default function ArchivePage() {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
-        <div className="text-foreground/30 body-text">Loading...</div>
+      <div className="min-h-screen py-8 px-4">
+        <div className="max-w-2xl mx-auto">
+          <h1 className="quote-text text-2xl text-center mb-8 text-foreground/80">
+            Archive
+          </h1>
+          <div className="space-y-6">
+            <ArchiveItemSkeleton />
+            <ArchiveItemSkeleton />
+            <ArchiveItemSkeleton />
+          </div>
+        </div>
       </div>
     );
   }

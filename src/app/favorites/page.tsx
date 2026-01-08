@@ -5,6 +5,7 @@ import { getFavorites } from "@/lib/favorites";
 import { getQuoteById } from "@/lib/quotes";
 import { Quote } from "@/components/Quote";
 import { PageTransition } from "@/components/PageTransition";
+import { FavoriteItemSkeleton } from "@/components/Skeleton";
 import type { Quote as QuoteType, FavoriteQuote } from "@/types";
 
 interface FavoriteItem {
@@ -42,8 +43,16 @@ export default function FavoritesPage() {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
-        <div className="text-foreground/30 body-text">Loading...</div>
+      <div className="min-h-screen py-8 px-4">
+        <div className="max-w-2xl mx-auto">
+          <h1 className="quote-text text-2xl text-center mb-8 text-foreground/80">
+            Favorites
+          </h1>
+          <div className="space-y-8">
+            <FavoriteItemSkeleton />
+            <FavoriteItemSkeleton />
+          </div>
+        </div>
       </div>
     );
   }
