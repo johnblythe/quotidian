@@ -160,8 +160,8 @@
         "npm run typecheck passes"
       ],
       "priority": 10,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Completed 2026-01-08. Added step state, time picker defaulting to 08:00, Complete button calls onComplete callback."
     },
     {
       "id": "US-011",
@@ -176,8 +176,8 @@
         "npm run typecheck passes"
       ],
       "priority": 11,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Completed 2026-01-08. savePreferences, getPreferences, isOnboarded functions in src/lib/preferences.ts"
     },
     {
       "id": "US-012",

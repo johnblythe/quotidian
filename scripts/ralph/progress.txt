@@ -136,3 +136,29 @@ Started: 2026-01-08
   - Button uses bg-foreground text-background for consistent contrast
   - autoFocus on input for immediate typing
 ---
+
+## 2026-01-08 - US-010: Add notification time picker to Onboarding
+- Added step state to track Step 1 (name) vs Step 2 (time)
+- Step 2: "When would you like your daily reflection?" with time picker input
+- Time picker defaults to 08:00, uses native HTML time input
+- Complete button calls onComplete callback with { name, notificationTime }
+- Added helper text explaining the notification purpose
+- Files modified: src/components/Onboarding.tsx
+- **Learnings for future iterations:**
+  - Native HTML time input (type="time") works well for this use case
+  - Use appearance-none class to reset browser time picker styling somewhat
+  - Step state controls which UI to show via conditional rendering
+---
+
+## 2026-01-08 - US-011: Create preferences helper functions
+- Created src/lib/preferences.ts with three functions
+- savePreferences(prefs): creates or updates preferences in IndexedDB, sets onboardedAt on first save
+- getPreferences(): returns UserPreferences or null if not set
+- isOnboarded(): returns boolean based on whether preferences exist
+- All functions work with db from @/lib/db
+- Files created: src/lib/preferences.ts
+- **Learnings for future iterations:**
+  - Preferences helper at src/lib/preferences.ts - import { savePreferences, getPreferences, isOnboarded } from '@/lib/preferences'
+  - savePreferences takes Omit<UserPreferences, 'id' | 'onboardedAt'> - only name and notificationTime
+  - Uses toCollection().first() to get single record since there's only one user preferences row
+---

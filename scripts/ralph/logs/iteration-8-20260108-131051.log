@@ -1,0 +1,10 @@
+**US-011 Complete.** 
+
+Created `src/lib/preferences.ts` with:
+- `savePreferences(prefs)` - saves/updates user preferences in IndexedDB
+- `getPreferences()` - retrieves preferences, returns null if not set
+- `isOnboarded()` - returns boolean based on preferences existence
+
+Typecheck and build both pass. Committed as `fc3dbc6`.
+
+There are still stories with `passes: false` in prd.json (US-012 through US-030), so this iteration is complete. The next iteration will pick up US-012: Wire up Onboarding to save preferences.

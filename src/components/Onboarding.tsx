@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { savePreferences } from "@/lib/preferences";
 
 interface OnboardingProps {
   onComplete?: (data: { name: string; notificationTime: string }) => void;
@@ -15,8 +16,10 @@ export function Onboarding({ onComplete }: OnboardingProps) {
     setStep(2);
   };
 
-  const handleComplete = () => {
-    onComplete?.({ name: name.trim(), notificationTime });
+  const handleComplete = async () => {
+    const data = { name: name.trim(), notificationTime };
+    await savePreferences(data);
+    onComplete?.(data);
   };
 
   return (
