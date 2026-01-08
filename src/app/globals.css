@@ -65,3 +65,67 @@ body {
     transform: none;
   }
 }
+
+/* Button interaction states */
+
+/* Icon button (ActionButtons, Navigation) - subtle scale + opacity */
+.btn-icon {
+  transition: transform 150ms ease-out, opacity 150ms ease-out, color 150ms ease-out;
+}
+
+.btn-icon:hover {
+  transform: scale(1.05);
+}
+
+.btn-icon:active {
+  transform: scale(0.95);
+  opacity: 0.8;
+}
+
+/* Primary button (Onboarding, Settings) - subtle glow + scale */
+.btn-primary {
+  transition: transform 150ms ease-out, box-shadow 150ms ease-out, opacity 150ms ease-out;
+}
+
+.btn-primary:hover:not(:disabled) {
+  transform: scale(1.02);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+.btn-primary:active:not(:disabled) {
+  transform: scale(0.98);
+  box-shadow: none;
+}
+
+/* Nav link - subtle background on hover */
+.btn-nav {
+  transition: transform 150ms ease-out, background-color 150ms ease-out, color 150ms ease-out;
+  border-radius: 8px;
+}
+
+.btn-nav:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+.btn-nav:active {
+  transform: scale(0.95);
+  background-color: rgba(0, 0, 0, 0.08);
+}
+
+/* Respect reduced motion for buttons */
+@media (prefers-reduced-motion: reduce) {
+  .btn-icon,
+  .btn-primary,
+  .btn-nav {
+    transition: none;
+  }
+
+  .btn-icon:hover,
+  .btn-icon:active,
+  .btn-primary:hover:not(:disabled),
+  .btn-primary:active:not(:disabled),
+  .btn-nav:hover,
+  .btn-nav:active {
+    transform: none;
+  }
+}

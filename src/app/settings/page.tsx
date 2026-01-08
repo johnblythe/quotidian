@@ -84,8 +84,8 @@ export default function SettingsPage() {
             <button
               onClick={handleSave}
               disabled={isSaving || !name.trim()}
-              className="w-full py-3 px-6 bg-foreground text-background font-medium rounded-lg
-                         disabled:opacity-50 disabled:cursor-not-allowed transition-opacity"
+              className="btn-primary w-full py-3 px-6 bg-foreground text-background font-medium rounded-lg
+                         disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isSaving ? 'Saving...' : 'Save'}
             </button>

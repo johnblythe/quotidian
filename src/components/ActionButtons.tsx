@@ -23,7 +23,7 @@ export function ActionButtons({
       {/* Save (heart) button */}
       <button
         onClick={onSave}
-        className="flex flex-col items-center gap-1 text-foreground/60 hover:text-foreground transition-colors"
+        className="btn-icon flex flex-col items-center gap-1 text-foreground/60 hover:text-foreground"
         aria-label={isSaved ? "Remove from favorites" : "Save to favorites"}
       >
         <svg
@@ -45,7 +45,7 @@ export function ActionButtons({
       {/* Reflect (pencil) button */}
       <button
         onClick={onReflect}
-        className={`flex flex-col items-center gap-1 transition-colors ${
+        className={`btn-icon flex flex-col items-center gap-1 ${
           isReflecting
             ? "text-foreground"
             : "text-foreground/60 hover:text-foreground"
@@ -73,7 +73,7 @@ export function ActionButtons({
       <button
         onClick={onAnother}
         disabled={isAnotherDisabled}
-        className={`flex flex-col items-center gap-1 transition-colors ${
+        className={`btn-icon flex flex-col items-center gap-1 ${
           isAnotherDisabled
             ? "text-foreground/30 cursor-not-allowed"
             : "text-foreground/60 hover:text-foreground"

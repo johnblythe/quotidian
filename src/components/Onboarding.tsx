@@ -41,9 +41,8 @@ export function Onboarding({ onComplete }: OnboardingProps) {
             <button
               onClick={handleNext}
               disabled={!name.trim()}
-              className="mt-8 px-8 py-3 bg-foreground text-background body-text
-                         disabled:opacity-30 disabled:cursor-not-allowed
-                         hover:opacity-90 transition-opacity rounded-sm"
+              className="btn-primary mt-8 px-8 py-3 bg-foreground text-background body-text
+                         disabled:opacity-30 disabled:cursor-not-allowed rounded-sm"
             >
               Next
             </button>
@@ -67,8 +66,7 @@ export function Onboarding({ onComplete }: OnboardingProps) {
             </p>
             <button
               onClick={handleComplete}
-              className="mt-8 px-8 py-3 bg-foreground text-background body-text
-                         hover:opacity-90 transition-opacity rounded-sm"
+              className="btn-primary mt-8 px-8 py-3 bg-foreground text-background body-text rounded-sm"
             >
               Complete
             </button>

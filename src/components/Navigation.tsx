@@ -104,7 +104,7 @@ export function Navigation() {
               <li key={item.href}>
                 <Link
                   href={item.href}
-                  className={`flex flex-col items-center gap-1 px-3 py-1 transition-colors ${
+                  className={`btn-nav flex flex-col items-center gap-1 px-3 py-1 ${
                     isActive
                       ? "text-foreground"
                       : "text-foreground/50 hover:text-foreground/80"

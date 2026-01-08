@@ -68,3 +68,58 @@ Started: 2026-01-08
   - Always check for near-duplicates when adding quotes - some are variations on same idea
   - Naval emphasizes wealth, happiness, and self-improvement - many quotes fit work + wisdom themes
 ---
+
+## 2026-01-08 - US-B06: Research and add 20 Alan Watts quotes with themes
+- Added 20 new Alan Watts quotes (watts-011 through watts-030) with properly tagged themes
+- Also added themes to existing 10 Alan Watts quotes (watts-001 through watts-010)
+- Sources used: The Wisdom of Insecurity, The Way of Zen, The Book: On the Taboo Against Knowing Who You Are, Out of Your Mind, The Tao of Philosophy, The Essence of Alan Watts, The Joyous Cosmology, Lecture recordings
+- Themes covered: identity (12), wisdom (14), time (9), simplicity (9), joy (6), adversity (6), work (2), discipline (2), death (1), relationships (2)
+- Files modified: src/data/quotes.json
+- **Learnings for future iterations:**
+  - Alan Watts quotes come from books and lecture recordings - cite specific book/lecture
+  - Watts emphasizes present-moment awareness, identity, and Eastern philosophy - many quotes fit time + identity + wisdom themes
+  - "The Book" is shorthand for "The Book: On the Taboo Against Knowing Who You Are"
+---
+
+## 2026-01-08 - US-B07: Research and add 10 James Stockdale quotes with themes
+- Added themes to existing 5 Stockdale quotes (stockdale-001 through stockdale-005)
+- Added 5 new Stockdale quotes (stockdale-006 through stockdale-010) with themes
+- Sources used: Stockdale Paradox via Good to Great, Interview with Jim Collins, Courage Under Fire: Testing Epictetus's Doctrines, Thoughts of a Philosophical Fighter Pilot, In Love and War, Stockdale on Stoicism
+- Themes covered: adversity (8), discipline (7), wisdom (3), identity (5)
+- Files modified: src/data/quotes.json
+- **Learnings for future iterations:**
+  - James Stockdale was a Navy Admiral and Vietnam POW who applied Stoicism to survive captivity
+  - Main sources: Courage Under Fire, Thoughts of a Philosophical Fighter Pilot, In Love and War (memoir with wife Sybil)
+  - Stockdale quotes emphasize resilience under extreme adversity - most quotes fit adversity + discipline themes
+  - The "Stockdale Paradox" from Good to Great is his most famous concept
+---
+
+## 2026-01-08 - US-B08: Research and add 30 misc quotes (Lao Tzu, Buddha, Rumi) with themes
+- Added 10 Lao Tzu quotes (laotzu-001 through laotzu-010) from Tao Te Ching with themes
+- Added 10 Buddha quotes (buddha-001 through buddha-010) from Dhammapada with themes
+- Added 10 Rumi quotes (rumi-001 through rumi-010) from Selected Poems with themes
+- Sources used: Tao Te Ching (with chapter numbers where known), Dhammapada, Selected Poems
+- Themes covered across all 30: wisdom (13), simplicity (10), identity (10), discipline (9), adversity (6), time (6), relationships (5), joy (5)
+- Files modified: src/data/quotes.json
+- **Learnings for future iterations:**
+  - Lao Tzu quotes all from Tao Te Ching - cite chapter number when known
+  - Buddha quotes traditionally from Dhammapada - cite verse number when known
+  - Rumi quotes from various poems - "Selected Poems" is acceptable as generic source
+  - Eastern philosophers emphasize simplicity, present-moment awareness, and self-knowledge
+  - Quote IDs follow pattern: author-NNN (laotzu, buddha, rumi)
+---
+
+## 2026-01-08 - US-B09: Add page transition animations
+- Created PageTransition component in src/components/PageTransition.tsx
+- Uses CSS opacity+transform animation with requestAnimationFrame for smooth triggering
+- Added page transition CSS in globals.css with 200ms fade-in + subtle slide-up effect
+- Wrapped all 4 pages (home, archive, favorites, settings) with PageTransition component
+- Added prefers-reduced-motion media query to disable animations for accessibility
+- Files created: src/components/PageTransition.tsx
+- Files modified: src/app/globals.css, src/app/page.tsx, src/app/archive/page.tsx, src/app/favorites/page.tsx, src/app/settings/page.tsx
+- **Learnings for future iterations:**
+  - PageTransition is a reusable wrapper - use it on main content after loading state
+  - Animation classes: .page-transition (initial hidden) + .page-transition-enter (visible)
+  - For Next.js App Router, client-side navigation doesn't trigger full page reload, so transitions apply on initial load
+  - Always respect prefers-reduced-motion for accessibility compliance
+---

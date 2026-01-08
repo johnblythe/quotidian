@@ -1,0 +1,9 @@
+**US-B09 completed.** Implemented page transition animations:
+
+- Created `PageTransition` component using CSS opacity+transform animation (200ms)
+- Wrapped all pages: home, archive, favorites, settings
+- Added `prefers-reduced-motion` media query for accessibility
+- All quality checks pass (typecheck + build)
+- Committed: `feat: US-B09 - Add page transition animations`
+
+There are still stories with `passes: false` (US-B10 through US-B25), so another iteration will pick up the next story.
