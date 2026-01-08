@@ -6,6 +6,7 @@ Started: 2026-01-08
 - Theme type in src/types/index.ts - 10 theme categories for quotes
 - Quote interface now has optional themes: Theme[] field
 - Button CSS utilities: .btn-icon (scale), .btn-primary (glow), .btn-nav (background) in globals.css
+- Skeleton components in src/components/Skeleton.tsx: Skeleton (base), QuoteSkeleton, ArchiveItemSkeleton, FavoriteItemSkeleton
 
 ---
 
@@ -143,4 +144,24 @@ Started: 2026-01-08
   - All button transitions should be 150ms for consistency
   - Always add prefers-reduced-motion support when adding animations
   - Remove redundant `transition-colors` or `transition-opacity` classes when using custom btn-* classes
+---
+
+## 2026-01-08 - US-B11: Add loading skeletons to async components
+- Created Skeleton.tsx with base Skeleton component and 3 specialized skeletons:
+  - QuoteSkeleton - matches Quote component dimensions (3 lines + author + source)
+  - ArchiveItemSkeleton - matches archive list item layout (2 lines + author + date/reflection)
+  - FavoriteItemSkeleton - matches favorites item with full Quote + saved date
+- Uses Tailwind's animate-pulse for shimmer effect
+- Skeleton dimensions use responsive sizing (sm:h-8 for larger quote text)
+- Updated home page to show QuoteSkeleton during "loading" state
+- Updated archive page to show 3 ArchiveItemSkeletons during loading
+- Updated favorites page to show 2 FavoriteItemSkeletons during loading
+- Files created: src/components/Skeleton.tsx
+- Files modified: src/app/page.tsx, src/app/archive/page.tsx, src/app/favorites/page.tsx
+- **Learnings for future iterations:**
+  - Skeleton component exports from src/components/Skeleton.tsx
+  - Use animate-pulse from Tailwind for skeleton shimmer
+  - Skeletons should match approximate dimensions of loaded content
+  - Show 2-3 skeleton items in lists to indicate content is coming
+  - Include aria-hidden="true" on skeleton divs for accessibility
 ---
