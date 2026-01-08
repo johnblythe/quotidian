@@ -222,8 +222,8 @@
         "npm run typecheck passes"
       ],
       "priority": 14,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Completed 2026-01-08. Greeting component with time-based greeting logic."
     },
     {
       "id": "US-015",
@@ -237,8 +237,8 @@
         "npm run typecheck passes"
       ],
       "priority": 15,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Completed 2026-01-08. Greeting displayed above quote, name fetched from preferences."
     },
     {
       "id": "US-016",
@@ -254,8 +254,8 @@
         "npm run typecheck passes"
       ],
       "priority": 16,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Completed 2026-01-08. ReflectionEditor with auto-grow textarea, serif font, generous padding."
     },
     {
       "id": "US-017",

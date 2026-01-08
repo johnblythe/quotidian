@@ -186,3 +186,43 @@ Started: 2026-01-08
   - PageState pattern (loading/onboarding/quote) handles async data gracefully
   - getTodaysQuote() is still sync, works in client components too
 ---
+
+## 2026-01-08 - US-014: Create Greeting component
+- Created src/components/Greeting.tsx with time-based greeting
+- Props: name string
+- getGreetingTime() returns 'morning' | 'afternoon' | 'evening' based on hour
+- Morning: 5am-12pm (hours 5-11), Afternoon: 12pm-5pm (hours 12-16), Evening: 5pm-5am (hours 17-23, 0-4)
+- Styled with body-text class, centered, subtle opacity (text-foreground/60), margin-bottom for spacing
+- Files created: src/components/Greeting.tsx
+- **Learnings for future iterations:**
+  - Greeting component at src/components/Greeting.tsx - import { Greeting } from '@/components/Greeting'
+  - Uses 'use client' directive since new Date() is dynamic
+  - Subtle styling with text-foreground/60 for muted appearance
+---
+
+## 2026-01-08 - US-015: Add Greeting to homepage
+- Added Greeting component to homepage above Quote
+- Changed from isOnboarded() to getPreferences() to fetch user name
+- Added userName state to store the name from preferences
+- Greeting conditionally renders when userName is available
+- After onboarding completes, fetches preferences to get name for immediate greeting display
+- Files modified: src/app/page.tsx
+- **Learnings for future iterations:**
+  - Use getPreferences() instead of isOnboarded() when you need user data beyond a boolean check
+  - Fetch preferences again after onboarding to ensure name is immediately available
+  - Conditional render with {userName && <Greeting name={userName} />} for safety
+---
+
+## 2026-01-08 - US-016: Create ReflectionEditor component
+- Created src/components/ReflectionEditor.tsx with "use client" directive
+- Props: quoteId (string), initialContent (optional string), onSave callback
+- Textarea with placeholder "What does this stir in you?"
+- Auto-grow functionality via useEffect that adjusts height on content change
+- Styled with font-serif (Lora), generous padding (px-6 py-8), max-width 65ch
+- Transparent background, no visible border, placeholder with 40% opacity
+- Files created: src/components/ReflectionEditor.tsx
+- **Learnings for future iterations:**
+  - ReflectionEditor at src/components/ReflectionEditor.tsx - import { ReflectionEditor } from '@/components/ReflectionEditor'
+  - Auto-grow pattern: set height to 'auto' then to scrollHeight in useEffect
+  - Uses data-quote-id attribute for potential future DOM querying
+---

@@ -1,0 +1,8 @@
+**US-014 Complete.** 
+
+Created `src/components/Greeting.tsx` with:
+- Time-based greeting logic (morning 5am-12pm, afternoon 12pm-5pm, evening 5pm-5am)
+- Props: `name` string
+- Subtle styling positioned above the quote
+
+There are still stories with `passes: false` (US-015 through US-030), so the next iteration will continue with US-015: Add Greeting to homepage.

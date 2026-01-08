@@ -1,0 +1,19 @@
+There are still 15 stories with `passes: false`. The next story is US-016 (Create ReflectionEditor component). Since there are still stories remaining, I'll end my response normally so another iteration can continue.
+
+---
+
+**US-015: Add Greeting to homepage** - Complete ✓
+
+**Summary:**
+- Added Greeting component import to homepage
+- Changed from `isOnboarded()` to `getPreferences()` to fetch user name
+- Added `userName` state to store the name
+- Greeting displays above the quote when user is logged in
+- After onboarding completes, fetches preferences again for immediate greeting
+
+**UI Verification needed:**
+- Homepage should show "Good morning/afternoon/evening, {name}" above the daily quote
+- Greeting uses subtle styling (text-foreground/60) for muted appearance
+- After completing onboarding, greeting should appear immediately with the user's name
+
+**Next story:** US-016 - Create ReflectionEditor component
