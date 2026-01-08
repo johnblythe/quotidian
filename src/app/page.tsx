@@ -8,6 +8,7 @@ import { ActionButtons } from "@/components/ActionButtons";
 import { ReflectionEditor } from "@/components/ReflectionEditor";
 import { getTodaysQuote, getRandomQuote } from "@/lib/quotes";
 import { getPreferences } from "@/lib/preferences";
+import { isFavorite, addFavorite, removeFavorite } from "@/lib/favorites";
 import type { Quote as QuoteType } from "@/types";
 
 type PageState = "loading" | "onboarding" | "quote";
@@ -17,6 +18,7 @@ export default function Home() {
   const [userName, setUserName] = useState<string>("");
   const [currentQuote, setCurrentQuote] = useState<QuoteType>(getTodaysQuote());
   const [showReflection, setShowReflection] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
 
   useEffect(() => {
     const checkOnboarding = async () => {
@@ -31,9 +33,23 @@ export default function Home() {
     checkOnboarding();
   }, []);
 
-  const handleSave = () => {
-    // TODO: Will be wired to favorites in US-022
-    console.log("Save clicked for quote:", currentQuote.id);
+  // Check favorite status when quote changes
+  useEffect(() => {
+    const checkFavorite = async () => {
+      const saved = await isFavorite(currentQuote.id);
+      setIsSaved(saved);
+    };
+    checkFavorite();
+  }, [currentQuote.id]);
+
+  const handleSave = async () => {
+    if (isSaved) {
+      await removeFavorite(currentQuote.id);
+      setIsSaved(false);
+    } else {
+      await addFavorite(currentQuote.id);
+      setIsSaved(true);
+    }
   };
 
   const handleReflect = () => {
@@ -78,6 +94,7 @@ export default function Home() {
           onSave={handleSave}
           onReflect={handleReflect}
           onAnother={handleAnother}
+          isSaved={isSaved}
           isReflecting={showReflection}
         />
         {showReflection && (
