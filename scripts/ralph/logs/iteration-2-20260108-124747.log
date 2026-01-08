@@ -1,0 +1,17 @@
+There are still 28 stories with `passes: false`. US-002 is complete and committed.
+
+**Completed: US-002 - Configure PWA with manifest and service worker**
+
+Summary of changes:
+- Installed `next-pwa` package
+- Created `public/manifest.json` with Quotidian branding and warm colors (#fafaf8)
+- Generated placeholder PNG icons (192x192, 512x512) 
+- Configured `next.config.ts` with withPWA wrapper
+- Added TypeScript declarations for next-pwa (custom .d.ts since @types/next-pwa doesn't support Next 16)
+- Updated build script to use `--webpack` flag for next-pwa compatibility
+- Added SW files to `.gitignore`
+
+Key learnings documented:
+- next-pwa requires webpack mode in Next.js 16+
+- Service worker files are generated in `public/`, not `.next/`
+- Custom type declarations needed for untyped packages in src/types/
