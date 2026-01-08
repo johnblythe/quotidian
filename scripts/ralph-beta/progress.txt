@@ -357,3 +357,91 @@ Started: 2026-01-08
   - Empty state in editors should be clickable to transition to editing mode
   - Pencil icon path: M15.232 5.232l3.536...z (heroicons)
 ---
+
+## 2026-01-08 - US-B23: Accessibility audit and fixes
+- **Color contrast fixes:**
+  - Bumped text-foreground/40 to text-foreground/60 for readable text
+  - Bumped placeholder:text-foreground/30 to placeholder:text-foreground/50
+  - Affected: Onboarding, Settings, Archive, Favorites, ReflectionEditor, KeyboardShortcutsHelp
+- **Focus indicators:**
+  - Added global :focus-visible styles (2px solid foreground outline)
+  - Added specific focus-visible styles for btn-icon, btn-primary, btn-nav
+  - Added toast-dismiss-btn focus style for dark backgrounds
+- **Skip-to-content link:**
+  - Added skip link in layout.tsx for keyboard navigation
+  - Visually hidden until focused, then slides into view
+  - Added #main-content target wrapper
+- **Modal focus management:**
+  - Added focus trap to KeyboardShortcutsHelp and MilestoneCelebration modals
+  - Auto-focus first interactive element when modal opens
+  - Restore previous focus when modal closes
+  - Tab key cycles within modal elements
+- **Reduced motion support:**
+  - Added skip-to-content transition to reduced motion media query
+  - All other animations already had reduced motion support
+- Files modified: globals.css, layout.tsx, Onboarding.tsx, KeyboardShortcutsHelp.tsx, MilestoneCelebration.tsx, ReflectionEditor.tsx, Toast.tsx, archive/page.tsx, favorites/page.tsx, settings/page.tsx
+- **Learnings for future iterations:**
+  - Color contrast: foreground/60 meets WCAG AA for normal text, /50 for large text only
+  - Use :focus-visible instead of :focus to avoid showing focus on mouse clicks
+  - Modal focus trap pattern: store previousActiveElement, focus first element, trap Tab, restore on close
+  - Skip-to-content links need z-index > 100 to appear above fixed nav
+---
+
+## 2026-01-08 - US-B24: Performance optimization pass
+- **Font optimization:**
+  - Switched from @fontsource packages to next/font/google for Inter and Lora
+  - next/font provides automatic font optimization with display: swap and subsetting
+  - Removed @fontsource/inter and @fontsource/lora dependencies (~7.3MB node_modules savings)
+  - CSS variables now use --font-inter and --font-lora from next/font
+- **Bundle optimization:**
+  - Added dynamic imports (next/dynamic with ssr: false) for rarely-used modal components:
+    - KeyboardShortcutsHelp - only loads when user presses ? key
+    - MilestoneCelebration - only loads when user hits 100 reflections
+    - PhilosopherModeActivated - only loads on Konami code easter egg
+    - Confetti - only loads on first favorite
+  - This splits these components into separate chunks loaded on-demand
+- **Unused asset cleanup:**
+  - Removed 5 unused SVG files from public/ (Next.js boilerplate leftovers)
+    - file.svg, globe.svg, next.svg, vercel.svg, window.svg
+- **Image optimization:**
+  - PWA icons already small (545B for 192x192, 1.9KB for 512x512)
+  - No other images in the app to optimize
+- Files modified: layout.tsx, globals.css, page.tsx, archive/page.tsx, favorites/page.tsx, ReflectionEditor.tsx, package.json
+- Files removed: public/file.svg, public/globe.svg, public/next.svg, public/vercel.svg, public/window.svg
+- **Learnings for future iterations:**
+  - next/font/google is preferred over @fontsource for Next.js projects - auto-hosts fonts, optimizes loading
+  - Use dynamic(() => import(...), { ssr: false }) for client-only modal components
+  - Pattern for named exports: dynamic(() => import("...").then(mod => ({ default: mod.ComponentName })))
+  - Static pages (○) in build output means pre-rendered at build time = fast loads
+---
+
+## 2026-01-08 - US-B25: Cross-browser and device testing fixes
+- **iOS Safari fixes:**
+  - Added Apple PWA meta tags (apple-web-app-capable, apple-web-app-status-bar-style)
+  - Added viewportFit: "cover" for edge-to-edge display
+  - Added safe area inset CSS variables for notched devices
+  - Fixed 100vh bug with @supports (-webkit-touch-callout: none) using -webkit-fill-available
+  - Added -webkit-touch-callout: none and tap highlight fix
+  - Added -webkit-overflow-scrolling: touch for momentum scrolling
+- **Android Chrome fixes:**
+  - Added theme-color meta tag via Next.js viewport export
+  - Fixed manifest.json to separate "any" and "maskable" icon purposes (required by modern PWA spec)
+  - Added id, scope, lang, and categories to manifest for better PWA install
+- **Desktop browser fixes:**
+  - Added Firefox-specific scrollbar styling and focus ring handling
+  - Added cross-browser vendor prefixes for flexbox, transitions, appearance
+  - Added -webkit-text-size-adjust for orientation change handling
+- **PWA improvements:**
+  - Added explicit manifest link in metadata
+  - Added Apple touch icons via metadata.icons.apple
+  - Navigation now uses nav-safe-area class for home indicator spacing
+- **Next.js 16 compatibility:**
+  - Moved viewport and themeColor to separate `export const viewport` (required in Next.js 16+)
+- Files modified: layout.tsx, globals.css, Navigation.tsx, manifest.json
+- **Learnings for future iterations:**
+  - Next.js 16+ requires viewport/themeColor in separate Viewport export, not in Metadata
+  - iOS safe area variables: env(safe-area-inset-top/bottom/left/right)
+  - PWA manifest icons should have separate entries for "any" and "maskable" purposes, not combined
+  - Use @supports (-webkit-touch-callout: none) to target iOS Safari specifically
+  - @media (display-mode: standalone) targets PWA when installed to home screen
+---
