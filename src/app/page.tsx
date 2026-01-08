@@ -9,6 +9,7 @@ import { ReflectionEditor } from "@/components/ReflectionEditor";
 import { getTodaysQuote, getRandomQuote } from "@/lib/quotes";
 import { getPreferences } from "@/lib/preferences";
 import { isFavorite, addFavorite, removeFavorite } from "@/lib/favorites";
+import { getFreshPullsToday, incrementFreshPulls, recordQuoteShown } from "@/lib/history";
 import type { Quote as QuoteType } from "@/types";
 
 type PageState = "loading" | "onboarding" | "quote";
@@ -19,6 +20,7 @@ export default function Home() {
   const [currentQuote, setCurrentQuote] = useState<QuoteType>(getTodaysQuote());
   const [showReflection, setShowReflection] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
+  const [remainingPulls, setRemainingPulls] = useState<number>(3);
 
   useEffect(() => {
     const checkOnboarding = async () => {
@@ -26,6 +28,11 @@ export default function Home() {
       if (prefs) {
         setUserName(prefs.name);
         setPageState("quote");
+        // Check remaining pulls for today
+        const pullsUsed = await getFreshPullsToday();
+        setRemainingPulls(Math.max(0, 3 - pullsUsed));
+        // Record today's quote being shown
+        await recordQuoteShown(getTodaysQuote().id, false);
       } else {
         setPageState("onboarding");
       }
@@ -56,11 +63,16 @@ export default function Home() {
     setShowReflection((prev) => !prev);
   };
 
-  const handleAnother = () => {
-    // TODO: Will be wired to daily limit in US-024
+  const handleAnother = async () => {
+    if (remainingPulls <= 0) return;
+
     const newQuote = getRandomQuote(currentQuote.id);
     setCurrentQuote(newQuote);
     setShowReflection(false);
+
+    // Record the fresh pull and decrement remaining
+    await incrementFreshPulls(newQuote.id);
+    setRemainingPulls((prev) => Math.max(0, prev - 1));
   };
 
   if (pageState === "loading") {
@@ -96,6 +108,7 @@ export default function Home() {
           onAnother={handleAnother}
           isSaved={isSaved}
           isReflecting={showReflection}
+          remainingPulls={remainingPulls}
         />
         {showReflection && (
           <ReflectionEditor quoteId={currentQuote.id} />

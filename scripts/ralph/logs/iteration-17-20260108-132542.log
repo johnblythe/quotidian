@@ -1,0 +1,12 @@
+There are still 10 stories with `passes: false` (US-021 through US-030).
+
+**US-020 Complete!**
+
+Implemented:
+- Created `src/components/ActionButtons.tsx` with Save (heart), Reflect (pencil), Another (arrow) buttons
+- SVG icons for each button with text labels below
+- Updated homepage to show buttons below quote
+- Reflect button toggles ReflectionEditor visibility
+- Another button gets a random different quote
+
+Next story to pick up: **US-021 - Create favorites helper functions**

@@ -6,6 +6,7 @@ interface ActionButtonsProps {
   onAnother: () => void;
   isSaved?: boolean;
   isReflecting?: boolean;
+  remainingPulls?: number;
 }
 
 export function ActionButtons({
@@ -14,7 +15,9 @@ export function ActionButtons({
   onAnother,
   isSaved = false,
   isReflecting = false,
+  remainingPulls,
 }: ActionButtonsProps) {
+  const isAnotherDisabled = remainingPulls !== undefined && remainingPulls <= 0;
   return (
     <div className="flex items-center justify-center gap-8 py-8">
       {/* Save (heart) button */}
@@ -69,8 +72,13 @@ export function ActionButtons({
       {/* Another (arrow) button */}
       <button
         onClick={onAnother}
-        className="flex flex-col items-center gap-1 text-foreground/60 hover:text-foreground transition-colors"
-        aria-label="Get another quote"
+        disabled={isAnotherDisabled}
+        className={`flex flex-col items-center gap-1 transition-colors ${
+          isAnotherDisabled
+            ? "text-foreground/30 cursor-not-allowed"
+            : "text-foreground/60 hover:text-foreground"
+        }`}
+        aria-label={isAnotherDisabled ? "No more quotes available today" : "Get another quote"}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -88,7 +96,9 @@ export function ActionButtons({
           <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16" />
           <path d="M16 16h5v5" />
         </svg>
-        <span className="text-xs body-text">Another</span>
+        <span className="text-xs body-text">
+          {remainingPulls !== undefined ? `Another (${remainingPulls} left)` : "Another"}
+        </span>
       </button>
     </div>
   );

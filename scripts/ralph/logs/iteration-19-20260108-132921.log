@@ -1,0 +1,9 @@
+There are still 8 stories with `passes: false`. US-022 is complete. The next story will be picked up by another iteration.
+
+**Summary of US-022 completion:**
+- Added `isSaved` state to homepage
+- Added useEffect to check favorite status when quote changes
+- Wired handleSave to toggle favorite using addFavorite/removeFavorite
+- Passed isSaved prop to ActionButtons (filled heart when saved, outline when not)
+- Build and typecheck pass
+- Changes committed

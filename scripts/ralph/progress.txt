@@ -268,3 +268,60 @@ Started: 2026-01-08
   - Cleanup timeouts in useEffect return to avoid memory leaks
   - "Saved" indicator shows via opacity transition, auto-hides after 2 seconds
 ---
+
+## 2026-01-08 - US-020: Add action buttons to quote page
+- Created src/components/ActionButtons.tsx with Save (heart), Reflect (pencil), Another (arrow) buttons
+- SVG icons for each button, styled minimally with text labels below
+- Props: onSave, onReflect, onAnother callbacks plus isSaved and isReflecting states
+- Updated src/app/page.tsx to integrate ActionButtons and ReflectionEditor
+- Added showReflection state to toggle ReflectionEditor visibility
+- Reflect button toggles editor, Another button gets random quote and hides editor
+- Changed from static todaysQuote to currentQuote state to support "Another" functionality
+- Files created: src/components/ActionButtons.tsx
+- Files modified: src/app/page.tsx
+- **Learnings for future iterations:**
+  - ActionButtons at src/components/ActionButtons.tsx - import { ActionButtons } from '@/components/ActionButtons'
+  - Use inline SVG icons for simple shapes (heart, pencil, refresh arrows)
+  - isSaved prop controls filled vs outline heart, isReflecting highlights pencil button
+  - handleSave and handleAnother have TODO comments for US-022 and US-024 wiring
+---
+
+## 2026-01-08 - US-021: Create favorites helper functions
+- Created src/lib/favorites.ts with four functions
+- addFavorite(quoteId): saves to IndexedDB, checks for existing to avoid duplicates
+- removeFavorite(quoteId): deletes by quoteId using where().delete()
+- isFavorite(quoteId): returns boolean based on whether quoteId exists in favorites
+- getFavorites(): returns all favorites ordered by savedAt descending (newest first)
+- Files created: src/lib/favorites.ts
+- **Learnings for future iterations:**
+  - Favorites helper at src/lib/favorites.ts - import { addFavorite, removeFavorite, isFavorite, getFavorites } from '@/lib/favorites'
+  - Use where('quoteId').equals(id).delete() to delete by indexed field (not primary key)
+  - Check existing before add to avoid duplicate favorites
+---
+
+## 2026-01-08 - US-022: Wire up Save button for favorites
+- Modified src/app/page.tsx to wire up Save button to favorites
+- Added isSaved state, checks isFavorite on mount and when currentQuote.id changes
+- handleSave toggles: if saved, calls removeFavorite, else calls addFavorite
+- Passes isSaved prop to ActionButtons, which controls filled vs outline heart (already handled in US-020)
+- Files modified: src/app/page.tsx
+- **Learnings for future iterations:**
+  - Use useEffect with quote ID dependency to re-check favorite status when quote changes
+  - Optimistic UI: update local state immediately (setIsSaved) before/after async DB call
+  - ActionButtons already handles filled/outline heart via isSaved prop from US-020
+---
+
+## 2026-01-08 - US-023: Create quote history helper functions
+- Created src/lib/history.ts with five functions
+- recordQuoteShown(quoteId, freshPull): saves quote view to history with timestamp
+- getQuoteHistory(): returns all history ordered by shownAt descending
+- getFreshPullsToday(): counts fresh pulls (another quote requests) since midnight today
+- incrementFreshPulls(quoteId): records a fresh pull by calling recordQuoteShown with freshPull=true
+- canGetAnother(): returns true if < 3 fresh pulls today
+- Files created: src/lib/history.ts
+- **Learnings for future iterations:**
+  - History helper at src/lib/history.ts - import { recordQuoteShown, getQuoteHistory, getFreshPullsToday, incrementFreshPulls, canGetAnother } from '@/lib/history'
+  - Use where('shownAt').aboveOrEqual(date) to filter by date range in Dexie
+  - Use .filter() for additional filtering after where() (e.g., filtering by freshPull boolean)
+  - getTodayStart() helper creates midnight Date for today comparison
+---

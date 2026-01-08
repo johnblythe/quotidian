@@ -315,8 +315,8 @@
         "npm run typecheck passes"
       ],
       "priority": 20,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Completed 2026-01-08. ActionButtons component with SVG icons for heart/pencil/refresh, Reflect toggles ReflectionEditor visibility."
     },
     {
       "id": "US-021",
@@ -331,8 +331,8 @@
         "npm run typecheck passes"
       ],
       "priority": 21,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Completed 2026-01-08. addFavorite, removeFavorite, isFavorite, getFavorites in src/lib/favorites.ts"
     },
     {
       "id": "US-022",
@@ -346,8 +346,8 @@
         "npm run typecheck passes"
       ],
       "priority": 22,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Completed 2026-01-08. Save button checks isFavorite on mount and when quote changes, toggles via addFavorite/removeFavorite, filled/outline heart via isSaved prop."
     },
     {
       "id": "US-023",
@@ -363,8 +363,8 @@
         "npm run typecheck passes"
       ],
       "priority": 23,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Completed 2026-01-08. recordQuoteShown, getQuoteHistory, getFreshPullsToday, incrementFreshPulls, canGetAnother in src/lib/history.ts"
     },
     {
       "id": "US-024",

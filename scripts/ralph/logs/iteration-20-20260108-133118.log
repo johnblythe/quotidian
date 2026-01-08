@@ -1,0 +1,13 @@
+US-023 is complete. There are still stories with `passes: false` remaining (US-024 through US-030), so the task is not fully complete yet.
+
+**Summary:**
+- Implemented US-023: Create quote history helper functions
+- Created `src/lib/history.ts` with 5 functions:
+  - `recordQuoteShown(quoteId, freshPull)` - saves quote view to history
+  - `getQuoteHistory()` - returns all history newest first
+  - `getFreshPullsToday()` - counts "another" pulls since midnight
+  - `incrementFreshPulls(quoteId)` - records a fresh pull
+  - `canGetAnother()` - returns true if < 3 pulls today
+- Typecheck and build pass
+- Committed: `feat: US-023 - Create quote history helper functions`
+- Updated prd.json and progress.txt
