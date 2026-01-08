@@ -1,17 +1,13 @@
 import { Quote } from "@/components/Quote";
-
-const sampleQuote = {
-  id: "marcus-001",
-  text: "You have power over your mind — not outside events. Realize this, and you will find strength.",
-  author: "Marcus Aurelius",
-  source: "Meditations, Book 6",
-};
+import { getTodaysQuote } from "@/lib/quotes";
 
 export default function Home() {
+  const todaysQuote = getTodaysQuote();
+
   return (
     <div className="flex min-h-screen items-center justify-center">
       <main className="w-full">
-        <Quote quote={sampleQuote} />
+        <Quote quote={todaysQuote} />
       </main>
     </div>
   );
