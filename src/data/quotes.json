@@ -7,58 +7,10 @@
     "context": "On the futility of anticipatory anxiety"
   },
   {
-    "id": "marcus-001",
-    "text": "You have power over your mind — not outside events. Realize this, and you will find strength.",
-    "author": "Marcus Aurelius",
-    "source": "Meditations, Book 6"
-  },
-  {
-    "id": "epictetus-001",
-    "text": "It's not what happens to you, but how you react to it that matters.",
-    "author": "Epictetus",
-    "source": "Enchiridion"
-  },
-  {
-    "id": "naval-001",
-    "text": "The three big ones in life are wealth, health, and happiness. We pursue them in that order, but their importance is reverse.",
-    "author": "Naval Ravikant",
-    "source": "The Almanack of Naval Ravikant"
-  },
-  {
-    "id": "watts-001",
-    "text": "The only way to make sense out of change is to plunge into it, move with it, and join the dance.",
-    "author": "Alan Watts",
-    "source": "The Wisdom of Insecurity"
-  },
-  {
     "id": "seneca-002",
     "text": "It is not that we have a short time to live, but that we waste a lot of it.",
     "author": "Seneca",
     "source": "On the Shortness of Life"
-  },
-  {
-    "id": "marcus-002",
-    "text": "Waste no more time arguing about what a good man should be. Be one.",
-    "author": "Marcus Aurelius",
-    "source": "Meditations, Book 10"
-  },
-  {
-    "id": "epictetus-002",
-    "text": "First say to yourself what you would be; and then do what you have to do.",
-    "author": "Epictetus",
-    "source": "Discourses, Book 3"
-  },
-  {
-    "id": "naval-002",
-    "text": "A calm mind, a fit body, and a house full of love. These things cannot be bought — they must be earned.",
-    "author": "Naval Ravikant",
-    "source": "Twitter/X, 2018"
-  },
-  {
-    "id": "watts-002",
-    "text": "Muddy water is best cleared by leaving it alone.",
-    "author": "Alan Watts",
-    "source": "The Way of Zen"
   },
   {
     "id": "seneca-003",
@@ -67,10 +19,118 @@
     "source": "Letters from a Stoic, Letter 76"
   },
   {
+    "id": "seneca-004",
+    "text": "Begin at once to live, and count each separate day as a separate life.",
+    "author": "Seneca",
+    "source": "Letters from a Stoic, Letter 101"
+  },
+  {
+    "id": "seneca-005",
+    "text": "Difficulties strengthen the mind, as labor does the body.",
+    "author": "Seneca",
+    "source": "Letters from a Stoic, Letter 78"
+  },
+  {
+    "id": "seneca-006",
+    "text": "True happiness is to enjoy the present, without anxious dependence upon the future.",
+    "author": "Seneca",
+    "source": "Letters from a Stoic, Letter 15"
+  },
+  {
+    "id": "seneca-007",
+    "text": "If a man knows not to which port he sails, no wind is favorable.",
+    "author": "Seneca",
+    "source": "Letters from a Stoic, Letter 71"
+  },
+  {
+    "id": "seneca-008",
+    "text": "We are always complaining that our days are few, and acting as though there would be no end of them.",
+    "author": "Seneca",
+    "source": "On the Shortness of Life"
+  },
+  {
+    "id": "seneca-009",
+    "text": "Sometimes even to live is an act of courage.",
+    "author": "Seneca",
+    "source": "Letters from a Stoic, Letter 78"
+  },
+  {
+    "id": "seneca-010",
+    "text": "The greatest remedy for anger is delay.",
+    "author": "Seneca",
+    "source": "On Anger, Book 2"
+  },
+  {
+    "id": "marcus-001",
+    "text": "You have power over your mind — not outside events. Realize this, and you will find strength.",
+    "author": "Marcus Aurelius",
+    "source": "Meditations, Book 6"
+  },
+  {
+    "id": "marcus-002",
+    "text": "Waste no more time arguing about what a good man should be. Be one.",
+    "author": "Marcus Aurelius",
+    "source": "Meditations, Book 10"
+  },
+  {
     "id": "marcus-003",
     "text": "The impediment to action advances action. What stands in the way becomes the way.",
     "author": "Marcus Aurelius",
     "source": "Meditations, Book 5"
+  },
+  {
+    "id": "marcus-004",
+    "text": "Very little is needed to make a happy life; it is all within yourself, in your way of thinking.",
+    "author": "Marcus Aurelius",
+    "source": "Meditations, Book 7"
+  },
+  {
+    "id": "marcus-005",
+    "text": "Dwell on the beauty of life. Watch the stars, and see yourself running with them.",
+    "author": "Marcus Aurelius",
+    "source": "Meditations, Book 7"
+  },
+  {
+    "id": "marcus-006",
+    "text": "Accept the things to which fate binds you, and love the people with whom fate brings you together.",
+    "author": "Marcus Aurelius",
+    "source": "Meditations, Book 6"
+  },
+  {
+    "id": "marcus-007",
+    "text": "When you arise in the morning, think of what a precious privilege it is to be alive.",
+    "author": "Marcus Aurelius",
+    "source": "Meditations, Book 5"
+  },
+  {
+    "id": "marcus-008",
+    "text": "The best revenge is not to be like your enemy.",
+    "author": "Marcus Aurelius",
+    "source": "Meditations, Book 6"
+  },
+  {
+    "id": "marcus-009",
+    "text": "Never let the future disturb you. You will meet it, if you have to, with the same weapons of reason.",
+    "author": "Marcus Aurelius",
+    "source": "Meditations, Book 7"
+  },
+  {
+    "id": "marcus-010",
+    "text": "The soul becomes dyed with the color of its thoughts.",
+    "author": "Marcus Aurelius",
+    "source": "Meditations, Book 5"
+  },
+  {
+    "id": "epictetus-001",
+    "text": "It's not what happens to you, but how you react to it that matters.",
+    "author": "Epictetus",
+    "source": "Enchiridion"
+  },
+  {
+    "id": "epictetus-002",
+    "text": "First say to yourself what you would be; and then do what you have to do.",
+    "author": "Epictetus",
+    "source": "Discourses, Book 3"
   },
   {
     "id": "epictetus-003",
@@ -79,15 +139,197 @@
     "source": "Discourses"
   },
   {
+    "id": "epictetus-004",
+    "text": "Make the best use of what is in your power, and take the rest as it happens.",
+    "author": "Epictetus",
+    "source": "Enchiridion"
+  },
+  {
+    "id": "epictetus-005",
+    "text": "Wealth consists not in having great possessions, but in having few wants.",
+    "author": "Epictetus",
+    "source": "Discourses"
+  },
+  {
+    "id": "epictetus-006",
+    "text": "Don't explain your philosophy. Embody it.",
+    "author": "Epictetus",
+    "source": "Enchiridion"
+  },
+  {
+    "id": "epictetus-007",
+    "text": "He who laughs at himself never runs out of things to laugh at.",
+    "author": "Epictetus",
+    "source": "Enchiridion"
+  },
+  {
+    "id": "epictetus-008",
+    "text": "If you want to improve, be content to be thought foolish and stupid.",
+    "author": "Epictetus",
+    "source": "Enchiridion"
+  },
+  {
+    "id": "epictetus-009",
+    "text": "Circumstances don't make the man, they only reveal him to himself.",
+    "author": "Epictetus",
+    "source": "Discourses, Book 1"
+  },
+  {
+    "id": "epictetus-010",
+    "text": "You are not your body and hair-style, but your capacity for choosing well.",
+    "author": "Epictetus",
+    "source": "Discourses, Book 3"
+  },
+  {
+    "id": "naval-001",
+    "text": "The three big ones in life are wealth, health, and happiness. We pursue them in that order, but their importance is reverse.",
+    "author": "Naval Ravikant",
+    "source": "The Almanack of Naval Ravikant"
+  },
+  {
+    "id": "naval-002",
+    "text": "A calm mind, a fit body, and a house full of love. These things cannot be bought — they must be earned.",
+    "author": "Naval Ravikant",
+    "source": "Twitter/X, 2018"
+  },
+  {
     "id": "naval-003",
     "text": "Learn to sell. Learn to build. If you can do both, you will be unstoppable.",
     "author": "Naval Ravikant",
     "source": "How to Get Rich (tweetstorm)"
   },
   {
+    "id": "naval-004",
+    "text": "Desire is a contract you make with yourself to be unhappy until you get what you want.",
+    "author": "Naval Ravikant",
+    "source": "The Almanack of Naval Ravikant"
+  },
+  {
+    "id": "naval-005",
+    "text": "All the real benefits in life come from compound interest.",
+    "author": "Naval Ravikant",
+    "source": "The Almanack of Naval Ravikant"
+  },
+  {
+    "id": "naval-006",
+    "text": "The most important skill for getting rich is becoming a perpetual learner.",
+    "author": "Naval Ravikant",
+    "source": "The Almanack of Naval Ravikant"
+  },
+  {
+    "id": "naval-007",
+    "text": "If you can't see yourself working with someone for life, don't work with them for a day.",
+    "author": "Naval Ravikant",
+    "source": "Twitter/X, 2019"
+  },
+  {
+    "id": "naval-008",
+    "text": "Reading is the ultimate meta-skill and can be traded for anything else.",
+    "author": "Naval Ravikant",
+    "source": "The Almanack of Naval Ravikant"
+  },
+  {
+    "id": "naval-009",
+    "text": "Happiness is the absence of striving for happiness.",
+    "author": "Naval Ravikant",
+    "source": "The Almanack of Naval Ravikant"
+  },
+  {
+    "id": "naval-010",
+    "text": "Specific knowledge is found by pursuing your genuine curiosity and passion rather than whatever is hot right now.",
+    "author": "Naval Ravikant",
+    "source": "How to Get Rich (tweetstorm)"
+  },
+  {
+    "id": "watts-001",
+    "text": "The only way to make sense out of change is to plunge into it, move with it, and join the dance.",
+    "author": "Alan Watts",
+    "source": "The Wisdom of Insecurity"
+  },
+  {
+    "id": "watts-002",
+    "text": "Muddy water is best cleared by leaving it alone.",
+    "author": "Alan Watts",
+    "source": "The Way of Zen"
+  },
+  {
     "id": "watts-003",
     "text": "This is the real secret of life — to be completely engaged with what you are doing in the here and now.",
     "author": "Alan Watts",
     "source": "The Essential Alan Watts"
+  },
+  {
+    "id": "watts-004",
+    "text": "You are an aperture through which the universe is looking at and exploring itself.",
+    "author": "Alan Watts",
+    "source": "The Book: On the Taboo Against Knowing Who You Are"
+  },
+  {
+    "id": "watts-005",
+    "text": "The meaning of life is just to be alive. It is so plain and so obvious and so simple.",
+    "author": "Alan Watts",
+    "source": "The Culture of Counter-Culture"
+  },
+  {
+    "id": "watts-006",
+    "text": "Problems that remain persistently insoluble should always be suspected as questions asked in the wrong way.",
+    "author": "Alan Watts",
+    "source": "The Book: On the Taboo Against Knowing Who You Are"
+  },
+  {
+    "id": "watts-007",
+    "text": "Trying to define yourself is like trying to bite your own teeth.",
+    "author": "Alan Watts",
+    "source": "Life and Music"
+  },
+  {
+    "id": "watts-008",
+    "text": "No one is more dangerously insane than one who is sane all the time.",
+    "author": "Alan Watts",
+    "source": "The Book: On the Taboo Against Knowing Who You Are"
+  },
+  {
+    "id": "watts-009",
+    "text": "Every intelligent individual wants to know what makes him tick, and yet is at once fascinated and frustrated by the fact that oneself is the most difficult of all things to know.",
+    "author": "Alan Watts",
+    "source": "The Book: On the Taboo Against Knowing Who You Are"
+  },
+  {
+    "id": "watts-010",
+    "text": "We seldom realize that our most private thoughts and emotions are not actually our own.",
+    "author": "Alan Watts",
+    "source": "The Book: On the Taboo Against Knowing Who You Are"
+  },
+  {
+    "id": "stockdale-001",
+    "text": "You must never confuse faith that you will prevail in the end with the discipline to confront the most brutal facts of your current reality.",
+    "author": "James Stockdale",
+    "source": "Stockdale Paradox, via Good to Great",
+    "context": "From his experience as a POW in Vietnam"
+  },
+  {
+    "id": "stockdale-002",
+    "text": "I never lost faith in the end of the story. I never doubted that I would get out, and that I would turn the experience into the defining event of my life.",
+    "author": "James Stockdale",
+    "source": "Interview with Jim Collins"
+  },
+  {
+    "id": "stockdale-003",
+    "text": "The optimists were the ones who didn't make it. They said we'd be out by Christmas, and then by Easter, and then by Thanksgiving. They died of a broken heart.",
+    "author": "James Stockdale",
+    "source": "Interview with Jim Collins",
+    "context": "On surviving as a POW"
+  },
+  {
+    "id": "stockdale-004",
+    "text": "Life is not fair. The hero is often penalized, while the coward is rewarded. But the hero doesn't care.",
+    "author": "James Stockdale",
+    "source": "Courage Under Fire: Testing Epictetus's Doctrines"
+  },
+  {
+    "id": "stockdale-005",
+    "text": "The world can take anything from you — everything — except your freedom to choose how you respond.",
+    "author": "James Stockdale",
+    "source": "Thoughts of a Philosophical Fighter Pilot"
   }
 ]
