@@ -1126,14 +1126,14 @@
     "author": "James Stockdale",
     "source": "Stockdale Paradox, via Good to Great",
     "context": "From his experience as a POW in Vietnam",
-    "themes": []
+    "themes": ["adversity", "discipline"]
   },
   {
     "id": "stockdale-002",
     "text": "I never lost faith in the end of the story. I never doubted that I would get out, and that I would turn the experience into the defining event of my life.",
     "author": "James Stockdale",
     "source": "Interview with Jim Collins",
-    "themes": []
+    "themes": ["adversity", "identity"]
   },
   {
     "id": "stockdale-003",
@@ -1141,20 +1141,55 @@
     "author": "James Stockdale",
     "source": "Interview with Jim Collins",
     "context": "On surviving as a POW",
-    "themes": []
+    "themes": ["adversity", "wisdom"]
   },
   {
     "id": "stockdale-004",
     "text": "Life is not fair. The hero is often penalized, while the coward is rewarded. But the hero doesn't care.",
     "author": "James Stockdale",
     "source": "Courage Under Fire: Testing Epictetus's Doctrines",
-    "themes": []
+    "themes": ["adversity", "identity"]
   },
   {
     "id": "stockdale-005",
     "text": "The world can take anything from you — everything — except your freedom to choose how you respond.",
     "author": "James Stockdale",
     "source": "Thoughts of a Philosophical Fighter Pilot",
-    "themes": []
+    "themes": ["adversity", "discipline"]
+  },
+  {
+    "id": "stockdale-006",
+    "text": "Epictetus showed me that I had to take my own good and my own evil under my own control.",
+    "author": "James Stockdale",
+    "source": "Courage Under Fire: Testing Epictetus's Doctrines",
+    "themes": ["discipline", "identity"]
+  },
+  {
+    "id": "stockdale-007",
+    "text": "In prison, I learned that a man can be made to do almost anything if you manipulate his fears and hopes.",
+    "author": "James Stockdale",
+    "source": "In Love and War",
+    "themes": ["adversity", "wisdom"]
+  },
+  {
+    "id": "stockdale-008",
+    "text": "A clear conscience is an absolute requirement for leading a good life.",
+    "author": "James Stockdale",
+    "source": "Thoughts of a Philosophical Fighter Pilot",
+    "themes": ["discipline", "identity"]
+  },
+  {
+    "id": "stockdale-009",
+    "text": "Education is supposed to be a painful process. The Stoics never thought about cushioning the student.",
+    "author": "James Stockdale",
+    "source": "Stockdale on Stoicism",
+    "themes": ["discipline", "wisdom"]
+  },
+  {
+    "id": "stockdale-010",
+    "text": "The Stoics never said that one must stoically accept evil. They said the exact opposite. You have to defend yourself.",
+    "author": "James Stockdale",
+    "source": "Courage Under Fire: Testing Epictetus's Doctrines",
+    "themes": ["adversity", "discipline"]
   }
 ]
