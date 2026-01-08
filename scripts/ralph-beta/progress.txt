@@ -1,7 +1,447 @@
 # Ralph Progress Log - Beta Phase
-Started: (pending)
+Started: 2026-01-08
 
 ## Codebase Patterns
 (Inherited from alpha - see scripts/ralph/progress.txt)
+- Theme type in src/types/index.ts - 10 theme categories for quotes
+- Quote interface now has optional themes: Theme[] field
+- Button CSS utilities: .btn-icon (scale), .btn-primary (glow), .btn-nav (background) in globals.css
+- Skeleton components in src/components/Skeleton.tsx: Skeleton (base), QuoteSkeleton, ArchiveItemSkeleton, FavoriteItemSkeleton
+- Toast system: ToastProvider in layout.tsx, useToast() hook for showToast(message)
+- Keyboard shortcuts hook: useKeyboardShortcuts() in src/hooks/useKeyboardShortcuts.ts
+- KeyboardShortcutsHelp modal component in src/components/KeyboardShortcutsHelp.tsx (context prop: "home" or "list")
+- Milestone celebration: MilestoneCelebration component + localStorage tracking in src/components/MilestoneCelebration.tsx
 
+---
+
+## 2026-01-08 - US-B01: Update Quote interface to include themes array
+- Added Theme type with 10 theme categories: 'adversity' | 'death' | 'discipline' | 'joy' | 'relationships' | 'work' | 'identity' | 'time' | 'wisdom' | 'simplicity'
+- Updated Quote interface to include optional themes: Theme[] field
+- Updated all 55 quotes in quotes.json to include empty themes arrays
+- Files modified: src/types/index.ts, src/data/quotes.json
+- **Learnings for future iterations:**
+  - Theme field is optional (themes?: Theme[]) for backwards compatibility
+  - Empty arrays in JSON are valid - future stories will populate actual themes
+  - All acceptance criteria items must be verified before marking passes: true
+---
+
+## 2026-01-08 - US-B02: Research and add 25 Seneca quotes with themes
+- Added 25 new Seneca quotes (seneca-011 through seneca-035) with properly tagged themes
+- Sources used: Letters to Lucilius (various letters), On the Shortness of Life, On Anger, On Providence, On Tranquility of Mind
+- Themes covered: adversity (7), time (10), discipline (11), wisdom (10), simplicity (4), death (2), relationships (1), identity (3), joy (1)
+- Also added themes to seneca-010 which previously had empty themes array
+- Files modified: src/data/quotes.json
+- **Learnings for future iterations:**
+  - Quote IDs follow pattern: author-NNN (e.g., seneca-011)
+  - Each quote should have 1-2 themes tagged, based on primary message
+  - Sources should be specific when possible (e.g., "Letters to Lucilius, Letter 7")
+  - Ensure no text duplicates by reading existing quotes first
+---
+
+## 2026-01-08 - US-B03: Research and add 25 Marcus Aurelius quotes with themes
+- Added 25 new Marcus Aurelius quotes (marcus-011 through marcus-035) with properly tagged themes
+- All quotes sourced from Meditations (Books 2, 4, 5, 6, 7, 10, 12)
+- Added themes to existing 10 Marcus Aurelius quotes (marcus-001 through marcus-010)
+- Themes covered: death (7), time (8), adversity (8), discipline (11), wisdom (9), identity (9), simplicity (4), joy (6), relationships (3), work (2)
+- Files modified: src/data/quotes.json
+- **Learnings for future iterations:**
+  - Marcus Aurelius quotes all from Meditations - cite specific Book number
+  - Some quotes are variations on same theme (e.g., morning gratitude) - ensure text is distinct
+  - Existing quotes with empty themes should also be populated when adding new ones from same author
+---
+
+## 2026-01-08 - US-B04: Research and add 20 Epictetus quotes with themes
+- Added 20 new Epictetus quotes (epictetus-011 through epictetus-030) with properly tagged themes
+- Also added themes to existing 10 Epictetus quotes (epictetus-001 through epictetus-010)
+- Sources used: Enchiridion (14 quotes) and Discourses Books 1, 2, 3 (16 quotes)
+- Themes covered: adversity (9), discipline (13), identity (13), wisdom (15), simplicity (4), relationships (4), joy (2), work (2), time (1)
+- Files modified: src/data/quotes.json
+- **Learnings for future iterations:**
+  - Epictetus quotes primarily from Enchiridion (handbook) and Discourses (longer lectures)
+  - Discourses should cite specific Book number when possible (Book 1, 2, or 3)
+  - Epictetus emphasizes dichotomy of control - many quotes fit adversity + discipline themes
+---
+
+## 2026-01-08 - US-B05: Research and add 20 Naval Ravikant quotes with themes
+- Added 20 new Naval Ravikant quotes (naval-011 through naval-030) with properly tagged themes
+- Also added themes to existing 10 Naval quotes (naval-001 through naval-010)
+- Sources used: The Almanack of Naval Ravikant, How to Get Rich (tweetstorm), Twitter/X posts
+- Themes covered: work (10), identity (8), wisdom (9), joy (6), relationships (5), discipline (6), time (5), simplicity (4), adversity (3), death (1)
+- Fixed potential duplicate (naval-013 was similar to naval-002) by replacing with different quote
+- Files modified: src/data/quotes.json
+- **Learnings for future iterations:**
+  - Naval quotes come from: The Almanack of Naval Ravikant, How to Get Rich tweetstorm, Twitter/X posts
+  - Always check for near-duplicates when adding quotes - some are variations on same idea
+  - Naval emphasizes wealth, happiness, and self-improvement - many quotes fit work + wisdom themes
+---
+
+## 2026-01-08 - US-B06: Research and add 20 Alan Watts quotes with themes
+- Added 20 new Alan Watts quotes (watts-011 through watts-030) with properly tagged themes
+- Also added themes to existing 10 Alan Watts quotes (watts-001 through watts-010)
+- Sources used: The Wisdom of Insecurity, The Way of Zen, The Book: On the Taboo Against Knowing Who You Are, Out of Your Mind, The Tao of Philosophy, The Essence of Alan Watts, The Joyous Cosmology, Lecture recordings
+- Themes covered: identity (12), wisdom (14), time (9), simplicity (9), joy (6), adversity (6), work (2), discipline (2), death (1), relationships (2)
+- Files modified: src/data/quotes.json
+- **Learnings for future iterations:**
+  - Alan Watts quotes come from books and lecture recordings - cite specific book/lecture
+  - Watts emphasizes present-moment awareness, identity, and Eastern philosophy - many quotes fit time + identity + wisdom themes
+  - "The Book" is shorthand for "The Book: On the Taboo Against Knowing Who You Are"
+---
+
+## 2026-01-08 - US-B07: Research and add 10 James Stockdale quotes with themes
+- Added themes to existing 5 Stockdale quotes (stockdale-001 through stockdale-005)
+- Added 5 new Stockdale quotes (stockdale-006 through stockdale-010) with themes
+- Sources used: Stockdale Paradox via Good to Great, Interview with Jim Collins, Courage Under Fire: Testing Epictetus's Doctrines, Thoughts of a Philosophical Fighter Pilot, In Love and War, Stockdale on Stoicism
+- Themes covered: adversity (8), discipline (7), wisdom (3), identity (5)
+- Files modified: src/data/quotes.json
+- **Learnings for future iterations:**
+  - James Stockdale was a Navy Admiral and Vietnam POW who applied Stoicism to survive captivity
+  - Main sources: Courage Under Fire, Thoughts of a Philosophical Fighter Pilot, In Love and War (memoir with wife Sybil)
+  - Stockdale quotes emphasize resilience under extreme adversity - most quotes fit adversity + discipline themes
+  - The "Stockdale Paradox" from Good to Great is his most famous concept
+---
+
+## 2026-01-08 - US-B08: Research and add 30 misc quotes (Lao Tzu, Buddha, Rumi) with themes
+- Added 10 Lao Tzu quotes (laotzu-001 through laotzu-010) from Tao Te Ching with themes
+- Added 10 Buddha quotes (buddha-001 through buddha-010) from Dhammapada with themes
+- Added 10 Rumi quotes (rumi-001 through rumi-010) from Selected Poems with themes
+- Sources used: Tao Te Ching (with chapter numbers where known), Dhammapada, Selected Poems
+- Themes covered across all 30: wisdom (13), simplicity (10), identity (10), discipline (9), adversity (6), time (6), relationships (5), joy (5)
+- Files modified: src/data/quotes.json
+- **Learnings for future iterations:**
+  - Lao Tzu quotes all from Tao Te Ching - cite chapter number when known
+  - Buddha quotes traditionally from Dhammapada - cite verse number when known
+  - Rumi quotes from various poems - "Selected Poems" is acceptable as generic source
+  - Eastern philosophers emphasize simplicity, present-moment awareness, and self-knowledge
+  - Quote IDs follow pattern: author-NNN (laotzu, buddha, rumi)
+---
+
+## 2026-01-08 - US-B09: Add page transition animations
+- Created PageTransition component in src/components/PageTransition.tsx
+- Uses CSS opacity+transform animation with requestAnimationFrame for smooth triggering
+- Added page transition CSS in globals.css with 200ms fade-in + subtle slide-up effect
+- Wrapped all 4 pages (home, archive, favorites, settings) with PageTransition component
+- Added prefers-reduced-motion media query to disable animations for accessibility
+- Files created: src/components/PageTransition.tsx
+- Files modified: src/app/globals.css, src/app/page.tsx, src/app/archive/page.tsx, src/app/favorites/page.tsx, src/app/settings/page.tsx
+- **Learnings for future iterations:**
+  - PageTransition is a reusable wrapper - use it on main content after loading state
+  - Animation classes: .page-transition (initial hidden) + .page-transition-enter (visible)
+  - For Next.js App Router, client-side navigation doesn't trigger full page reload, so transitions apply on initial load
+  - Always respect prefers-reduced-motion for accessibility compliance
+---
+
+## 2026-01-08 - US-B10: Add button hover and active states
+- Added 3 CSS utility classes in globals.css:
+  - `.btn-icon` - for icon buttons (ActionButtons) - subtle scale on hover (1.05), scale down on active (0.95)
+  - `.btn-primary` - for primary action buttons (Onboarding, Settings) - subtle glow/shadow on hover, scale on active
+  - `.btn-nav` - for navigation links - subtle background color on hover/active
+- All transitions are 150ms ease-out for smooth feel
+- Applied classes to all interactive elements:
+  - ActionButtons.tsx: Save, Reflect, Another buttons
+  - Navigation.tsx: nav links
+  - Onboarding.tsx: Next, Complete buttons
+  - settings/page.tsx: Save button
+- Added prefers-reduced-motion support to disable transforms for accessibility
+- Files modified: src/app/globals.css, src/components/ActionButtons.tsx, src/components/Navigation.tsx, src/components/Onboarding.tsx, src/app/settings/page.tsx
+- **Learnings for future iterations:**
+  - Three button utility classes: .btn-icon (scale), .btn-primary (glow + scale), .btn-nav (background)
+  - All button transitions should be 150ms for consistency
+  - Always add prefers-reduced-motion support when adding animations
+  - Remove redundant `transition-colors` or `transition-opacity` classes when using custom btn-* classes
+---
+
+## 2026-01-08 - US-B11: Add loading skeletons to async components
+- Created Skeleton.tsx with base Skeleton component and 3 specialized skeletons:
+  - QuoteSkeleton - matches Quote component dimensions (3 lines + author + source)
+  - ArchiveItemSkeleton - matches archive list item layout (2 lines + author + date/reflection)
+  - FavoriteItemSkeleton - matches favorites item with full Quote + saved date
+- Uses Tailwind's animate-pulse for shimmer effect
+- Skeleton dimensions use responsive sizing (sm:h-8 for larger quote text)
+- Updated home page to show QuoteSkeleton during "loading" state
+- Updated archive page to show 3 ArchiveItemSkeletons during loading
+- Updated favorites page to show 2 FavoriteItemSkeletons during loading
+- Files created: src/components/Skeleton.tsx
+- Files modified: src/app/page.tsx, src/app/archive/page.tsx, src/app/favorites/page.tsx
+- **Learnings for future iterations:**
+  - Skeleton component exports from src/components/Skeleton.tsx
+  - Use animate-pulse from Tailwind for skeleton shimmer
+  - Skeletons should match approximate dimensions of loaded content
+  - Show 2-3 skeleton items in lists to indicate content is coming
+  - Include aria-hidden="true" on skeleton divs for accessibility
+---
+
+## 2026-01-08 - US-B12: Add heart fill animation on favorite
+- Added heart-pop animation (300ms cubic-bezier bounce) for favoriting
+- Added heart-shrink animation (200ms ease-out) for unfavoriting
+- Created heart-icon CSS class in globals.css with animation keyframes
+- Updated ActionButtons to use useRef and useEffect for tracking state changes
+- Animation only triggers on actual save/unsave state change, not on mount
+- Uses getBoundingClientRect() to force reflow for animation restart
+- Added prefers-reduced-motion support to disable animations
+- Files modified: src/app/globals.css, src/components/ActionButtons.tsx
+- **Learnings for future iterations:**
+  - Heart animation CSS classes: .heart-icon (base), .heart-filled (pop), .heart-unfilled (shrink)
+  - Use getBoundingClientRect() (not offsetWidth) to force reflow on SVG elements for TypeScript
+  - Track previous state with useRef to only animate on actual changes
+  - Animation timing: 300ms for emphasis (favorite), 200ms for de-emphasis (unfavorite)
+---
+
+## 2026-01-08 - US-B13: Add toast notification system
+- Created Toast component with ToastProvider context in src/components/Toast.tsx
+- Toast appears at bottom of screen (bottom-20 on mobile to avoid nav, bottom-6 on desktop)
+- Auto-dismisses after 3 seconds with dismissable X button
+- Added toast-enter animation (200ms slide-up fade-in) in globals.css
+- Wrapped app in ToastProvider in layout.tsx
+- Added toast triggers on:
+  - Save/remove favorite (home page)
+  - Save reflection (ReflectionEditor - on debounced save)
+  - Update settings (settings page)
+- Added prefers-reduced-motion support for toast animation
+- Files created: src/components/Toast.tsx
+- Files modified: src/app/globals.css, src/app/layout.tsx, src/app/page.tsx, src/app/settings/page.tsx, src/components/ReflectionEditor.tsx
+- **Learnings for future iterations:**
+  - Toast component exports: ToastProvider (wrapper), useToast (hook)
+  - Use useToast() hook to call showToast(message) from any component
+  - Toast container uses fixed positioning with z-50 for overlay
+  - Supports multiple simultaneous toasts stacked vertically
+  - Counter-based IDs avoid React key issues with rapid toasts
+---
+
+## 2026-01-08 - US-B14: Improve textarea auto-resize smoothness
+- Rewrote auto-resize logic in ReflectionEditor.tsx to eliminate jumpiness
+- New approach: temporarily disable CSS transition during measurement, measure with height:auto, restore original height, re-enable transition, then animate to target
+- Uses requestAnimationFrame to ensure smooth transition between frames
+- Added .textarea-smooth-resize CSS class in globals.css with 150ms height transition
+- Added overflow: hidden to prevent scroll during resize
+- Added window resize listener to handle responsive font size changes
+- Added prefers-reduced-motion support to disable transition for accessibility
+- Files modified: src/components/ReflectionEditor.tsx, src/app/globals.css
+- **Learnings for future iterations:**
+  - Auto-resize pattern: disable transition → measure → restore → enable transition → animate
+  - Use getBoundingClientRect() to force reflow before re-enabling transition
+  - CSS class .textarea-smooth-resize provides 150ms height transition + overflow:hidden
+  - Always add resize event listener for textareas when font sizes change responsively
+---
+
+## 2026-01-08 - US-B15: Add keyboard shortcuts
+- Created useKeyboardShortcuts hook in src/hooks/useKeyboardShortcuts.ts
+- Created KeyboardShortcutsHelp modal component in src/components/KeyboardShortcutsHelp.tsx
+- Home page shortcuts: s (save/unsave), r (reflect), Escape (close reflection/modal), ? (show help)
+- Archive/Favorites pages: j (next item), k (previous item), Escape (clear selection), ? (show help)
+- Shortcuts ignore key presses when user is typing in input/textarea (except Escape)
+- Shortcuts ignore key presses when modifier keys (Ctrl, Alt, Meta) are pressed
+- Visual selection highlighting on archive/favorites items when navigated with j/k
+- Items scroll into view when selected via keyboard
+- Files created: src/hooks/useKeyboardShortcuts.ts, src/components/KeyboardShortcutsHelp.tsx
+- Files modified: src/app/page.tsx, src/app/archive/page.tsx, src/app/favorites/page.tsx
+- **Learnings for future iterations:**
+  - useKeyboardShortcuts hook takes object with optional handlers: onSave, onReflect, onEscape, onNavigateUp, onNavigateDown, onHelp
+  - KeyboardShortcutsHelp takes context prop ("home" or "list") to show relevant shortcuts
+  - Use useRef to store handlers and avoid stale closure issues
+  - Use itemRefs array with ref callbacks to track DOM elements for scrollIntoView
+  - Selected items get bg-foreground/5 highlight with smooth transition
+---
+
+## 2026-01-08 - US-B16: Add milestone celebration for 100 reflections
+- Created MilestoneCelebration modal component in src/components/MilestoneCelebration.tsx
+- Added getTotalReflectionCount function to journal.ts
+- Modified saveJournalEntry to return boolean indicating if entry is new
+- Integrated milestone check into ReflectionEditor debounced save
+- Milestone tracking uses localStorage (key: quotidian_shown_milestones)
+- Modal shows congratulatory message for 100 reflections milestone
+- Only shows once per milestone (tracked via localStorage array)
+- Files created: src/components/MilestoneCelebration.tsx
+- Files modified: src/lib/journal.ts, src/components/ReflectionEditor.tsx
+- **Learnings for future iterations:**
+  - MilestoneCelebration exports: MilestoneCelebration (modal), getMilestones, markMilestoneShown, shouldShowMilestone
+  - saveJournalEntry returns true for new entry, false for update
+  - getTotalReflectionCount() returns number of journal entries
+  - Milestone modal follows same pattern as KeyboardShortcutsHelp (click outside to dismiss, Escape to close)
+  - localStorage used instead of IndexedDB for simple boolean tracking to avoid schema version bump
+---
+
+## 2026-01-08 - US-B17: Add seasonal greeting variants
+- Added getSeason() function to detect season from date (Northern Hemisphere)
+- Season boundaries: Winter (Dec 21-Mar 20), Spring (Mar 21-Jun 20), Summer (Jun 21-Sep 22), Autumn (Sep 23-Dec 20)
+- Updated greeting format from "Good morning, John" to "Good winter morning, John"
+- Greetings now include all 4 seasons × 3 time periods (morning/afternoon/evening)
+- Files modified: src/components/Greeting.tsx
+- **Learnings for future iterations:**
+  - Season type: 'winter' | 'spring' | 'summer' | 'autumn'
+  - getSeason() uses month (0-11) and day to determine season
+  - Northern Hemisphere seasons assumed - could add hemisphere detection in future
+  - Greeting format is subtle: "Good {season} {timeOfDay}, {name}"
+---
+
+## 2026-01-08 - US-B18: Add Konami code easter egg
+- Created useKonamiCode hook in src/hooks/useKonamiCode.ts to detect konami sequence
+- Created PhilosopherModeActivated component in src/components/PhilosopherMode.tsx for activation modal
+- Added quote helper functions to src/lib/quotes.ts: getAllAuthors(), getRandomAuthor(), getQuotesByAuthor(), getTodaysQuoteByAuthor(), getRandomQuoteByAuthor()
+- Integrated philosopher mode state into home page - tracks selected philosopher
+- "Another" button respects philosopher mode and only shows quotes from that philosopher
+- State resets on page refresh (session-only, not persisted)
+- Modal auto-dismisses after 4 seconds or on click
+- Files created: src/hooks/useKonamiCode.ts, src/components/PhilosopherMode.tsx
+- Files modified: src/lib/quotes.ts, src/app/page.tsx
+- **Learnings for future iterations:**
+  - Konami code: ArrowUp, ArrowUp, ArrowDown, ArrowDown, ArrowLeft, ArrowRight, ArrowLeft, ArrowRight, KeyB, KeyA (uses event.code)
+  - useKonamiCode(callback) hook tracks key sequence and calls callback when matched
+  - Quote helpers for author filtering are in src/lib/quotes.ts
+  - Session-only state uses React useState (not localStorage) so it resets on refresh
+---
+
+## 2026-01-08 - US-B19: Add first-favorite confetti
+- Created Confetti component in src/components/Confetti.tsx
+- Generates 30 confetti pieces that fall with CSS animation (1.2-2s duration)
+- Uses localStorage to track if first favorite confetti has been shown (key: quotidian_first_favorite_shown)
+- Checks both localStorage flag AND current favorites count to ensure it's truly the first favorite
+- Animation includes rotation and horizontal drift via CSS custom properties
+- Auto-dismisses after 2.5s with cleanup callback
+- Integrated into both click and keyboard (s key) save handlers
+- Added prefers-reduced-motion support (shows brief gradient flash instead)
+- Files created: src/components/Confetti.tsx
+- Files modified: src/app/globals.css, src/app/page.tsx
+- **Learnings for future iterations:**
+  - Confetti component exports: Confetti, hasShownFirstFavoriteConfetti, markFirstFavoriteConfettiShown
+  - CSS animation uses nth-child selectors with custom properties for variation
+  - Double-check first-time logic: check both localStorage flag AND database state
+  - For one-time events, localStorage is simpler than IndexedDB schema changes
+---
+
+## 2026-01-08 - US-B20: Design and implement empty state for favorites
+- Redesigned empty state with visually pleasing layout:
+  - Large decorative heart icon in a subtle circular background
+  - "Your collection awaits" heading in serif font
+  - Helpful text about tapping hearts to save quotes
+  - Link with arrow icon to go find first quote
+- Used PageTransition wrapper for consistency with other pages
+- Applied existing btn-nav class to CTA link for hover effects
+- Files modified: src/app/favorites/page.tsx
+- **Learnings for future iterations:**
+  - Empty states should have: icon/visual, heading, helper text, and CTA
+  - Use quote-text for headings, body-text for descriptions
+  - Wrap empty states in PageTransition for consistent page enter animations
+  - Use aria-hidden="true" on decorative SVGs
+---
+
+## 2026-01-08 - US-B21: Design and implement empty state for archive
+- Redesigned archive empty state with visually pleasing layout following favorites pattern:
+  - Large decorative open book icon in subtle circular background
+  - "Your journey begins" heading in serif font
+  - Helpful text explaining archive will collect quote history and reflections
+  - CTA link with arrow icon to see today's quote
+- Used PageTransition wrapper for consistency with other pages
+- Applied existing btn-nav class to CTA link for hover effects
+- Files modified: src/app/archive/page.tsx
+- **Learnings for future iterations:**
+  - Empty states follow consistent pattern: icon, heading, description, CTA
+  - Book icon (M12 6.253v13...) good for archive/history contexts
+  - Heart icon for favorites, book icon for archive - semantic distinction
+---
+
+## 2026-01-08 - US-B22: Design and implement empty state for reflections
+- Added ReflectionEmptyState component inside ReflectionEditor.tsx
+- Empty state displays when:
+  - Editor is loaded (isLoaded=true)
+  - No existing reflection (content.length === 0)
+  - User hasn't started writing yet (hasStartedWriting=false)
+- Design is minimal and subtle:
+  - Small pencil/pen icon in foreground/20 color
+  - Italic serif prompt: "Wisdom grows when written"
+  - Clickable to focus and start writing
+- Clicking the empty state transitions to the regular textarea with placeholder
+- Files modified: src/components/ReflectionEditor.tsx
+- **Learnings for future iterations:**
+  - ReflectionEmptyState is internal to ReflectionEditor (not exported)
+  - Track hasStartedWriting state to distinguish between "no reflection" and "cleared reflection"
+  - Empty state in editors should be clickable to transition to editing mode
+  - Pencil icon path: M15.232 5.232l3.536...z (heroicons)
+---
+
+## 2026-01-08 - US-B23: Accessibility audit and fixes
+- **Color contrast fixes:**
+  - Bumped text-foreground/40 to text-foreground/60 for readable text
+  - Bumped placeholder:text-foreground/30 to placeholder:text-foreground/50
+  - Affected: Onboarding, Settings, Archive, Favorites, ReflectionEditor, KeyboardShortcutsHelp
+- **Focus indicators:**
+  - Added global :focus-visible styles (2px solid foreground outline)
+  - Added specific focus-visible styles for btn-icon, btn-primary, btn-nav
+  - Added toast-dismiss-btn focus style for dark backgrounds
+- **Skip-to-content link:**
+  - Added skip link in layout.tsx for keyboard navigation
+  - Visually hidden until focused, then slides into view
+  - Added #main-content target wrapper
+- **Modal focus management:**
+  - Added focus trap to KeyboardShortcutsHelp and MilestoneCelebration modals
+  - Auto-focus first interactive element when modal opens
+  - Restore previous focus when modal closes
+  - Tab key cycles within modal elements
+- **Reduced motion support:**
+  - Added skip-to-content transition to reduced motion media query
+  - All other animations already had reduced motion support
+- Files modified: globals.css, layout.tsx, Onboarding.tsx, KeyboardShortcutsHelp.tsx, MilestoneCelebration.tsx, ReflectionEditor.tsx, Toast.tsx, archive/page.tsx, favorites/page.tsx, settings/page.tsx
+- **Learnings for future iterations:**
+  - Color contrast: foreground/60 meets WCAG AA for normal text, /50 for large text only
+  - Use :focus-visible instead of :focus to avoid showing focus on mouse clicks
+  - Modal focus trap pattern: store previousActiveElement, focus first element, trap Tab, restore on close
+  - Skip-to-content links need z-index > 100 to appear above fixed nav
+---
+
+## 2026-01-08 - US-B24: Performance optimization pass
+- **Font optimization:**
+  - Switched from @fontsource packages to next/font/google for Inter and Lora
+  - next/font provides automatic font optimization with display: swap and subsetting
+  - Removed @fontsource/inter and @fontsource/lora dependencies (~7.3MB node_modules savings)
+  - CSS variables now use --font-inter and --font-lora from next/font
+- **Bundle optimization:**
+  - Added dynamic imports (next/dynamic with ssr: false) for rarely-used modal components:
+    - KeyboardShortcutsHelp - only loads when user presses ? key
+    - MilestoneCelebration - only loads when user hits 100 reflections
+    - PhilosopherModeActivated - only loads on Konami code easter egg
+    - Confetti - only loads on first favorite
+  - This splits these components into separate chunks loaded on-demand
+- **Unused asset cleanup:**
+  - Removed 5 unused SVG files from public/ (Next.js boilerplate leftovers)
+    - file.svg, globe.svg, next.svg, vercel.svg, window.svg
+- **Image optimization:**
+  - PWA icons already small (545B for 192x192, 1.9KB for 512x512)
+  - No other images in the app to optimize
+- Files modified: layout.tsx, globals.css, page.tsx, archive/page.tsx, favorites/page.tsx, ReflectionEditor.tsx, package.json
+- Files removed: public/file.svg, public/globe.svg, public/next.svg, public/vercel.svg, public/window.svg
+- **Learnings for future iterations:**
+  - next/font/google is preferred over @fontsource for Next.js projects - auto-hosts fonts, optimizes loading
+  - Use dynamic(() => import(...), { ssr: false }) for client-only modal components
+  - Pattern for named exports: dynamic(() => import("...").then(mod => ({ default: mod.ComponentName })))
+  - Static pages (○) in build output means pre-rendered at build time = fast loads
+---
+
+## 2026-01-08 - US-B25: Cross-browser and device testing fixes
+- **iOS Safari fixes:**
+  - Added Apple PWA meta tags (apple-web-app-capable, apple-web-app-status-bar-style)
+  - Added viewportFit: "cover" for edge-to-edge display
+  - Added safe area inset CSS variables for notched devices
+  - Fixed 100vh bug with @supports (-webkit-touch-callout: none) using -webkit-fill-available
+  - Added -webkit-touch-callout: none and tap highlight fix
+  - Added -webkit-overflow-scrolling: touch for momentum scrolling
+- **Android Chrome fixes:**
+  - Added theme-color meta tag via Next.js viewport export
+  - Fixed manifest.json to separate "any" and "maskable" icon purposes (required by modern PWA spec)
+  - Added id, scope, lang, and categories to manifest for better PWA install
+- **Desktop browser fixes:**
+  - Added Firefox-specific scrollbar styling and focus ring handling
+  - Added cross-browser vendor prefixes for flexbox, transitions, appearance
+  - Added -webkit-text-size-adjust for orientation change handling
+- **PWA improvements:**
+  - Added explicit manifest link in metadata
+  - Added Apple touch icons via metadata.icons.apple
+  - Navigation now uses nav-safe-area class for home indicator spacing
+- **Next.js 16 compatibility:**
+  - Moved viewport and themeColor to separate `export const viewport` (required in Next.js 16+)
+- Files modified: layout.tsx, globals.css, Navigation.tsx, manifest.json
+- **Learnings for future iterations:**
+  - Next.js 16+ requires viewport/themeColor in separate Viewport export, not in Metadata
+  - iOS safe area variables: env(safe-area-inset-top/bottom/left/right)
+  - PWA manifest icons should have separate entries for "any" and "maskable" purposes, not combined
+  - Use @supports (-webkit-touch-callout: none) to target iOS Safari specifically
+  - @media (display-mode: standalone) targets PWA when installed to home screen
 ---

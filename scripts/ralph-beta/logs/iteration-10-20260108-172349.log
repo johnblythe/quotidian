@@ -1,0 +1,12 @@
+**US-B10: Add button hover and active states** is complete.
+
+**Summary:**
+- Added 3 CSS button utility classes in `globals.css`:
+  - `.btn-icon` - scale up/down on hover/active (for icon buttons)
+  - `.btn-primary` - shadow glow + scale on hover/active (for primary action buttons)
+  - `.btn-nav` - background color change on hover/active (for navigation links)
+- All transitions are 150ms for smooth, consistent feel
+- Applied to all buttons across: ActionButtons.tsx, Navigation.tsx, Onboarding.tsx, settings/page.tsx
+- Respects prefers-reduced-motion for accessibility
+
+There are still stories with `passes: false` remaining (US-B11 through US-B25), so another iteration can pick up the next story.

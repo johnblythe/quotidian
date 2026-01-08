@@ -1,0 +1,15 @@
+There are still 8 stories with `passes: false`. Story US-B17 is now complete. The next iteration will pick up US-B18 (Konami code easter egg).
+
+**Summary of US-B17: Add seasonal greeting variants**
+
+Implemented:
+- Added `getSeason()` function that detects season based on current date (Northern Hemisphere)
+- Season boundaries use approximate equinox/solstice dates:
+  - Winter: Dec 21 - Mar 20
+  - Spring: Mar 21 - Jun 20  
+  - Summer: Jun 21 - Sep 22
+  - Autumn: Sep 23 - Dec 20
+- Updated greeting format from "Good morning, John" to "Good winter morning, John"
+- All 12 combinations work: 4 seasons × 3 time periods
+
+Files modified: `src/components/Greeting.tsx`

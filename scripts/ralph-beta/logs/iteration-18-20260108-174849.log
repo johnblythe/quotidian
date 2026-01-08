@@ -1,0 +1,10 @@
+There are still 7 stories with `passes: false`, so the work is not complete yet. 
+
+**US-B18: Add Konami code easter egg** has been completed:
+- Created `useKonamiCode` hook to detect the Konami code sequence (up up down down left right left right b a)
+- Created `PhilosopherModeActivated` modal component with playful activation message
+- Added quote helper functions for filtering by author
+- Integrated philosopher mode into home page - when activated, all quotes for the session come from one random philosopher
+- State resets on page refresh (session-only)
+- Both typecheck and build pass
+- Committed as: `feat: US-B18 - Add Konami code easter egg`

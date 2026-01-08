@@ -1,16 +1,28 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
+import dynamic from "next/dynamic";
 import { Quote } from "@/components/Quote";
 import { Onboarding } from "@/components/Onboarding";
 import { Greeting } from "@/components/Greeting";
 import { ActionButtons } from "@/components/ActionButtons";
 import { ReflectionEditor } from "@/components/ReflectionEditor";
-import { getTodaysQuote, getRandomQuote } from "@/lib/quotes";
+import { PageTransition } from "@/components/PageTransition";
+import { QuoteSkeleton } from "@/components/Skeleton";
+import { useToast } from "@/components/Toast";
+import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
+import { getTodaysQuote, getRandomQuote, getRandomAuthor, getTodaysQuoteByAuthor, getRandomQuoteByAuthor } from "@/lib/quotes";
+import { useKonamiCode } from "@/hooks/useKonamiCode";
+import { hasShownFirstFavoriteConfetti, markFirstFavoriteConfettiShown } from "@/components/Confetti";
 import { getPreferences } from "@/lib/preferences";
-import { isFavorite, addFavorite, removeFavorite } from "@/lib/favorites";
+import { isFavorite, addFavorite, removeFavorite, getFavorites } from "@/lib/favorites";
 import { getFreshPullsToday, incrementFreshPulls, recordQuoteShown } from "@/lib/history";
 import type { Quote as QuoteType } from "@/types";
+
+// Lazy load rarely-used modal components
+const KeyboardShortcutsHelp = dynamic(() => import("@/components/KeyboardShortcutsHelp").then(mod => ({ default: mod.KeyboardShortcutsHelp })), { ssr: false });
+const PhilosopherModeActivated = dynamic(() => import("@/components/PhilosopherMode").then(mod => ({ default: mod.PhilosopherModeActivated })), { ssr: false });
+const Confetti = dynamic(() => import("@/components/Confetti").then(mod => ({ default: mod.Confetti })), { ssr: false });
 
 type PageState = "loading" | "onboarding" | "quote";
 
@@ -21,6 +33,72 @@ export default function Home() {
   const [showReflection, setShowReflection] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
   const [remainingPulls, setRemainingPulls] = useState<number>(3);
+  const [showShortcutsHelp, setShowShortcutsHelp] = useState(false);
+  const [philosopherMode, setPhilosopherMode] = useState<string | null>(null);
+  const [showPhilosopherActivated, setShowPhilosopherActivated] = useState(false);
+  const [showConfetti, setShowConfetti] = useState(false);
+  const { showToast } = useToast();
+
+  // Konami code easter egg
+  const handleKonamiCode = useCallback(() => {
+    if (philosopherMode) return; // Already active
+    const randomPhilosopher = getRandomAuthor();
+    setPhilosopherMode(randomPhilosopher);
+    setShowPhilosopherActivated(true);
+    // Switch to a quote from this philosopher
+    setCurrentQuote(getTodaysQuoteByAuthor(randomPhilosopher));
+  }, [philosopherMode]);
+
+  useKonamiCode(handleKonamiCode);
+
+  // Keyboard shortcut handlers
+  const handleKeyboardSave = useCallback(async () => {
+    if (pageState !== "quote") return;
+    if (isSaved) {
+      await removeFavorite(currentQuote.id);
+      setIsSaved(false);
+      showToast("Removed from favorites");
+    } else {
+      // Check if this is the very first favorite
+      const isFirstFavorite = !hasShownFirstFavoriteConfetti();
+      const currentFavorites = await getFavorites();
+      const isActuallyFirst = isFirstFavorite && currentFavorites.length === 0;
+
+      await addFavorite(currentQuote.id);
+      setIsSaved(true);
+      showToast("Saved to favorites");
+
+      // Trigger confetti on first favorite ever
+      if (isActuallyFirst) {
+        setShowConfetti(true);
+        markFirstFavoriteConfettiShown();
+      }
+    }
+  }, [pageState, isSaved, currentQuote.id, showToast]);
+
+  const handleKeyboardReflect = useCallback(() => {
+    if (pageState !== "quote") return;
+    setShowReflection((prev) => !prev);
+  }, [pageState]);
+
+  const handleKeyboardEscape = useCallback(() => {
+    if (showShortcutsHelp) {
+      setShowShortcutsHelp(false);
+    } else if (showReflection) {
+      setShowReflection(false);
+    }
+  }, [showShortcutsHelp, showReflection]);
+
+  const handleKeyboardHelp = useCallback(() => {
+    setShowShortcutsHelp((prev) => !prev);
+  }, []);
+
+  useKeyboardShortcuts({
+    onSave: handleKeyboardSave,
+    onReflect: handleKeyboardReflect,
+    onEscape: handleKeyboardEscape,
+    onHelp: handleKeyboardHelp,
+  });
 
   useEffect(() => {
     const checkOnboarding = async () => {
@@ -53,9 +131,22 @@ export default function Home() {
     if (isSaved) {
       await removeFavorite(currentQuote.id);
       setIsSaved(false);
+      showToast("Removed from favorites");
     } else {
+      // Check if this is the very first favorite
+      const isFirstFavorite = !hasShownFirstFavoriteConfetti();
+      const currentFavorites = await getFavorites();
+      const isActuallyFirst = isFirstFavorite && currentFavorites.length === 0;
+
       await addFavorite(currentQuote.id);
       setIsSaved(true);
+      showToast("Saved to favorites");
+
+      // Trigger confetti on first favorite ever
+      if (isActuallyFirst) {
+        setShowConfetti(true);
+        markFirstFavoriteConfettiShown();
+      }
     }
   };
 
@@ -66,7 +157,10 @@ export default function Home() {
   const handleAnother = async () => {
     if (remainingPulls <= 0) return;
 
-    const newQuote = getRandomQuote(currentQuote.id);
+    // Use philosopher-specific quotes if in philosopher mode
+    const newQuote = philosopherMode
+      ? getRandomQuoteByAuthor(philosopherMode, currentQuote.id)
+      : getRandomQuote(currentQuote.id);
     setCurrentQuote(newQuote);
     setShowReflection(false);
 
@@ -78,7 +172,9 @@ export default function Home() {
   if (pageState === "loading") {
     return (
       <div className="flex min-h-screen items-center justify-center">
-        <div className="text-foreground/30 body-text">Loading...</div>
+        <main className="w-full">
+          <QuoteSkeleton />
+        </main>
       </div>
     );
   }
@@ -98,22 +194,41 @@ export default function Home() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center">
-      <main className="w-full">
-        {userName && <Greeting name={userName} />}
-        <Quote quote={currentQuote} />
-        <ActionButtons
-          onSave={handleSave}
-          onReflect={handleReflect}
-          onAnother={handleAnother}
-          isSaved={isSaved}
-          isReflecting={showReflection}
-          remainingPulls={remainingPulls}
+    <>
+      <PageTransition>
+        <div className="flex min-h-screen items-center justify-center">
+          <main className="w-full">
+            {userName && <Greeting name={userName} />}
+            <Quote quote={currentQuote} />
+            <ActionButtons
+              onSave={handleSave}
+              onReflect={handleReflect}
+              onAnother={handleAnother}
+              isSaved={isSaved}
+              isReflecting={showReflection}
+              remainingPulls={remainingPulls}
+            />
+            {showReflection && (
+              <ReflectionEditor quoteId={currentQuote.id} />
+            )}
+          </main>
+        </div>
+      </PageTransition>
+      <KeyboardShortcutsHelp
+        isOpen={showShortcutsHelp}
+        onClose={() => setShowShortcutsHelp(false)}
+        context="home"
+      />
+      {showPhilosopherActivated && philosopherMode && (
+        <PhilosopherModeActivated
+          philosopher={philosopherMode}
+          onDismiss={() => setShowPhilosopherActivated(false)}
         />
-        {showReflection && (
-          <ReflectionEditor quoteId={currentQuote.id} />
-        )}
-      </main>
-    </div>
+      )}
+      <Confetti
+        isActive={showConfetti}
+        onComplete={() => setShowConfetti(false)}
+      />
+    </>
   );
 }

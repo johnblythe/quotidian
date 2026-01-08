@@ -2,6 +2,19 @@
  * Core type definitions for Quotidian app
  */
 
+/** Theme categories for philosophical quotes */
+export type Theme =
+  | 'adversity'
+  | 'death'
+  | 'discipline'
+  | 'joy'
+  | 'relationships'
+  | 'work'
+  | 'identity'
+  | 'time'
+  | 'wisdom'
+  | 'simplicity';
+
 /** A philosophical quote with attribution */
 export interface Quote {
   id: string;
@@ -9,6 +22,7 @@ export interface Quote {
   author: string;
   source?: string;
   context?: string;
+  themes?: Theme[];
 }
 
 /** A user's journal reflection on a quote */

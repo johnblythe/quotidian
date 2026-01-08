@@ -1,5 +1,7 @@
 "use client";
 
+import { useRef, useEffect } from "react";
+
 interface ActionButtonsProps {
   onSave: () => void;
   onReflect: () => void;
@@ -18,15 +20,38 @@ export function ActionButtons({
   remainingPulls,
 }: ActionButtonsProps) {
   const isAnotherDisabled = remainingPulls !== undefined && remainingPulls <= 0;
+  const prevSavedRef = useRef<boolean | null>(null);
+  const heartRef = useRef<SVGSVGElement>(null);
+
+  // Track animation on save state change
+  useEffect(() => {
+    const heart = heartRef.current;
+    if (!heart) return;
+
+    // Only animate on actual state changes (not initial mount)
+    if (prevSavedRef.current !== null && prevSavedRef.current !== isSaved) {
+      // Remove any existing animation classes
+      heart.classList.remove("heart-filled", "heart-unfilled");
+      // Force reflow to restart animation
+      void heart.getBoundingClientRect();
+      // Add appropriate animation class
+      heart.classList.add(isSaved ? "heart-filled" : "heart-unfilled");
+    }
+
+    prevSavedRef.current = isSaved;
+  }, [isSaved]);
+
   return (
     <div className="flex items-center justify-center gap-8 py-8">
       {/* Save (heart) button */}
       <button
         onClick={onSave}
-        className="flex flex-col items-center gap-1 text-foreground/60 hover:text-foreground transition-colors"
+        className="btn-icon flex flex-col items-center gap-1 text-foreground/60 hover:text-foreground"
         aria-label={isSaved ? "Remove from favorites" : "Save to favorites"}
       >
         <svg
+          ref={heartRef}
+          className="heart-icon"
           xmlns="http://www.w3.org/2000/svg"
           width="24"
           height="24"
@@ -45,7 +70,7 @@ export function ActionButtons({
       {/* Reflect (pencil) button */}
       <button
         onClick={onReflect}
-        className={`flex flex-col items-center gap-1 transition-colors ${
+        className={`btn-icon flex flex-col items-center gap-1 ${
           isReflecting
             ? "text-foreground"
             : "text-foreground/60 hover:text-foreground"
@@ -73,7 +98,7 @@ export function ActionButtons({
       <button
         onClick={onAnother}
         disabled={isAnotherDisabled}
-        className={`flex flex-col items-center gap-1 transition-colors ${
+        className={`btn-icon flex flex-col items-center gap-1 ${
           isAnotherDisabled
             ? "text-foreground/30 cursor-not-allowed"
             : "text-foreground/60 hover:text-foreground"

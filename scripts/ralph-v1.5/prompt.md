@@ -4,19 +4,19 @@ You are an autonomous coding agent working on the Quotidian project - a PWA for 
 
 ## Your Task
 
-1. Read the PRD at `scripts/ralph/prd.json`
-2. Read the progress log at `scripts/ralph/progress.txt` (check Codebase Patterns section first)
+1. Read the PRD at `scripts/ralph-v1.5/prd.json`
+2. Read the progress log at `scripts/ralph-v1.5/progress.txt` (check Codebase Patterns section first)
 3. Check you're on the correct branch from PRD `branchName`. If not, check it out or create from main.
 4. Pick the **highest priority** user story where `passes: false`
 5. Implement that single user story completely
 6. Run quality checks: `npm run typecheck` and `npm run build`
 7. If checks pass, commit ALL changes with message: `feat: [Story ID] - [Story Title]`
 8. Update the PRD to set `passes: true` for the completed story
-9. Append your progress to `scripts/ralph/progress.txt`
+9. Append your progress to `scripts/ralph-v1.5/progress.txt`
 
 ## Progress Report Format
 
-APPEND to scripts/ralph/progress.txt (never replace, always append):
+APPEND to scripts/ralph-v1.5/progress.txt (never replace, always append):
 ```
 ## [Date/Time] - [Story ID]: [Story Title]
 - What was implemented

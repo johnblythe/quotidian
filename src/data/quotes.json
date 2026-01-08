@@ -4,332 +4,1402 @@
     "text": "We suffer more often in imagination than in reality.",
     "author": "Seneca",
     "source": "Letters from a Stoic, Letter 13",
-    "context": "On the futility of anticipatory anxiety"
+    "context": "On the futility of anticipatory anxiety",
+    "themes": []
   },
   {
     "id": "seneca-002",
     "text": "It is not that we have a short time to live, but that we waste a lot of it.",
     "author": "Seneca",
-    "source": "On the Shortness of Life"
+    "source": "On the Shortness of Life",
+    "themes": []
   },
   {
     "id": "seneca-003",
     "text": "Luck is what happens when preparation meets opportunity.",
     "author": "Seneca",
-    "source": "Letters from a Stoic, Letter 76"
+    "source": "Letters from a Stoic, Letter 76",
+    "themes": []
   },
   {
     "id": "seneca-004",
     "text": "Begin at once to live, and count each separate day as a separate life.",
     "author": "Seneca",
-    "source": "Letters from a Stoic, Letter 101"
+    "source": "Letters from a Stoic, Letter 101",
+    "themes": []
   },
   {
     "id": "seneca-005",
     "text": "Difficulties strengthen the mind, as labor does the body.",
     "author": "Seneca",
-    "source": "Letters from a Stoic, Letter 78"
+    "source": "Letters from a Stoic, Letter 78",
+    "themes": []
   },
   {
     "id": "seneca-006",
     "text": "True happiness is to enjoy the present, without anxious dependence upon the future.",
     "author": "Seneca",
-    "source": "Letters from a Stoic, Letter 15"
+    "source": "Letters from a Stoic, Letter 15",
+    "themes": []
   },
   {
     "id": "seneca-007",
     "text": "If a man knows not to which port he sails, no wind is favorable.",
     "author": "Seneca",
-    "source": "Letters from a Stoic, Letter 71"
+    "source": "Letters from a Stoic, Letter 71",
+    "themes": []
   },
   {
     "id": "seneca-008",
     "text": "We are always complaining that our days are few, and acting as though there would be no end of them.",
     "author": "Seneca",
-    "source": "On the Shortness of Life"
+    "source": "On the Shortness of Life",
+    "themes": []
   },
   {
     "id": "seneca-009",
     "text": "Sometimes even to live is an act of courage.",
     "author": "Seneca",
-    "source": "Letters from a Stoic, Letter 78"
+    "source": "Letters from a Stoic, Letter 78",
+    "themes": []
   },
   {
     "id": "seneca-010",
     "text": "The greatest remedy for anger is delay.",
     "author": "Seneca",
-    "source": "On Anger, Book 2"
+    "source": "On Anger, Book 2",
+    "themes": ["discipline", "wisdom"]
+  },
+  {
+    "id": "seneca-011",
+    "text": "It is not the man who has too little, but the man who craves more, that is poor.",
+    "author": "Seneca",
+    "source": "Letters to Lucilius, Letter 2",
+    "themes": ["simplicity", "wisdom"]
+  },
+  {
+    "id": "seneca-012",
+    "text": "Life is long if you know how to use it.",
+    "author": "Seneca",
+    "source": "On the Shortness of Life",
+    "themes": ["time", "wisdom"]
+  },
+  {
+    "id": "seneca-013",
+    "text": "No person has the power to have everything they want, but it is in their power not to want what they don't have.",
+    "author": "Seneca",
+    "source": "Letters to Lucilius, Letter 123",
+    "themes": ["simplicity", "discipline"]
+  },
+  {
+    "id": "seneca-014",
+    "text": "We are more often frightened than hurt; and we suffer more from imagination than from reality.",
+    "author": "Seneca",
+    "source": "Letters to Lucilius, Letter 13",
+    "themes": ["adversity", "wisdom"]
+  },
+  {
+    "id": "seneca-015",
+    "text": "Hang on to your youthful enthusiasms — you'll be able to use them better when you're older.",
+    "author": "Seneca",
+    "source": "Letters to Lucilius, Letter 68",
+    "themes": ["time", "joy"]
+  },
+  {
+    "id": "seneca-016",
+    "text": "Every night before going to sleep, we must ask ourselves: what weakness did I overcome today? What virtue did I acquire?",
+    "author": "Seneca",
+    "source": "On Anger, Book 3",
+    "themes": ["discipline", "wisdom"]
+  },
+  {
+    "id": "seneca-017",
+    "text": "The mind that is anxious about future events is miserable.",
+    "author": "Seneca",
+    "source": "Letters to Lucilius, Letter 98",
+    "themes": ["time", "adversity"]
+  },
+  {
+    "id": "seneca-018",
+    "text": "Associate with those who will make a better man of you. Welcome those whom you yourself can improve.",
+    "author": "Seneca",
+    "source": "Letters to Lucilius, Letter 7",
+    "themes": ["relationships", "wisdom"]
+  },
+  {
+    "id": "seneca-019",
+    "text": "While we are postponing, life speeds by.",
+    "author": "Seneca",
+    "source": "Letters to Lucilius, Letter 1",
+    "themes": ["time", "discipline"]
+  },
+  {
+    "id": "seneca-020",
+    "text": "Nothing is burdensome if taken lightly, and nothing need arouse irritation so long as it doesn't set off our anger.",
+    "author": "Seneca",
+    "source": "On Anger, Book 2",
+    "themes": ["adversity", "discipline"]
+  },
+  {
+    "id": "seneca-021",
+    "text": "It is quality rather than quantity that matters.",
+    "author": "Seneca",
+    "source": "Letters to Lucilius, Letter 45",
+    "themes": ["simplicity", "wisdom"]
+  },
+  {
+    "id": "seneca-022",
+    "text": "He suffers more than necessary, who suffers before it is necessary.",
+    "author": "Seneca",
+    "source": "Letters to Lucilius, Letter 98",
+    "themes": ["adversity", "time"]
+  },
+  {
+    "id": "seneca-023",
+    "text": "A gem cannot be polished without friction, nor a man perfected without trials.",
+    "author": "Seneca",
+    "source": "On Providence",
+    "themes": ["adversity", "discipline"]
+  },
+  {
+    "id": "seneca-024",
+    "text": "There is no genius without a touch of madness.",
+    "author": "Seneca",
+    "source": "On Tranquility of Mind",
+    "themes": ["identity", "wisdom"]
+  },
+  {
+    "id": "seneca-025",
+    "text": "To wish to be well is a part of becoming well.",
+    "author": "Seneca",
+    "source": "Letters to Lucilius, Letter 95",
+    "themes": ["discipline", "wisdom"]
+  },
+  {
+    "id": "seneca-026",
+    "text": "You act like mortals in all that you fear, and like immortals in all that you desire.",
+    "author": "Seneca",
+    "source": "On the Shortness of Life",
+    "themes": ["death", "time"]
+  },
+  {
+    "id": "seneca-027",
+    "text": "The greatest obstacle to living is expectancy, which hangs upon tomorrow and loses today.",
+    "author": "Seneca",
+    "source": "On the Shortness of Life",
+    "themes": ["time", "simplicity"]
+  },
+  {
+    "id": "seneca-028",
+    "text": "It is not that we have so little time but that we lose so much.",
+    "author": "Seneca",
+    "source": "On the Shortness of Life",
+    "themes": ["time", "discipline"]
+  },
+  {
+    "id": "seneca-029",
+    "text": "The whole future lies in uncertainty: live immediately.",
+    "author": "Seneca",
+    "source": "Letters to Lucilius, Letter 101",
+    "themes": ["time", "death"]
+  },
+  {
+    "id": "seneca-030",
+    "text": "As long as you live, keep learning how to live.",
+    "author": "Seneca",
+    "source": "Letters to Lucilius, Letter 76",
+    "themes": ["wisdom", "time"]
+  },
+  {
+    "id": "seneca-031",
+    "text": "Anger, if not restrained, is frequently more hurtful to us than the injury that provokes it.",
+    "author": "Seneca",
+    "source": "On Anger, Book 1",
+    "themes": ["discipline", "adversity"]
+  },
+  {
+    "id": "seneca-032",
+    "text": "We should every night call ourselves to account: What infirmity have I mastered today? What passion opposed?",
+    "author": "Seneca",
+    "source": "On Anger, Book 3",
+    "themes": ["discipline", "identity"]
+  },
+  {
+    "id": "seneca-033",
+    "text": "The bravest sight in the world is to see a great man struggling against adversity.",
+    "author": "Seneca",
+    "source": "On Providence",
+    "themes": ["adversity", "discipline"]
+  },
+  {
+    "id": "seneca-034",
+    "text": "Religion is regarded by the common people as true, by the wise as false, and by rulers as useful.",
+    "author": "Seneca",
+    "source": "Letters to Lucilius",
+    "themes": ["wisdom", "identity"]
+  },
+  {
+    "id": "seneca-035",
+    "text": "Enjoy present pleasures in such a way as not to injure future ones.",
+    "author": "Seneca",
+    "source": "Letters to Lucilius, Letter 15",
+    "themes": ["time", "discipline"]
   },
   {
     "id": "marcus-001",
     "text": "You have power over your mind — not outside events. Realize this, and you will find strength.",
     "author": "Marcus Aurelius",
-    "source": "Meditations, Book 6"
+    "source": "Meditations, Book 6",
+    "themes": ["discipline", "wisdom"]
   },
   {
     "id": "marcus-002",
     "text": "Waste no more time arguing about what a good man should be. Be one.",
     "author": "Marcus Aurelius",
-    "source": "Meditations, Book 10"
+    "source": "Meditations, Book 10",
+    "themes": ["discipline", "identity"]
   },
   {
     "id": "marcus-003",
     "text": "The impediment to action advances action. What stands in the way becomes the way.",
     "author": "Marcus Aurelius",
-    "source": "Meditations, Book 5"
+    "source": "Meditations, Book 5",
+    "themes": ["adversity", "wisdom"]
   },
   {
     "id": "marcus-004",
     "text": "Very little is needed to make a happy life; it is all within yourself, in your way of thinking.",
     "author": "Marcus Aurelius",
-    "source": "Meditations, Book 7"
+    "source": "Meditations, Book 7",
+    "themes": ["simplicity", "joy"]
   },
   {
     "id": "marcus-005",
     "text": "Dwell on the beauty of life. Watch the stars, and see yourself running with them.",
     "author": "Marcus Aurelius",
-    "source": "Meditations, Book 7"
+    "source": "Meditations, Book 7",
+    "themes": ["joy", "wisdom"]
   },
   {
     "id": "marcus-006",
     "text": "Accept the things to which fate binds you, and love the people with whom fate brings you together.",
     "author": "Marcus Aurelius",
-    "source": "Meditations, Book 6"
+    "source": "Meditations, Book 6",
+    "themes": ["relationships", "wisdom"]
   },
   {
     "id": "marcus-007",
     "text": "When you arise in the morning, think of what a precious privilege it is to be alive.",
     "author": "Marcus Aurelius",
-    "source": "Meditations, Book 5"
+    "source": "Meditations, Book 5",
+    "themes": ["joy", "time"]
   },
   {
     "id": "marcus-008",
     "text": "The best revenge is not to be like your enemy.",
     "author": "Marcus Aurelius",
-    "source": "Meditations, Book 6"
+    "source": "Meditations, Book 6",
+    "themes": ["discipline", "identity"]
   },
   {
     "id": "marcus-009",
     "text": "Never let the future disturb you. You will meet it, if you have to, with the same weapons of reason.",
     "author": "Marcus Aurelius",
-    "source": "Meditations, Book 7"
+    "source": "Meditations, Book 7",
+    "themes": ["adversity", "time"]
   },
   {
     "id": "marcus-010",
     "text": "The soul becomes dyed with the color of its thoughts.",
     "author": "Marcus Aurelius",
-    "source": "Meditations, Book 5"
+    "source": "Meditations, Book 5",
+    "themes": ["identity", "wisdom"]
+  },
+  {
+    "id": "marcus-011",
+    "text": "If it is not right, do not do it; if it is not true, do not say it.",
+    "author": "Marcus Aurelius",
+    "source": "Meditations, Book 12",
+    "themes": ["discipline", "wisdom"]
+  },
+  {
+    "id": "marcus-012",
+    "text": "The object of life is not to be on the side of the majority, but to escape finding oneself in the ranks of the insane.",
+    "author": "Marcus Aurelius",
+    "source": "Meditations, Book 4",
+    "themes": ["identity", "wisdom"]
+  },
+  {
+    "id": "marcus-013",
+    "text": "How much time he gains who does not look to see what his neighbor says or does or thinks.",
+    "author": "Marcus Aurelius",
+    "source": "Meditations, Book 4",
+    "themes": ["time", "simplicity"]
+  },
+  {
+    "id": "marcus-014",
+    "text": "Everything we hear is an opinion, not a fact. Everything we see is a perspective, not the truth.",
+    "author": "Marcus Aurelius",
+    "source": "Meditations, Book 6",
+    "themes": ["wisdom", "identity"]
+  },
+  {
+    "id": "marcus-015",
+    "text": "Look back over the past, with its changing empires that rose and fell, and you can foresee the future too.",
+    "author": "Marcus Aurelius",
+    "source": "Meditations, Book 7",
+    "themes": ["time", "wisdom"]
+  },
+  {
+    "id": "marcus-016",
+    "text": "Be tolerant with others and strict with yourself.",
+    "author": "Marcus Aurelius",
+    "source": "Meditations, Book 5",
+    "themes": ["discipline", "relationships"]
+  },
+  {
+    "id": "marcus-017",
+    "text": "Death smiles at us all; all we can do is smile back.",
+    "author": "Marcus Aurelius",
+    "source": "Meditations, Book 7",
+    "themes": ["death", "adversity"]
+  },
+  {
+    "id": "marcus-018",
+    "text": "It is not death that a man should fear, but he should fear never beginning to live.",
+    "author": "Marcus Aurelius",
+    "source": "Meditations, Book 12",
+    "themes": ["death", "time"]
+  },
+  {
+    "id": "marcus-019",
+    "text": "The happiness of your life depends upon the quality of your thoughts.",
+    "author": "Marcus Aurelius",
+    "source": "Meditations, Book 4",
+    "themes": ["joy", "discipline"]
+  },
+  {
+    "id": "marcus-020",
+    "text": "When you arise in the morning, think of what a privilege it is to be alive, to think, to enjoy, to love.",
+    "author": "Marcus Aurelius",
+    "source": "Meditations, Book 5",
+    "themes": ["joy", "time"]
+  },
+  {
+    "id": "marcus-021",
+    "text": "Reject your sense of injury and the injury itself disappears.",
+    "author": "Marcus Aurelius",
+    "source": "Meditations, Book 4",
+    "themes": ["adversity", "discipline"]
+  },
+  {
+    "id": "marcus-022",
+    "text": "Loss is nothing else but change, and change is nature's delight.",
+    "author": "Marcus Aurelius",
+    "source": "Meditations, Book 4",
+    "themes": ["adversity", "time"]
+  },
+  {
+    "id": "marcus-023",
+    "text": "Do not act as if you had ten thousand years to throw away. Death stands at your elbow. Be good for something while you live.",
+    "author": "Marcus Aurelius",
+    "source": "Meditations, Book 4",
+    "themes": ["death", "time"]
+  },
+  {
+    "id": "marcus-024",
+    "text": "The art of living is more like wrestling than dancing.",
+    "author": "Marcus Aurelius",
+    "source": "Meditations, Book 7",
+    "themes": ["adversity", "discipline"]
+  },
+  {
+    "id": "marcus-025",
+    "text": "Begin each day by telling yourself: Today I shall be meeting with interference, ingratitude, insolence, disloyalty, ill-will, and selfishness.",
+    "author": "Marcus Aurelius",
+    "source": "Meditations, Book 2",
+    "themes": ["adversity", "relationships"]
+  },
+  {
+    "id": "marcus-026",
+    "text": "Think of yourself as dead. You have lived your life. Now take what's left and live it properly.",
+    "author": "Marcus Aurelius",
+    "source": "Meditations, Book 7",
+    "themes": ["death", "discipline"]
+  },
+  {
+    "id": "marcus-027",
+    "text": "A man's worth is no greater than the worth of his ambitions.",
+    "author": "Marcus Aurelius",
+    "source": "Meditations, Book 7",
+    "themes": ["identity", "work"]
+  },
+  {
+    "id": "marcus-028",
+    "text": "Nowhere can man find a quieter or more untroubled retreat than in his own soul.",
+    "author": "Marcus Aurelius",
+    "source": "Meditations, Book 4",
+    "themes": ["simplicity", "identity"]
+  },
+  {
+    "id": "marcus-029",
+    "text": "How ridiculous and how strange to be surprised at anything which happens in life.",
+    "author": "Marcus Aurelius",
+    "source": "Meditations, Book 12",
+    "themes": ["adversity", "wisdom"]
+  },
+  {
+    "id": "marcus-030",
+    "text": "If someone is able to show me that what I think or do is not right, I will happily change.",
+    "author": "Marcus Aurelius",
+    "source": "Meditations, Book 6",
+    "themes": ["wisdom", "identity"]
+  },
+  {
+    "id": "marcus-031",
+    "text": "What we do now echoes in eternity.",
+    "author": "Marcus Aurelius",
+    "source": "Meditations, Book 4",
+    "themes": ["time", "work"]
+  },
+  {
+    "id": "marcus-032",
+    "text": "Remember that very little is needed to make a happy life.",
+    "author": "Marcus Aurelius",
+    "source": "Meditations, Book 7",
+    "themes": ["simplicity", "joy"]
+  },
+  {
+    "id": "marcus-033",
+    "text": "Our life is what our thoughts make it.",
+    "author": "Marcus Aurelius",
+    "source": "Meditations, Book 4",
+    "themes": ["identity", "discipline"]
+  },
+  {
+    "id": "marcus-034",
+    "text": "Do every act of your life as though it were the very last act of your life.",
+    "author": "Marcus Aurelius",
+    "source": "Meditations, Book 2",
+    "themes": ["death", "discipline"]
+  },
+  {
+    "id": "marcus-035",
+    "text": "No man can escape his destiny, the next inquiry being how he may best live the time that he has to live.",
+    "author": "Marcus Aurelius",
+    "source": "Meditations, Book 10",
+    "themes": ["death", "time"]
   },
   {
     "id": "epictetus-001",
     "text": "It's not what happens to you, but how you react to it that matters.",
     "author": "Epictetus",
-    "source": "Enchiridion"
+    "source": "Enchiridion",
+    "themes": ["adversity", "discipline"]
   },
   {
     "id": "epictetus-002",
     "text": "First say to yourself what you would be; and then do what you have to do.",
     "author": "Epictetus",
-    "source": "Discourses, Book 3"
+    "source": "Discourses, Book 3",
+    "themes": ["identity", "discipline"]
   },
   {
     "id": "epictetus-003",
     "text": "No man is free who is not master of himself.",
     "author": "Epictetus",
-    "source": "Discourses"
+    "source": "Discourses",
+    "themes": ["discipline", "identity"]
   },
   {
     "id": "epictetus-004",
     "text": "Make the best use of what is in your power, and take the rest as it happens.",
     "author": "Epictetus",
-    "source": "Enchiridion"
+    "source": "Enchiridion",
+    "themes": ["wisdom", "adversity"]
   },
   {
     "id": "epictetus-005",
     "text": "Wealth consists not in having great possessions, but in having few wants.",
     "author": "Epictetus",
-    "source": "Discourses"
+    "source": "Discourses",
+    "themes": ["simplicity", "wisdom"]
   },
   {
     "id": "epictetus-006",
     "text": "Don't explain your philosophy. Embody it.",
     "author": "Epictetus",
-    "source": "Enchiridion"
+    "source": "Enchiridion",
+    "themes": ["discipline", "identity"]
   },
   {
     "id": "epictetus-007",
     "text": "He who laughs at himself never runs out of things to laugh at.",
     "author": "Epictetus",
-    "source": "Enchiridion"
+    "source": "Enchiridion",
+    "themes": ["joy", "wisdom"]
   },
   {
     "id": "epictetus-008",
     "text": "If you want to improve, be content to be thought foolish and stupid.",
     "author": "Epictetus",
-    "source": "Enchiridion"
+    "source": "Enchiridion",
+    "themes": ["wisdom", "identity"]
   },
   {
     "id": "epictetus-009",
     "text": "Circumstances don't make the man, they only reveal him to himself.",
     "author": "Epictetus",
-    "source": "Discourses, Book 1"
+    "source": "Discourses, Book 1",
+    "themes": ["adversity", "identity"]
   },
   {
     "id": "epictetus-010",
     "text": "You are not your body and hair-style, but your capacity for choosing well.",
     "author": "Epictetus",
-    "source": "Discourses, Book 3"
+    "source": "Discourses, Book 3",
+    "themes": ["identity", "wisdom"]
+  },
+  {
+    "id": "epictetus-011",
+    "text": "Any person capable of angering you becomes your master; he can anger you only when you permit yourself to be disturbed by him.",
+    "author": "Epictetus",
+    "source": "Enchiridion",
+    "themes": ["discipline", "adversity"]
+  },
+  {
+    "id": "epictetus-012",
+    "text": "It is impossible for a man to learn what he thinks he already knows.",
+    "author": "Epictetus",
+    "source": "Discourses, Book 2",
+    "themes": ["wisdom", "identity"]
+  },
+  {
+    "id": "epictetus-013",
+    "text": "We have two ears and one mouth so that we can listen twice as much as we speak.",
+    "author": "Epictetus",
+    "source": "Discourses",
+    "themes": ["wisdom", "relationships"]
+  },
+  {
+    "id": "epictetus-014",
+    "text": "Seek not the good in external things; seek it in yourselves.",
+    "author": "Epictetus",
+    "source": "Discourses, Book 1",
+    "themes": ["simplicity", "identity"]
+  },
+  {
+    "id": "epictetus-015",
+    "text": "Only the educated are free.",
+    "author": "Epictetus",
+    "source": "Discourses, Book 2",
+    "themes": ["wisdom", "discipline"]
+  },
+  {
+    "id": "epictetus-016",
+    "text": "Men are disturbed not by things, but by the views which they take of them.",
+    "author": "Epictetus",
+    "source": "Enchiridion",
+    "themes": ["wisdom", "adversity"]
+  },
+  {
+    "id": "epictetus-017",
+    "text": "If you would be a reader, read; if a writer, write.",
+    "author": "Epictetus",
+    "source": "Discourses, Book 2",
+    "themes": ["discipline", "work"]
+  },
+  {
+    "id": "epictetus-018",
+    "text": "Know, first, who you are, and then adorn yourself accordingly.",
+    "author": "Epictetus",
+    "source": "Discourses, Book 3",
+    "themes": ["identity", "wisdom"]
+  },
+  {
+    "id": "epictetus-019",
+    "text": "We cannot choose our external circumstances, but we can always choose how we respond to them.",
+    "author": "Epictetus",
+    "source": "Enchiridion",
+    "themes": ["adversity", "discipline"]
+  },
+  {
+    "id": "epictetus-020",
+    "text": "Caretake this moment. Immerse yourself in its particulars. Respond to this person, this challenge, this deed.",
+    "author": "Epictetus",
+    "source": "Enchiridion",
+    "themes": ["time", "discipline"]
+  },
+  {
+    "id": "epictetus-021",
+    "text": "Freedom is the only worthy goal in life. It is won by disregarding things that lie beyond our control.",
+    "author": "Epictetus",
+    "source": "Discourses, Book 1",
+    "themes": ["simplicity", "wisdom"]
+  },
+  {
+    "id": "epictetus-022",
+    "text": "He is a wise man who does not grieve for the things which he has not, but rejoices for those which he has.",
+    "author": "Epictetus",
+    "source": "Enchiridion",
+    "themes": ["joy", "simplicity"]
+  },
+  {
+    "id": "epictetus-023",
+    "text": "The key is to keep company only with people who uplift you, whose presence calls forth your best.",
+    "author": "Epictetus",
+    "source": "Discourses, Book 3",
+    "themes": ["relationships", "wisdom"]
+  },
+  {
+    "id": "epictetus-024",
+    "text": "Practice yourself, for heaven's sake, in little things; and thence proceed to greater.",
+    "author": "Epictetus",
+    "source": "Discourses, Book 1",
+    "themes": ["discipline", "work"]
+  },
+  {
+    "id": "epictetus-025",
+    "text": "Remember that you are an actor in a drama, of such a kind as the author pleases to make it.",
+    "author": "Epictetus",
+    "source": "Enchiridion",
+    "themes": ["identity", "adversity"]
+  },
+  {
+    "id": "epictetus-026",
+    "text": "When someone is properly grounded in life, they shouldn't have to look outside themselves for approval.",
+    "author": "Epictetus",
+    "source": "Discourses, Book 1",
+    "themes": ["identity", "wisdom"]
+  },
+  {
+    "id": "epictetus-027",
+    "text": "Suffering arises from trying to control what is uncontrollable, or from neglecting what is within our power.",
+    "author": "Epictetus",
+    "source": "Enchiridion",
+    "themes": ["adversity", "discipline"]
+  },
+  {
+    "id": "epictetus-028",
+    "text": "Other people's views and troubles can be contagious. Don't sabotage yourself by unwittingly adopting negative attitudes.",
+    "author": "Epictetus",
+    "source": "Enchiridion",
+    "themes": ["relationships", "wisdom"]
+  },
+  {
+    "id": "epictetus-029",
+    "text": "Be not swept off your feet by the vividness of the impression, but say, 'Wait for me a little; let me see what you are.'",
+    "author": "Epictetus",
+    "source": "Discourses, Book 2",
+    "themes": ["discipline", "wisdom"]
+  },
+  {
+    "id": "epictetus-030",
+    "text": "What would have become of Hercules do you think if there had been no lion, hydra, stag or boar? What would he have done in the absence of such challenges?",
+    "author": "Epictetus",
+    "source": "Discourses, Book 1",
+    "themes": ["adversity", "identity"]
   },
   {
     "id": "naval-001",
     "text": "The three big ones in life are wealth, health, and happiness. We pursue them in that order, but their importance is reverse.",
     "author": "Naval Ravikant",
-    "source": "The Almanack of Naval Ravikant"
+    "source": "The Almanack of Naval Ravikant",
+    "themes": ["wisdom", "simplicity"]
   },
   {
     "id": "naval-002",
     "text": "A calm mind, a fit body, and a house full of love. These things cannot be bought — they must be earned.",
     "author": "Naval Ravikant",
-    "source": "Twitter/X, 2018"
+    "source": "Twitter/X, 2018",
+    "themes": ["discipline", "relationships"]
   },
   {
     "id": "naval-003",
     "text": "Learn to sell. Learn to build. If you can do both, you will be unstoppable.",
     "author": "Naval Ravikant",
-    "source": "How to Get Rich (tweetstorm)"
+    "source": "How to Get Rich (tweetstorm)",
+    "themes": ["work", "discipline"]
   },
   {
     "id": "naval-004",
     "text": "Desire is a contract you make with yourself to be unhappy until you get what you want.",
     "author": "Naval Ravikant",
-    "source": "The Almanack of Naval Ravikant"
+    "source": "The Almanack of Naval Ravikant",
+    "themes": ["simplicity", "joy"]
   },
   {
     "id": "naval-005",
     "text": "All the real benefits in life come from compound interest.",
     "author": "Naval Ravikant",
-    "source": "The Almanack of Naval Ravikant"
+    "source": "The Almanack of Naval Ravikant",
+    "themes": ["time", "discipline"]
   },
   {
     "id": "naval-006",
     "text": "The most important skill for getting rich is becoming a perpetual learner.",
     "author": "Naval Ravikant",
-    "source": "The Almanack of Naval Ravikant"
+    "source": "The Almanack of Naval Ravikant",
+    "themes": ["wisdom", "work"]
   },
   {
     "id": "naval-007",
     "text": "If you can't see yourself working with someone for life, don't work with them for a day.",
     "author": "Naval Ravikant",
-    "source": "Twitter/X, 2019"
+    "source": "Twitter/X, 2019",
+    "themes": ["relationships", "work"]
   },
   {
     "id": "naval-008",
     "text": "Reading is the ultimate meta-skill and can be traded for anything else.",
     "author": "Naval Ravikant",
-    "source": "The Almanack of Naval Ravikant"
+    "source": "The Almanack of Naval Ravikant",
+    "themes": ["wisdom", "discipline"]
   },
   {
     "id": "naval-009",
     "text": "Happiness is the absence of striving for happiness.",
     "author": "Naval Ravikant",
-    "source": "The Almanack of Naval Ravikant"
+    "source": "The Almanack of Naval Ravikant",
+    "themes": ["joy", "simplicity"]
   },
   {
     "id": "naval-010",
     "text": "Specific knowledge is found by pursuing your genuine curiosity and passion rather than whatever is hot right now.",
     "author": "Naval Ravikant",
-    "source": "How to Get Rich (tweetstorm)"
+    "source": "How to Get Rich (tweetstorm)",
+    "themes": ["identity", "work"]
+  },
+  {
+    "id": "naval-011",
+    "text": "Play long-term games with long-term people. All returns in life come from compound interest over many turns of the game.",
+    "author": "Naval Ravikant",
+    "source": "How to Get Rich (tweetstorm)",
+    "themes": ["time", "relationships"]
+  },
+  {
+    "id": "naval-012",
+    "text": "Free education is abundant, all over the internet. It's the desire to learn that's scarce.",
+    "author": "Naval Ravikant",
+    "source": "Twitter/X, 2019",
+    "themes": ["wisdom", "discipline"]
+  },
+  {
+    "id": "naval-013",
+    "text": "The hardest thing is not doing what you want — it's knowing what you want.",
+    "author": "Naval Ravikant",
+    "source": "The Almanack of Naval Ravikant",
+    "themes": ["identity", "wisdom"]
+  },
+  {
+    "id": "naval-014",
+    "text": "You're not going to get rich renting out your time. You must own equity to gain your financial freedom.",
+    "author": "Naval Ravikant",
+    "source": "How to Get Rich (tweetstorm)",
+    "themes": ["work", "wisdom"]
+  },
+  {
+    "id": "naval-015",
+    "text": "Escape competition through authenticity. When you're competing with others, it's because you're copying them.",
+    "author": "Naval Ravikant",
+    "source": "How to Get Rich (tweetstorm)",
+    "themes": ["identity", "work"]
+  },
+  {
+    "id": "naval-016",
+    "text": "If you're not willing to be misunderstood, you will never do anything new.",
+    "author": "Naval Ravikant",
+    "source": "The Almanack of Naval Ravikant",
+    "themes": ["identity", "adversity"]
+  },
+  {
+    "id": "naval-017",
+    "text": "Retirement is when you stop sacrificing today for an imaginary tomorrow. You've reached retirement when you're doing what you would do even if you weren't getting paid.",
+    "author": "Naval Ravikant",
+    "source": "The Almanack of Naval Ravikant",
+    "themes": ["time", "work"]
+  },
+  {
+    "id": "naval-018",
+    "text": "The modern struggle: Lone individuals summoning inhuman willpower, fasting, meditating, and exercising, up against armies of scientists and statisticians weaponizing abundant food, screens, and medicine.",
+    "author": "Naval Ravikant",
+    "source": "Twitter/X, 2020",
+    "themes": ["discipline", "adversity"]
+  },
+  {
+    "id": "naval-019",
+    "text": "Peace is happiness at rest. Happiness is peace in motion.",
+    "author": "Naval Ravikant",
+    "source": "The Almanack of Naval Ravikant",
+    "themes": ["joy", "simplicity"]
+  },
+  {
+    "id": "naval-020",
+    "text": "If you have everything you want, are you happy right this second? If not, why not?",
+    "author": "Naval Ravikant",
+    "source": "The Almanack of Naval Ravikant",
+    "themes": ["joy", "wisdom"]
+  },
+  {
+    "id": "naval-021",
+    "text": "Seek wealth, not money or status. Wealth is having assets that earn while you sleep.",
+    "author": "Naval Ravikant",
+    "source": "How to Get Rich (tweetstorm)",
+    "themes": ["work", "wisdom"]
+  },
+  {
+    "id": "naval-022",
+    "text": "The best founders I've found are the ones who are very long-term thinkers. They have a strong vision for the world.",
+    "author": "Naval Ravikant",
+    "source": "The Almanack of Naval Ravikant",
+    "themes": ["time", "work"]
+  },
+  {
+    "id": "naval-023",
+    "text": "Judgment — especially demonstrated judgment, with high accountability and a clear track record — is critical.",
+    "author": "Naval Ravikant",
+    "source": "How to Get Rich (tweetstorm)",
+    "themes": ["wisdom", "work"]
+  },
+  {
+    "id": "naval-024",
+    "text": "You should be too busy to have dinner parties with your friends every week, but not so busy that you never have dinner with your friends.",
+    "author": "Naval Ravikant",
+    "source": "The Almanack of Naval Ravikant",
+    "themes": ["relationships", "simplicity"]
+  },
+  {
+    "id": "naval-025",
+    "text": "We spend our whole life trying to be great at something. The great are just ones who work endlessly at getting great at one thing.",
+    "author": "Naval Ravikant",
+    "source": "The Almanack of Naval Ravikant",
+    "themes": ["discipline", "work"]
+  },
+  {
+    "id": "naval-026",
+    "text": "The reality is life is a single-player game. You're born alone. You die alone. All of your interpretations are alone.",
+    "author": "Naval Ravikant",
+    "source": "The Almanack of Naval Ravikant",
+    "themes": ["identity", "death"]
+  },
+  {
+    "id": "naval-027",
+    "text": "Cynicism is easy. Mimicry is easy. Optimistic contrarians are the rarest breed.",
+    "author": "Naval Ravikant",
+    "source": "Twitter/X, 2019",
+    "themes": ["identity", "wisdom"]
+  },
+  {
+    "id": "naval-028",
+    "text": "No one can compete with you on being you. Most of life is a search for who and what needs you the most.",
+    "author": "Naval Ravikant",
+    "source": "The Almanack of Naval Ravikant",
+    "themes": ["identity", "relationships"]
+  },
+  {
+    "id": "naval-029",
+    "text": "A happy person isn't someone who's happy all the time. It's someone who effortlessly interprets events in such a way that they don't lose their innate peace.",
+    "author": "Naval Ravikant",
+    "source": "The Almanack of Naval Ravikant",
+    "themes": ["joy", "adversity"]
+  },
+  {
+    "id": "naval-030",
+    "text": "If you want to be successful, surround yourself with people who are more successful than you. If you want to be happy, surround yourself with people who are less successful than you.",
+    "author": "Naval Ravikant",
+    "source": "The Almanack of Naval Ravikant",
+    "themes": ["relationships", "joy"]
   },
   {
     "id": "watts-001",
     "text": "The only way to make sense out of change is to plunge into it, move with it, and join the dance.",
     "author": "Alan Watts",
-    "source": "The Wisdom of Insecurity"
+    "source": "The Wisdom of Insecurity",
+    "themes": ["adversity", "time"]
   },
   {
     "id": "watts-002",
     "text": "Muddy water is best cleared by leaving it alone.",
     "author": "Alan Watts",
-    "source": "The Way of Zen"
+    "source": "The Way of Zen",
+    "themes": ["simplicity", "wisdom"]
   },
   {
     "id": "watts-003",
     "text": "This is the real secret of life — to be completely engaged with what you are doing in the here and now.",
     "author": "Alan Watts",
-    "source": "The Essential Alan Watts"
+    "source": "The Essential Alan Watts",
+    "themes": ["time", "joy"]
   },
   {
     "id": "watts-004",
     "text": "You are an aperture through which the universe is looking at and exploring itself.",
     "author": "Alan Watts",
-    "source": "The Book: On the Taboo Against Knowing Who You Are"
+    "source": "The Book: On the Taboo Against Knowing Who You Are",
+    "themes": ["identity", "wisdom"]
   },
   {
     "id": "watts-005",
     "text": "The meaning of life is just to be alive. It is so plain and so obvious and so simple.",
     "author": "Alan Watts",
-    "source": "The Culture of Counter-Culture"
+    "source": "The Culture of Counter-Culture",
+    "themes": ["simplicity", "joy"]
   },
   {
     "id": "watts-006",
     "text": "Problems that remain persistently insoluble should always be suspected as questions asked in the wrong way.",
     "author": "Alan Watts",
-    "source": "The Book: On the Taboo Against Knowing Who You Are"
+    "source": "The Book: On the Taboo Against Knowing Who You Are",
+    "themes": ["wisdom", "adversity"]
   },
   {
     "id": "watts-007",
     "text": "Trying to define yourself is like trying to bite your own teeth.",
     "author": "Alan Watts",
-    "source": "Life and Music"
+    "source": "Life and Music",
+    "themes": ["identity", "wisdom"]
   },
   {
     "id": "watts-008",
     "text": "No one is more dangerously insane than one who is sane all the time.",
     "author": "Alan Watts",
-    "source": "The Book: On the Taboo Against Knowing Who You Are"
+    "source": "The Book: On the Taboo Against Knowing Who You Are",
+    "themes": ["wisdom", "joy"]
   },
   {
     "id": "watts-009",
     "text": "Every intelligent individual wants to know what makes him tick, and yet is at once fascinated and frustrated by the fact that oneself is the most difficult of all things to know.",
     "author": "Alan Watts",
-    "source": "The Book: On the Taboo Against Knowing Who You Are"
+    "source": "The Book: On the Taboo Against Knowing Who You Are",
+    "themes": ["identity", "wisdom"]
   },
   {
     "id": "watts-010",
     "text": "We seldom realize that our most private thoughts and emotions are not actually our own.",
     "author": "Alan Watts",
-    "source": "The Book: On the Taboo Against Knowing Who You Are"
+    "source": "The Book: On the Taboo Against Knowing Who You Are",
+    "themes": ["identity", "relationships"]
+  },
+  {
+    "id": "watts-011",
+    "text": "We do not come into this world; we come out of it, as leaves from a tree.",
+    "author": "Alan Watts",
+    "source": "The Book: On the Taboo Against Knowing Who You Are",
+    "themes": ["identity", "wisdom"]
+  },
+  {
+    "id": "watts-012",
+    "text": "Man suffers only because he takes seriously what the gods made for fun.",
+    "author": "Alan Watts",
+    "source": "The Tao of Philosophy",
+    "themes": ["joy", "adversity"]
+  },
+  {
+    "id": "watts-013",
+    "text": "To have faith is to trust yourself to the water. When you swim you don't grab hold of the water, because if you do you will sink and drown.",
+    "author": "Alan Watts",
+    "source": "The Essence of Alan Watts",
+    "themes": ["adversity", "wisdom"]
+  },
+  {
+    "id": "watts-014",
+    "text": "The art of living is neither careless drifting on the one hand nor fearful clinging to the past on the other.",
+    "author": "Alan Watts",
+    "source": "The Wisdom of Insecurity",
+    "themes": ["time", "simplicity"]
+  },
+  {
+    "id": "watts-015",
+    "text": "Running away from fear is fear; fighting pain is pain; trying to be brave is being scared.",
+    "author": "Alan Watts",
+    "source": "The Wisdom of Insecurity",
+    "themes": ["adversity", "identity"]
+  },
+  {
+    "id": "watts-016",
+    "text": "We are living in a culture entirely hypnotized by the illusion of time.",
+    "author": "Alan Watts",
+    "source": "The Essential Alan Watts",
+    "themes": ["time", "wisdom"]
+  },
+  {
+    "id": "watts-017",
+    "text": "Things are as they are. Looking out into the universe at night, we make no comparisons between right and wrong stars, nor between well and badly arranged constellations.",
+    "author": "Alan Watts",
+    "source": "The Way of Zen",
+    "themes": ["simplicity", "wisdom"]
+  },
+  {
+    "id": "watts-018",
+    "text": "You and I are all as much continuous with the physical universe as a wave is continuous with the ocean.",
+    "author": "Alan Watts",
+    "source": "The Book: On the Taboo Against Knowing Who You Are",
+    "themes": ["identity", "wisdom"]
+  },
+  {
+    "id": "watts-019",
+    "text": "Zen does not confuse spirituality with thinking about God while one is peeling potatoes. Zen spirituality is just to peel the potatoes.",
+    "author": "Alan Watts",
+    "source": "The Way of Zen",
+    "themes": ["simplicity", "time"]
+  },
+  {
+    "id": "watts-020",
+    "text": "Tomorrow and plans for tomorrow can have no significance at all unless you are in full contact with the reality of the present.",
+    "author": "Alan Watts",
+    "source": "The Wisdom of Insecurity",
+    "themes": ["time", "wisdom"]
+  },
+  {
+    "id": "watts-021",
+    "text": "No work is stressful. It is your inability to manage your body, mind, and emotions that makes it stressful.",
+    "author": "Alan Watts",
+    "source": "The Essence of Alan Watts",
+    "themes": ["work", "discipline"]
+  },
+  {
+    "id": "watts-022",
+    "text": "The past and future are real illusions, that they exist in the present, which is what there is and all there is.",
+    "author": "Alan Watts",
+    "source": "The Essence of Alan Watts",
+    "themes": ["time", "wisdom"]
+  },
+  {
+    "id": "watts-023",
+    "text": "What I am really saying is that you don't need to do anything, because if you see yourself in the correct way, you are all as much extraordinary phenomenon of nature as trees, clouds, the patterns in running water.",
+    "author": "Alan Watts",
+    "source": "Out of Your Mind",
+    "themes": ["identity", "simplicity"]
+  },
+  {
+    "id": "watts-024",
+    "text": "The menu is not the meal.",
+    "author": "Alan Watts",
+    "source": "The Book: On the Taboo Against Knowing Who You Are",
+    "themes": ["wisdom", "simplicity"]
+  },
+  {
+    "id": "watts-025",
+    "text": "The more a thing tends to be permanent, the more it tends to be lifeless.",
+    "author": "Alan Watts",
+    "source": "The Wisdom of Insecurity",
+    "themes": ["time", "death"]
+  },
+  {
+    "id": "watts-026",
+    "text": "Waking up to who you are requires letting go of who you imagine yourself to be.",
+    "author": "Alan Watts",
+    "source": "The Joyous Cosmology",
+    "themes": ["identity", "wisdom"]
+  },
+  {
+    "id": "watts-027",
+    "text": "A scholar tries to learn something everyday; a student of Buddhism tries to unlearn something daily.",
+    "author": "Alan Watts",
+    "source": "The Way of Zen",
+    "themes": ["wisdom", "simplicity"]
+  },
+  {
+    "id": "watts-028",
+    "text": "Advice? I don't have advice. Stop aspiring and start writing. If you're writing, you're a writer. Write like you're a goddamn death row inmate and the governor is out of the country.",
+    "author": "Alan Watts",
+    "source": "Lecture recording",
+    "themes": ["work", "discipline"]
+  },
+  {
+    "id": "watts-029",
+    "text": "But I'll tell you what hermits realize. If you go off into a far, far forest and get very quiet, you'll come to understand that you're connected with everything.",
+    "author": "Alan Watts",
+    "source": "Out of Your Mind",
+    "themes": ["relationships", "identity"]
+  },
+  {
+    "id": "watts-030",
+    "text": "Life is like music for its own sake. We are living in an eternal now, and when we listen to music we are not listening to the past, we are not listening to the future, we are listening to an expanded present.",
+    "author": "Alan Watts",
+    "source": "The Tao of Philosophy",
+    "themes": ["time", "joy"]
   },
   {
     "id": "stockdale-001",
     "text": "You must never confuse faith that you will prevail in the end with the discipline to confront the most brutal facts of your current reality.",
     "author": "James Stockdale",
     "source": "Stockdale Paradox, via Good to Great",
-    "context": "From his experience as a POW in Vietnam"
+    "context": "From his experience as a POW in Vietnam",
+    "themes": ["adversity", "discipline"]
   },
   {
     "id": "stockdale-002",
     "text": "I never lost faith in the end of the story. I never doubted that I would get out, and that I would turn the experience into the defining event of my life.",
     "author": "James Stockdale",
-    "source": "Interview with Jim Collins"
+    "source": "Interview with Jim Collins",
+    "themes": ["adversity", "identity"]
   },
   {
     "id": "stockdale-003",
     "text": "The optimists were the ones who didn't make it. They said we'd be out by Christmas, and then by Easter, and then by Thanksgiving. They died of a broken heart.",
     "author": "James Stockdale",
     "source": "Interview with Jim Collins",
-    "context": "On surviving as a POW"
+    "context": "On surviving as a POW",
+    "themes": ["adversity", "wisdom"]
   },
   {
     "id": "stockdale-004",
     "text": "Life is not fair. The hero is often penalized, while the coward is rewarded. But the hero doesn't care.",
     "author": "James Stockdale",
-    "source": "Courage Under Fire: Testing Epictetus's Doctrines"
+    "source": "Courage Under Fire: Testing Epictetus's Doctrines",
+    "themes": ["adversity", "identity"]
   },
   {
     "id": "stockdale-005",
     "text": "The world can take anything from you — everything — except your freedom to choose how you respond.",
     "author": "James Stockdale",
-    "source": "Thoughts of a Philosophical Fighter Pilot"
+    "source": "Thoughts of a Philosophical Fighter Pilot",
+    "themes": ["adversity", "discipline"]
+  },
+  {
+    "id": "stockdale-006",
+    "text": "Epictetus showed me that I had to take my own good and my own evil under my own control.",
+    "author": "James Stockdale",
+    "source": "Courage Under Fire: Testing Epictetus's Doctrines",
+    "themes": ["discipline", "identity"]
+  },
+  {
+    "id": "stockdale-007",
+    "text": "In prison, I learned that a man can be made to do almost anything if you manipulate his fears and hopes.",
+    "author": "James Stockdale",
+    "source": "In Love and War",
+    "themes": ["adversity", "wisdom"]
+  },
+  {
+    "id": "stockdale-008",
+    "text": "A clear conscience is an absolute requirement for leading a good life.",
+    "author": "James Stockdale",
+    "source": "Thoughts of a Philosophical Fighter Pilot",
+    "themes": ["discipline", "identity"]
+  },
+  {
+    "id": "stockdale-009",
+    "text": "Education is supposed to be a painful process. The Stoics never thought about cushioning the student.",
+    "author": "James Stockdale",
+    "source": "Stockdale on Stoicism",
+    "themes": ["discipline", "wisdom"]
+  },
+  {
+    "id": "stockdale-010",
+    "text": "The Stoics never said that one must stoically accept evil. They said the exact opposite. You have to defend yourself.",
+    "author": "James Stockdale",
+    "source": "Courage Under Fire: Testing Epictetus's Doctrines",
+    "themes": ["adversity", "discipline"]
+  },
+  {
+    "id": "laotzu-001",
+    "text": "The journey of a thousand miles begins with a single step.",
+    "author": "Lao Tzu",
+    "source": "Tao Te Ching, Chapter 64",
+    "themes": ["discipline", "simplicity"]
+  },
+  {
+    "id": "laotzu-002",
+    "text": "When I let go of what I am, I become what I might be.",
+    "author": "Lao Tzu",
+    "source": "Tao Te Ching",
+    "themes": ["identity", "wisdom"]
+  },
+  {
+    "id": "laotzu-003",
+    "text": "Nature does not hurry, yet everything is accomplished.",
+    "author": "Lao Tzu",
+    "source": "Tao Te Ching",
+    "themes": ["time", "simplicity"]
+  },
+  {
+    "id": "laotzu-004",
+    "text": "He who knows others is wise; he who knows himself is enlightened.",
+    "author": "Lao Tzu",
+    "source": "Tao Te Ching, Chapter 33",
+    "themes": ["wisdom", "identity"]
+  },
+  {
+    "id": "laotzu-005",
+    "text": "The softest things in the world overcome the hardest things in the world.",
+    "author": "Lao Tzu",
+    "source": "Tao Te Ching, Chapter 43",
+    "themes": ["adversity", "wisdom"]
+  },
+  {
+    "id": "laotzu-006",
+    "text": "Be content with what you have; rejoice in the way things are. When you realize there is nothing lacking, the whole world belongs to you.",
+    "author": "Lao Tzu",
+    "source": "Tao Te Ching, Chapter 44",
+    "themes": ["simplicity", "joy"]
+  },
+  {
+    "id": "laotzu-007",
+    "text": "Silence is a source of great strength.",
+    "author": "Lao Tzu",
+    "source": "Tao Te Ching",
+    "themes": ["discipline", "wisdom"]
+  },
+  {
+    "id": "laotzu-008",
+    "text": "If you do not change direction, you may end up where you are heading.",
+    "author": "Lao Tzu",
+    "source": "Tao Te Ching",
+    "themes": ["wisdom", "time"]
+  },
+  {
+    "id": "laotzu-009",
+    "text": "Mastering others is strength. Mastering yourself is true power.",
+    "author": "Lao Tzu",
+    "source": "Tao Te Ching, Chapter 33",
+    "themes": ["discipline", "identity"]
+  },
+  {
+    "id": "laotzu-010",
+    "text": "Those who know do not speak. Those who speak do not know.",
+    "author": "Lao Tzu",
+    "source": "Tao Te Ching, Chapter 56",
+    "themes": ["wisdom", "simplicity"]
+  },
+  {
+    "id": "buddha-001",
+    "text": "The mind is everything. What you think you become.",
+    "author": "Buddha",
+    "source": "Dhammapada",
+    "themes": ["identity", "wisdom"]
+  },
+  {
+    "id": "buddha-002",
+    "text": "Peace comes from within. Do not seek it without.",
+    "author": "Buddha",
+    "source": "Dhammapada",
+    "themes": ["joy", "simplicity"]
+  },
+  {
+    "id": "buddha-003",
+    "text": "You will not be punished for your anger, you will be punished by your anger.",
+    "author": "Buddha",
+    "source": "Dhammapada",
+    "themes": ["discipline", "adversity"]
+  },
+  {
+    "id": "buddha-004",
+    "text": "In the end, only three things matter: how much you loved, how gently you lived, and how gracefully you let go of things not meant for you.",
+    "author": "Buddha",
+    "source": "Dhammapada",
+    "themes": ["relationships", "simplicity"]
+  },
+  {
+    "id": "buddha-005",
+    "text": "Do not dwell in the past, do not dream of the future, concentrate the mind on the present moment.",
+    "author": "Buddha",
+    "source": "Dhammapada",
+    "themes": ["time", "discipline"]
+  },
+  {
+    "id": "buddha-006",
+    "text": "No one saves us but ourselves. No one can and no one may. We ourselves must walk the path.",
+    "author": "Buddha",
+    "source": "Dhammapada, Verse 165",
+    "themes": ["identity", "discipline"]
+  },
+  {
+    "id": "buddha-007",
+    "text": "Holding on to anger is like grasping a hot coal with the intent of throwing it at someone else; you are the one who gets burned.",
+    "author": "Buddha",
+    "source": "Dhammapada",
+    "themes": ["discipline", "relationships"]
+  },
+  {
+    "id": "buddha-008",
+    "text": "Three things cannot be long hidden: the sun, the moon, and the truth.",
+    "author": "Buddha",
+    "source": "Dhammapada",
+    "themes": ["wisdom", "time"]
+  },
+  {
+    "id": "buddha-009",
+    "text": "Every morning we are born again. What we do today is what matters most.",
+    "author": "Buddha",
+    "source": "Dhammapada",
+    "themes": ["time", "discipline"]
+  },
+  {
+    "id": "buddha-010",
+    "text": "It is better to conquer yourself than to win a thousand battles. Then the victory is yours. It cannot be taken from you.",
+    "author": "Buddha",
+    "source": "Dhammapada",
+    "themes": ["discipline", "identity"]
+  },
+  {
+    "id": "rumi-001",
+    "text": "The wound is the place where the Light enters you.",
+    "author": "Rumi",
+    "source": "Selected Poems",
+    "themes": ["adversity", "wisdom"]
+  },
+  {
+    "id": "rumi-002",
+    "text": "Don't grieve. Anything you lose comes round in another form.",
+    "author": "Rumi",
+    "source": "Selected Poems",
+    "themes": ["adversity", "time"]
+  },
+  {
+    "id": "rumi-003",
+    "text": "Yesterday I was clever, so I wanted to change the world. Today I am wise, so I am changing myself.",
+    "author": "Rumi",
+    "source": "Selected Poems",
+    "themes": ["wisdom", "identity"]
+  },
+  {
+    "id": "rumi-004",
+    "text": "What you seek is seeking you.",
+    "author": "Rumi",
+    "source": "Selected Poems",
+    "themes": ["identity", "wisdom"]
+  },
+  {
+    "id": "rumi-005",
+    "text": "Let silence take you to the core of life.",
+    "author": "Rumi",
+    "source": "Selected Poems",
+    "themes": ["simplicity", "wisdom"]
+  },
+  {
+    "id": "rumi-006",
+    "text": "Raise your words, not voice. It is rain that grows flowers, not thunder.",
+    "author": "Rumi",
+    "source": "Selected Poems",
+    "themes": ["relationships", "wisdom"]
+  },
+  {
+    "id": "rumi-007",
+    "text": "You were born with wings, why prefer to crawl through life?",
+    "author": "Rumi",
+    "source": "Selected Poems",
+    "themes": ["identity", "joy"]
+  },
+  {
+    "id": "rumi-008",
+    "text": "The art of knowing is knowing what to ignore.",
+    "author": "Rumi",
+    "source": "Selected Poems",
+    "themes": ["wisdom", "simplicity"]
+  },
+  {
+    "id": "rumi-009",
+    "text": "Be like a tree and let the dead leaves drop.",
+    "author": "Rumi",
+    "source": "Selected Poems",
+    "themes": ["simplicity", "adversity"]
+  },
+  {
+    "id": "rumi-010",
+    "text": "Set your life on fire. Seek those who fan your flames.",
+    "author": "Rumi",
+    "source": "Selected Poems",
+    "themes": ["relationships", "joy"]
   }
 ]

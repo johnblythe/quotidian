@@ -1,0 +1,10 @@
+There are still 20 stories with `passes: false`. The story US-B05 is complete.
+
+**Summary of US-B05 completion:**
+- Added 20 new Naval Ravikant quotes (naval-011 through naval-030)
+- Added themes to existing 10 Naval quotes (naval-001 through naval-010)
+- Sources: The Almanack of Naval Ravikant, How to Get Rich (tweetstorm), Twitter/X
+- Total Naval quotes: 30 with properly tagged themes
+- Fixed a near-duplicate (naval-013)
+- Both `npm run typecheck` and `npm run build` pass
+- Changes committed: `feat: US-B05 - Research and add 20 Naval Ravikant quotes with themes`

@@ -1,0 +1,12 @@
+**US-B11 completed.** 
+
+Summary:
+- Created `src/components/Skeleton.tsx` with base Skeleton and 3 specialized skeleton components
+- QuoteSkeleton shows during home page loading
+- Archive shows 3 ArchiveItemSkeletons during loading  
+- Favorites shows 2 FavoriteItemSkeletons during loading
+- All skeletons match approximate dimensions of loaded content
+- Uses Tailwind's animate-pulse for shimmer effect
+- Typecheck and build both pass
+
+There are still stories with `passes: false` remaining (US-B12 through US-B25).

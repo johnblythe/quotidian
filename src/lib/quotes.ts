@@ -56,3 +56,68 @@ export function getAllQuotes(): Quote[] {
 export function getQuoteById(id: string): Quote | undefined {
   return quotes.find(q => q.id === id);
 }
+
+/**
+ * Get all unique authors
+ */
+export function getAllAuthors(): string[] {
+  const authors = new Set(quotes.map(q => q.author));
+  return Array.from(authors);
+}
+
+/**
+ * Get a random author
+ */
+export function getRandomAuthor(): string {
+  const authors = getAllAuthors();
+  return authors[Math.floor(Math.random() * authors.length)];
+}
+
+/**
+ * Get quotes by a specific author
+ */
+export function getQuotesByAuthor(author: string): Quote[] {
+  return quotes.filter(q => q.author === author);
+}
+
+/**
+ * Get today's quote from a specific author - deterministic based on date
+ */
+export function getTodaysQuoteByAuthor(author: string): Quote {
+  const authorQuotes = getQuotesByAuthor(author);
+  if (authorQuotes.length === 0) {
+    return getTodaysQuote(); // Fallback
+  }
+
+  const today = new Date();
+  const dateString = `${today.getFullYear()}-${today.getMonth()}-${today.getDate()}`;
+
+  let hash = 0;
+  for (let i = 0; i < dateString.length; i++) {
+    hash += dateString.charCodeAt(i);
+  }
+
+  const index = hash % authorQuotes.length;
+  return authorQuotes[index];
+}
+
+/**
+ * Get a random quote from a specific author
+ */
+export function getRandomQuoteByAuthor(author: string, excludeId?: string): Quote {
+  let authorQuotes = getQuotesByAuthor(author);
+
+  if (excludeId) {
+    authorQuotes = authorQuotes.filter(q => q.id !== excludeId);
+  }
+
+  if (authorQuotes.length === 0) {
+    // Fallback: get any quote from this author
+    authorQuotes = getQuotesByAuthor(author);
+    if (authorQuotes.length === 0) {
+      return getRandomQuote(excludeId); // Final fallback
+    }
+  }
+
+  return authorQuotes[Math.floor(Math.random() * authorQuotes.length)];
+}

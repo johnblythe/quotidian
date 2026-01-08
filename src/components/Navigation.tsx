@@ -95,8 +95,8 @@ export function Navigation() {
   const pathname = usePathname();
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-background border-t border-foreground/10 lg:top-0 lg:bottom-auto lg:border-t-0 lg:border-b z-50">
-      <div className="max-w-2xl mx-auto px-4">
+    <nav className="fixed bottom-0 left-0 right-0 bg-background border-t border-foreground/10 lg:top-0 lg:bottom-auto lg:border-t-0 lg:border-b z-50 nav-safe-area lg:pb-0">
+      <div className="max-w-2xl mx-auto px-4 safe-area-inset-x">
         <ul className="flex items-center justify-around lg:justify-center lg:gap-12 py-2 lg:py-3">
           {navItems.map((item) => {
             const isActive = pathname === item.href;
@@ -104,7 +104,7 @@ export function Navigation() {
               <li key={item.href}>
                 <Link
                   href={item.href}
-                  className={`flex flex-col items-center gap-1 px-3 py-1 transition-colors ${
+                  className={`btn-nav flex flex-col items-center gap-1 px-3 py-1 ${
                     isActive
                       ? "text-foreground"
                       : "text-foreground/50 hover:text-foreground/80"
