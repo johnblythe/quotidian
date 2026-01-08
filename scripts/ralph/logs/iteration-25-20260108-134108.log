@@ -1,0 +1,11 @@
+There are still 2 stories remaining (US-029 Settings page and US-030 expand quotes). The work continues in the next iteration.
+
+**Completed: US-028 - Create Favorites page**
+
+- Created `src/app/favorites/page.tsx` as client component
+- Lists all favorited quotes using `getFavorites()` (newest first)
+- Uses the reusable `Quote` component for display
+- Shows "Saved [date]" below each quote
+- Empty state: "No favorites yet" with helper text
+- All quality checks passed (typecheck + build)
+- Committed with: `feat: US-028 - Create Favorites page`

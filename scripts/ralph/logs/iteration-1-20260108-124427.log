@@ -1,0 +1,12 @@
+**US-001 Complete.** 
+
+Summary:
+- Initialized Next.js 14 project with TypeScript, Tailwind CSS, ESLint, and App Router
+- Configured port 3005 for dev and start scripts
+- Added typecheck script to package.json
+- All quality checks pass (typecheck + build)
+- Committed as `feat: US-001 - Initialize Next.js project with TypeScript and Tailwind`
+- Updated prd.json to mark US-001 as `passes: true`
+- Updated progress.txt with learnings
+
+There are still 29 stories with `passes: false`. The next iteration will pick up **US-002: Configure PWA with manifest and service worker**.

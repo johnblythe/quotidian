@@ -1,0 +1,8 @@
+US-008 is complete. There are still many stories with `passes: false` (US-009 through US-030), so I'll end my response normally for the next iteration to continue.
+
+**Summary of US-008 completion:**
+- Updated `src/app/page.tsx` to import and use `getTodaysQuote()` from `@/lib/quotes`
+- Removed the hardcoded sample quote
+- Homepage now displays a deterministic daily quote based on current date
+- TypeScript and build checks pass
+- Committed as `feat: US-008 - Build basic Today's Quote page`

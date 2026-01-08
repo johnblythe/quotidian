@@ -1,0 +1,11 @@
+US-021 is complete. There are still stories with `passes: false` (US-022 through US-030), so my iteration ends here normally.
+
+**Summary of US-021 completion:**
+- Created `src/lib/favorites.ts` with 4 functions:
+  - `addFavorite(quoteId)` - saves quote to favorites
+  - `removeFavorite(quoteId)` - removes from favorites
+  - `isFavorite(quoteId)` - returns boolean
+  - `getFavorites()` - returns all favorites ordered by savedAt
+- TypeScript and build checks pass
+- Committed: `feat: US-021 - Create favorites helper functions`
+- Updated prd.json and progress.txt

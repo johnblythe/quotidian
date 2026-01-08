@@ -2,6 +2,400 @@
 Started: 2026-01-08
 
 ## Codebase Patterns
-(Discovered patterns will be added here as Ralph iterates)
+- Next.js 14 with App Router, TypeScript, Tailwind CSS
+- Port 3005 configured in package.json (dev and start scripts)
+- Use `npm run typecheck` to verify TS, `npm run build` for production build
+- Source files in src/, pages in src/app/, globals.css has Tailwind imports
+- PWA: manifest.json in public/, icons in public/icons/
+- Build uses webpack mode (--webpack flag) for next-pwa compatibility
+- Custom type declarations in src/types/ for untyped packages
+- Fonts: Lora (serif) for quotes, Inter (sans) for body - imported in layout.tsx
+- Typography utilities: .quote-text (serif, large) and .body-text (sans) in globals.css
+- Database: Dexie in src/lib/db.ts - tables: preferences, journalEntries, favorites, quoteHistory
+- Types: src/types/index.ts has Quote, JournalEntry, UserPreferences, FavoriteQuote, QuoteHistory
+- Quotes: src/data/quotes.json - 15 seed quotes, IDs like "seneca-001", "marcus-002"
+- Quote logic: src/lib/quotes.ts - getTodaysQuote(), getRandomQuote(excludeId), getQuoteById(id)
 
+---
+
+## 2026-01-08 - US-001: Initialize Next.js project with TypeScript and Tailwind
+- Created Next.js 14 project scaffold with TypeScript, Tailwind, ESLint, App Router
+- Updated package.json: name to "quotidian", dev/start to use port 3005, added typecheck script
+- Files created: package.json, tsconfig.json, next.config.ts, eslint.config.mjs, postcss.config.mjs, src/app/*, public/*
+- **Learnings for future iterations:**
+  - Can't run create-next-app in dir with existing files - must use temp dir and copy
+  - After copying node_modules, symlinks break - always run `npm install` fresh
+  - Default Next.js now uses Turbopack for builds
+---
+
+## 2026-01-08 - US-002: Configure PWA with manifest and service worker
+- Installed next-pwa package
+- Created public/manifest.json with Quotidian name, warm colors (#fafaf8)
+- Generated placeholder PNG icons (192x192, 512x512) via Node script
+- Configured next.config.ts with withPWA wrapper
+- Added src/types/next-pwa.d.ts for TypeScript compatibility
+- Updated build script to use --webpack flag (Turbopack doesn't support next-pwa's webpack config)
+- Added SW files to .gitignore (sw.js, workbox-*.js are build artifacts)
+- Files created: public/manifest.json, public/icons/icon-*.png, src/types/next-pwa.d.ts, scripts/generate-icons.js
+- Files modified: next.config.ts, package.json, .gitignore
+- **Learnings for future iterations:**
+  - next-pwa requires webpack mode in Next.js 16+ (use --webpack flag in build)
+  - @types/next-pwa only supports Next 12/13 - create custom .d.ts for Next 16
+  - next-pwa generates sw.js in public/, not .next/
+  - Add turbopack: {} to next.config.ts to silence webpack/turbopack config warning
+---
+
+## 2026-01-08 - US-003: Set up typography and base styles
+- Installed @fontsource/lora and @fontsource/inter packages
+- Imported font CSS files in src/app/layout.tsx (400, 400-italic, 700 for Lora; 400, 500, 600 for Inter)
+- Updated globals.css: background #fafaf8, text color #1a1a1a
+- Configured Tailwind v4 @theme with --font-serif (Lora) and --font-sans (Inter)
+- Created .quote-text utility (serif, large, elegant line-height) and .body-text utility (sans, readable)
+- Updated homepage to display sample quote with new typography
+- Files modified: src/app/layout.tsx, src/app/globals.css, src/app/page.tsx, package.json
+- **Learnings for future iterations:**
+  - Tailwind v4 uses CSS @theme directive instead of tailwind.config.ts for fonts
+  - @fontsource packages provide individual weight CSS files (e.g., @fontsource/lora/400.css)
+  - No dark mode in this app - removed prefers-color-scheme media query
+---
+
+## 2026-01-08 - US-004: Set up IndexedDB with Dexie
+- Installed dexie package
+- Created src/types/index.ts with Quote, JournalEntry, UserPreferences, FavoriteQuote, QuoteHistory interfaces
+- Created src/lib/db.ts with QuotidianDB class extending Dexie
+- Defined tables: preferences, journalEntries, favorites, quoteHistory with typed EntityTable
+- Exported singleton db instance
+- Files created: src/types/index.ts, src/lib/db.ts
+- Files modified: package.json, package-lock.json
+- **Learnings for future iterations:**
+  - Use Dexie EntityTable<T, 'id'> for typed table access
+  - Schema indices: ++id for auto-increment primary key, add fields for queryable columns
+  - Import types from @/types (configured alias)
+---
+
+## 2026-01-08 - US-005: Create seed quotes JSON file
+- Created src/data/quotes.json with 15 philosophical quotes
+- Authors: Seneca (3), Marcus Aurelius (3), Epictetus (3), Naval Ravikant (3), Alan Watts (3)
+- Each quote has: id, text, author, source (all have sources), context (some have)
+- ID format: author-number (e.g., seneca-001, marcus-002)
+- Files created: src/data/quotes.json
+- **Learnings for future iterations:**
+  - Quotes data in src/data/quotes.json - can be imported directly in TS files
+  - Quote IDs follow author-number pattern for easy identification
+  - All quotes include source attribution for credibility
+---
+
+## 2026-01-08 - US-006: Create Quote display component
+- Created src/components/Quote.tsx with Quote type import
+- Props: quote object with text, author, source
+- Layout: blockquote centered, max-width 65ch, generous padding (py-12 px-6)
+- Typography: quote-text class for quote, body-text for attribution
+- Author prefixed with em dash, source shown in smaller text below
+- Updated homepage to use Quote component for visual verification
+- Files created: src/components/Quote.tsx
+- Files modified: src/app/page.tsx
+- **Learnings for future iterations:**
+  - Quote component at src/components/Quote.tsx - reusable for archive, favorites
+  - Use quote-text class for quote display, body-text for attribution
+  - Homepage currently displays sample quote - will be replaced with getTodaysQuote() in US-008
+---
+
+## 2026-01-08 - US-007: Create quote selection logic
+- Created src/lib/quotes.ts with quote selection functions
+- getTodaysQuote(): uses date-based hash for deterministic daily quote
+- getRandomQuote(excludeId): random selection excluding specified ID
+- Also added getAllQuotes() and getQuoteById() helper functions
+- Files created: src/lib/quotes.ts
+- **Learnings for future iterations:**
+  - Quote selection in src/lib/quotes.ts - import { getTodaysQuote, getRandomQuote } from '@/lib/quotes'
+  - Date hash: sums char codes of YYYY-MM-DD string, mods by quote count
+  - getRandomQuote falls back to any quote if all excluded
+---
+
+## 2026-01-08 - US-008: Build basic Today's Quote page
+- Updated src/app/page.tsx to use getTodaysQuote() from @/lib/quotes
+- Removed hardcoded sampleQuote, replaced with dynamic daily quote
+- Content remains centered vertically and horizontally (flex min-h-screen items-center)
+- Quote component already handles max-width and typography
+- Files modified: src/app/page.tsx
+- **Learnings for future iterations:**
+  - getTodaysQuote() is synchronous, can be used in server components
+  - Page works as static content - no client-side JS needed for basic display
+---
+
+## 2026-01-08 - US-009: Create Onboarding component - name input
+- Created src/components/Onboarding.tsx with "use client" directive
+- Step 1: "What should we call you?" heading with text input
+- Input styled: transparent bg, bottom border, centered text, placeholder styling
+- Next button: disabled when name empty, bg-foreground/text-background contrast
+- Component accepts onComplete callback prop for future wiring (US-012)
+- Files created: src/components/Onboarding.tsx
+- **Learnings for future iterations:**
+  - Onboarding is client component ("use client") - needed for useState
+  - Input uses underline style (border-b-2) for minimal aesthetic
+  - Button uses bg-foreground text-background for consistent contrast
+  - autoFocus on input for immediate typing
+---
+
+## 2026-01-08 - US-010: Add notification time picker to Onboarding
+- Added step state to track Step 1 (name) vs Step 2 (time)
+- Step 2: "When would you like your daily reflection?" with time picker input
+- Time picker defaults to 08:00, uses native HTML time input
+- Complete button calls onComplete callback with { name, notificationTime }
+- Added helper text explaining the notification purpose
+- Files modified: src/components/Onboarding.tsx
+- **Learnings for future iterations:**
+  - Native HTML time input (type="time") works well for this use case
+  - Use appearance-none class to reset browser time picker styling somewhat
+  - Step state controls which UI to show via conditional rendering
+---
+
+## 2026-01-08 - US-011: Create preferences helper functions
+- Created src/lib/preferences.ts with three functions
+- savePreferences(prefs): creates or updates preferences in IndexedDB, sets onboardedAt on first save
+- getPreferences(): returns UserPreferences or null if not set
+- isOnboarded(): returns boolean based on whether preferences exist
+- All functions work with db from @/lib/db
+- Files created: src/lib/preferences.ts
+- **Learnings for future iterations:**
+  - Preferences helper at src/lib/preferences.ts - import { savePreferences, getPreferences, isOnboarded } from '@/lib/preferences'
+  - savePreferences takes Omit<UserPreferences, 'id' | 'onboardedAt'> - only name and notificationTime
+  - Uses toCollection().first() to get single record since there's only one user preferences row
+---
+
+## 2026-01-08 - US-012: Wire up Onboarding to save preferences
+- Modified src/components/Onboarding.tsx to import savePreferences from @/lib/preferences
+- Changed handleComplete to async, calls savePreferences before onComplete callback
+- Data shape { name, notificationTime } matches what savePreferences expects
+- Files modified: src/components/Onboarding.tsx
+- **Learnings for future iterations:**
+  - Onboarding component now saves to IndexedDB automatically on complete
+  - onComplete callback still fires after save, allowing parent to react (e.g., hide onboarding)
+  - async/await needed in handleComplete since savePreferences returns Promise
+---
+
+## 2026-01-08 - US-013: Add onboarding check to homepage
+- Converted src/app/page.tsx to client component ("use client")
+- Added useState for pageState: "loading" | "onboarding" | "quote"
+- Added useEffect to check isOnboarded() on mount
+- Shows "Loading..." during initial check, Onboarding if not onboarded, Quote if onboarded
+- Onboarding onComplete callback transitions to quote state
+- Files modified: src/app/page.tsx
+- **Learnings for future iterations:**
+  - Homepage is now a client component due to IndexedDB async check
+  - PageState pattern (loading/onboarding/quote) handles async data gracefully
+  - getTodaysQuote() is still sync, works in client components too
+---
+
+## 2026-01-08 - US-014: Create Greeting component
+- Created src/components/Greeting.tsx with time-based greeting
+- Props: name string
+- getGreetingTime() returns 'morning' | 'afternoon' | 'evening' based on hour
+- Morning: 5am-12pm (hours 5-11), Afternoon: 12pm-5pm (hours 12-16), Evening: 5pm-5am (hours 17-23, 0-4)
+- Styled with body-text class, centered, subtle opacity (text-foreground/60), margin-bottom for spacing
+- Files created: src/components/Greeting.tsx
+- **Learnings for future iterations:**
+  - Greeting component at src/components/Greeting.tsx - import { Greeting } from '@/components/Greeting'
+  - Uses 'use client' directive since new Date() is dynamic
+  - Subtle styling with text-foreground/60 for muted appearance
+---
+
+## 2026-01-08 - US-015: Add Greeting to homepage
+- Added Greeting component to homepage above Quote
+- Changed from isOnboarded() to getPreferences() to fetch user name
+- Added userName state to store the name from preferences
+- Greeting conditionally renders when userName is available
+- After onboarding completes, fetches preferences to get name for immediate greeting display
+- Files modified: src/app/page.tsx
+- **Learnings for future iterations:**
+  - Use getPreferences() instead of isOnboarded() when you need user data beyond a boolean check
+  - Fetch preferences again after onboarding to ensure name is immediately available
+  - Conditional render with {userName && <Greeting name={userName} />} for safety
+---
+
+## 2026-01-08 - US-016: Create ReflectionEditor component
+- Created src/components/ReflectionEditor.tsx with "use client" directive
+- Props: quoteId (string), initialContent (optional string), onSave callback
+- Textarea with placeholder "What does this stir in you?"
+- Auto-grow functionality via useEffect that adjusts height on content change
+- Styled with font-serif (Lora), generous padding (px-6 py-8), max-width 65ch
+- Transparent background, no visible border, placeholder with 40% opacity
+- Files created: src/components/ReflectionEditor.tsx
+- **Learnings for future iterations:**
+  - ReflectionEditor at src/components/ReflectionEditor.tsx - import { ReflectionEditor } from '@/components/ReflectionEditor'
+  - Auto-grow pattern: set height to 'auto' then to scrollHeight in useEffect
+  - Uses data-quote-id attribute for potential future DOM querying
+---
+
+## 2026-01-08 - US-017: Add adaptive states to ReflectionEditor
+- Added EditorState type: "minimal" | "standard" | "focused"
+- getEditorState(length) returns state based on character count thresholds
+- < 100 chars: minimal - smaller padding (py-4), text-base, min-h-[80px]
+- 100-500 chars: standard - medium padding (py-8), text-lg, min-h-[120px]
+- > 500 chars: focused - larger padding (py-10), text-xl, leading-loose, min-h-[160px]
+- Word count appears only in focused mode (opacity-0 to opacity-100 transition)
+- All transitions use duration-300 ease-in-out for smooth state changes
+- countWords() helper splits on whitespace and filters empty strings
+- Files modified: src/components/ReflectionEditor.tsx
+- **Learnings for future iterations:**
+  - useMemo for derived state like editorState and wordCount to avoid recalc
+  - Tailwind transition-all covers padding, font-size, min-height changes
+  - Word count singular/plural handling: "1 word" vs "N words"
+---
+
+## 2026-01-08 - US-018: Create journal entry helper functions
+- Created src/lib/journal.ts with three functions
+- saveJournalEntry(quoteId, content): creates or updates entry in IndexedDB
+- getJournalEntry(quoteId): retrieves entry for a specific quote, returns null if none
+- getRecentEntries(limit): retrieves recent entries ordered by updatedAt descending
+- All functions use Dexie's where() and orderBy() methods
+- Files created: src/lib/journal.ts
+- **Learnings for future iterations:**
+  - Journal helper at src/lib/journal.ts - import { saveJournalEntry, getJournalEntry, getRecentEntries } from '@/lib/journal'
+  - Use where('field').equals(value).first() for single record lookup by indexed field
+  - Use orderBy('field').reverse() for descending sort
+---
+
+## 2026-01-08 - US-019: Wire ReflectionEditor to save entries
+- Modified src/components/ReflectionEditor.tsx to auto-save entries
+- Added debounced save (1 second) using useCallback and useRef for timeout
+- Added showSaved state with "Saved" text that appears for 2 seconds after save
+- Added useEffect to load existing journal entry on mount via getJournalEntry(quoteId)
+- Footer now shows "Saved" on left and word count on right (in focused mode)
+- Files modified: src/components/ReflectionEditor.tsx
+- **Learnings for future iterations:**
+  - Debounce pattern: useRef for timeout + useCallback for the debounced function
+  - Cleanup timeouts in useEffect return to avoid memory leaks
+  - "Saved" indicator shows via opacity transition, auto-hides after 2 seconds
+---
+
+## 2026-01-08 - US-020: Add action buttons to quote page
+- Created src/components/ActionButtons.tsx with Save (heart), Reflect (pencil), Another (arrow) buttons
+- SVG icons for each button, styled minimally with text labels below
+- Props: onSave, onReflect, onAnother callbacks plus isSaved and isReflecting states
+- Updated src/app/page.tsx to integrate ActionButtons and ReflectionEditor
+- Added showReflection state to toggle ReflectionEditor visibility
+- Reflect button toggles editor, Another button gets random quote and hides editor
+- Changed from static todaysQuote to currentQuote state to support "Another" functionality
+- Files created: src/components/ActionButtons.tsx
+- Files modified: src/app/page.tsx
+- **Learnings for future iterations:**
+  - ActionButtons at src/components/ActionButtons.tsx - import { ActionButtons } from '@/components/ActionButtons'
+  - Use inline SVG icons for simple shapes (heart, pencil, refresh arrows)
+  - isSaved prop controls filled vs outline heart, isReflecting highlights pencil button
+  - handleSave and handleAnother have TODO comments for US-022 and US-024 wiring
+---
+
+## 2026-01-08 - US-021: Create favorites helper functions
+- Created src/lib/favorites.ts with four functions
+- addFavorite(quoteId): saves to IndexedDB, checks for existing to avoid duplicates
+- removeFavorite(quoteId): deletes by quoteId using where().delete()
+- isFavorite(quoteId): returns boolean based on whether quoteId exists in favorites
+- getFavorites(): returns all favorites ordered by savedAt descending (newest first)
+- Files created: src/lib/favorites.ts
+- **Learnings for future iterations:**
+  - Favorites helper at src/lib/favorites.ts - import { addFavorite, removeFavorite, isFavorite, getFavorites } from '@/lib/favorites'
+  - Use where('quoteId').equals(id).delete() to delete by indexed field (not primary key)
+  - Check existing before add to avoid duplicate favorites
+---
+
+## 2026-01-08 - US-022: Wire up Save button for favorites
+- Modified src/app/page.tsx to wire up Save button to favorites
+- Added isSaved state, checks isFavorite on mount and when currentQuote.id changes
+- handleSave toggles: if saved, calls removeFavorite, else calls addFavorite
+- Passes isSaved prop to ActionButtons, which controls filled vs outline heart (already handled in US-020)
+- Files modified: src/app/page.tsx
+- **Learnings for future iterations:**
+  - Use useEffect with quote ID dependency to re-check favorite status when quote changes
+  - Optimistic UI: update local state immediately (setIsSaved) before/after async DB call
+  - ActionButtons already handles filled/outline heart via isSaved prop from US-020
+---
+
+## 2026-01-08 - US-023: Create quote history helper functions
+- Created src/lib/history.ts with five functions
+- recordQuoteShown(quoteId, freshPull): saves quote view to history with timestamp
+- getQuoteHistory(): returns all history ordered by shownAt descending
+- getFreshPullsToday(): counts fresh pulls (another quote requests) since midnight today
+- incrementFreshPulls(quoteId): records a fresh pull by calling recordQuoteShown with freshPull=true
+- canGetAnother(): returns true if < 3 fresh pulls today
+- Files created: src/lib/history.ts
+- **Learnings for future iterations:**
+  - History helper at src/lib/history.ts - import { recordQuoteShown, getQuoteHistory, getFreshPullsToday, incrementFreshPulls, canGetAnother } from '@/lib/history'
+  - Use where('shownAt').aboveOrEqual(date) to filter by date range in Dexie
+  - Use .filter() for additional filtering after where() (e.g., filtering by freshPull boolean)
+  - getTodayStart() helper creates midnight Date for today comparison
+---
+
+## 2026-01-08 - US-024: Wire up Another button with daily limit
+- Modified src/components/ActionButtons.tsx to accept remainingPulls prop
+- Added isAnotherDisabled computed from remainingPulls <= 0
+- Button shows "Another (X left)" with remaining count, disabled when 0
+- Modified src/app/page.tsx to wire up daily limit logic
+- Added remainingPulls state, checks getFreshPullsToday on mount
+- handleAnother: checks limit, gets random quote, increments fresh pulls, decrements remaining
+- Also records today's quote being shown on mount (freshPull=false for daily quote)
+- Files modified: src/components/ActionButtons.tsx, src/app/page.tsx
+- **Learnings for future iterations:**
+  - Use Math.max(0, 3 - pullsUsed) to compute remaining pulls
+  - Guard early return in handleAnother when remainingPulls <= 0
+  - recordQuoteShown with freshPull=false for daily quote, true for "Another" pulls
+---
+
+## 2026-01-08 - US-025: Create Navigation component
+- Created src/components/Navigation.tsx with "use client" directive
+- Links: Today (home), Archive, Favorites, Settings with SVG icons
+- Mobile: fixed bottom nav with horizontal layout (justify-around)
+- Desktop (lg:): fixed top nav with centered layout (justify-center, gap-12)
+- Uses usePathname() from next/navigation for current page detection
+- Active page: full opacity text-foreground, inactive: text-foreground/50
+- NavItem interface and navItems array for clean data structure
+- Files created: src/components/Navigation.tsx
+- **Learnings for future iterations:**
+  - Navigation at src/components/Navigation.tsx - import { Navigation } from '@/components/Navigation'
+  - Use usePathname() from next/navigation for route-based active state
+  - Fixed positioning with z-50 ensures nav stays above content
+  - lg: breakpoint toggles between bottom (mobile) and top (desktop) positioning
+---
+
+## 2026-01-08 - US-026: Add Navigation to layout
+- Added Navigation component import to src/app/layout.tsx
+- Added Navigation component rendering above {children} in body
+- Added body padding: pb-16 (bottom) on mobile, lg:pb-0 lg:pt-14 (top) on desktop
+- Padding accounts for fixed nav height (~60px mobile bottom, ~56px desktop top)
+- Files modified: src/app/layout.tsx
+- **Learnings for future iterations:**
+  - Navigation is always visible since it's in layout.tsx - applies to all routes
+  - Body padding prevents content from being hidden behind fixed nav
+  - pb-16 = 64px bottom padding (mobile), lg:pt-14 = 56px top padding (desktop)
+  - Navigation component handles its own responsive positioning (bottom vs top)
+---
+
+## 2026-01-08 - US-027: Create Archive page
+- Created src/app/archive/page.tsx as client component
+- Lists past quotes from history (newest first) with deduplication by quoteId
+- Shows quote text, author, date displayed, and reflection snippet (truncated to 100 chars)
+- Empty state: "No quotes yet" with subtle helper text
+- Uses getQuoteHistory(), getJournalEntry(), getQuoteById() from existing lib helpers
+- Gracefully handles missing quotes ("Quote no longer available")
+- Files created: src/app/archive/page.tsx
+- **Learnings for future iterations:**
+  - Archive page at src/app/archive/page.tsx - accessible via /archive route
+  - Deduplicate history entries by quoteId to show each quote only once
+  - Use Promise.all for parallel loading of quotes and reflections
+  - Date formatting: use toLocaleDateString with month short format
+---
+
+## 2026-01-08 - US-028: Create Favorites page
+- Created src/app/favorites/page.tsx as client component
+- Lists all favorited quotes using getFavorites() (newest first via savedAt)
+- Uses Quote component from src/components/Quote.tsx for proper quote display
+- Shows date saved below each quote using formatDate helper
+- Empty state: "No favorites yet" with helper text "Save quotes by tapping the heart icon"
+- Gracefully handles missing quotes ("Quote no longer available")
+- Files created: src/app/favorites/page.tsx
+- **Learnings for future iterations:**
+  - Favorites page at src/app/favorites/page.tsx - accessible via /favorites route
+  - Reuses Quote component for consistent quote display
+  - FavoriteItem interface wraps favorite with resolved quote
+  - No deduplication needed (unlike archive) since favorites are unique by quoteId
 ---

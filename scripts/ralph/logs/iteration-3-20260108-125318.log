@@ -1,0 +1,12 @@
+There are still 27 stories with `passes: false`. US-003 is complete.
+
+**Summary of US-003: Set up typography and base styles**
+
+Completed:
+- Installed `@fontsource/lora` and `@fontsource/inter` packages
+- Imported font CSS in `src/app/layout.tsx`
+- Updated `globals.css` with warm background (#fafaf8) and text color (#1a1a1a)
+- Configured Tailwind v4 `@theme` with serif (Lora) and sans (Inter) font families
+- Created `.quote-text` and `.body-text` utility classes
+- Updated homepage to showcase typography with sample quote
+- Typecheck and build pass

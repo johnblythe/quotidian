@@ -1,0 +1,3 @@
+US-012 is complete. Checking remaining stories - there are still many with `passes: false` (US-013 through US-030), so I'll end normally for the next iteration.
+
+**Summary:** Completed US-012 - Wired up Onboarding component to call `savePreferences` when user completes onboarding. The component now imports and awaits `savePreferences` with `{ name, notificationTime }` before calling the `onComplete` callback. Build and typecheck pass.

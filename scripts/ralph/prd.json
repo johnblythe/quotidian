@@ -15,8 +15,8 @@
         "npm run typecheck passes"
       ],
       "priority": 1,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Completed 2026-01-08"
     },
     {
       "id": "US-002",
@@ -31,8 +31,8 @@
         "npm run typecheck passes"
       ],
       "priority": 2,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Completed 2026-01-08. SW files generated in public/ not .next/ with next-pwa."
     },
     {
       "id": "US-003",
@@ -48,8 +48,8 @@
         "npm run typecheck passes"
       ],
       "priority": 3,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Completed 2026-01-08. Tailwind v4 uses @theme for font config."
     },
     {
       "id": "US-004",
@@ -64,8 +64,8 @@
         "npm run typecheck passes"
       ],
       "priority": 4,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Completed 2026-01-08. Dexie EntityTable for typed tables."
     },
     {
       "id": "US-005",
@@ -79,8 +79,8 @@
         "npm run typecheck passes"
       ],
       "priority": 5,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Completed 2026-01-08. 15 quotes from Seneca, Marcus Aurelius, Epictetus, Naval, Alan Watts."
     },
     {
       "id": "US-006",
@@ -98,8 +98,8 @@
         "npm run typecheck passes"
       ],
       "priority": 6,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Completed 2026-01-08. Quote component with centered text, max-width 65ch, serif font, em dash author prefix, source in smaller text."
     },
     {
       "id": "US-007",
@@ -114,8 +114,8 @@
         "npm run typecheck passes"
       ],
       "priority": 7,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Completed 2026-01-08. Date-based hash for deterministic daily quote, random with exclude support."
     },
     {
       "id": "US-008",
@@ -129,8 +129,8 @@
         "npm run typecheck passes"
       ],
       "priority": 8,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Completed 2026-01-08. Updated homepage to use getTodaysQuote() for deterministic daily quote."
     },
     {
       "id": "US-009",
@@ -145,8 +145,8 @@
         "npm run typecheck passes"
       ],
       "priority": 9,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Completed 2026-01-08. Step 1 with name input, Next button disabled when empty."
     },
     {
       "id": "US-010",
@@ -160,8 +160,8 @@
         "npm run typecheck passes"
       ],
       "priority": 10,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Completed 2026-01-08. Added step state, time picker defaulting to 08:00, Complete button calls onComplete callback."
     },
     {
       "id": "US-011",
@@ -176,8 +176,8 @@
         "npm run typecheck passes"
       ],
       "priority": 11,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Completed 2026-01-08. savePreferences, getPreferences, isOnboarded functions in src/lib/preferences.ts"
     },
     {
       "id": "US-012",
@@ -190,8 +190,8 @@
         "npm run typecheck passes"
       ],
       "priority": 12,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Completed 2026-01-08. Onboarding now imports savePreferences and calls it on handleComplete before onComplete callback."
     },
     {
       "id": "US-013",
@@ -206,8 +206,8 @@
         "npm run typecheck passes"
       ],
       "priority": 13,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Completed 2026-01-08. Homepage converted to client component with loading/onboarding/quote states."
     },
     {
       "id": "US-014",
@@ -222,8 +222,8 @@
         "npm run typecheck passes"
       ],
       "priority": 14,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Completed 2026-01-08. Greeting component with time-based greeting logic."
     },
     {
       "id": "US-015",
@@ -237,8 +237,8 @@
         "npm run typecheck passes"
       ],
       "priority": 15,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Completed 2026-01-08. Greeting displayed above quote, name fetched from preferences."
     },
     {
       "id": "US-016",
@@ -254,8 +254,8 @@
         "npm run typecheck passes"
       ],
       "priority": 16,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Completed 2026-01-08. ReflectionEditor with auto-grow textarea, serif font, generous padding."
     },
     {
       "id": "US-017",
@@ -270,8 +270,8 @@
         "npm run typecheck passes"
       ],
       "priority": 17,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Completed 2026-01-08. Three adaptive states with CSS transitions, word count in focused mode."
     },
     {
       "id": "US-018",
@@ -286,8 +286,8 @@
         "npm run typecheck passes"
       ],
       "priority": 18,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Completed 2026-01-08. saveJournalEntry, getJournalEntry, getRecentEntries in src/lib/journal.ts"
     },
     {
       "id": "US-019",
@@ -300,8 +300,8 @@
         "npm run typecheck passes"
       ],
       "priority": 19,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Completed 2026-01-08. Debounced 1s auto-save, 'Saved' indicator shows 2s after save, loads existing entry on mount."
     },
     {
       "id": "US-020",
@@ -315,8 +315,8 @@
         "npm run typecheck passes"
       ],
       "priority": 20,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Completed 2026-01-08. ActionButtons component with SVG icons for heart/pencil/refresh, Reflect toggles ReflectionEditor visibility."
     },
     {
       "id": "US-021",
@@ -331,8 +331,8 @@
         "npm run typecheck passes"
       ],
       "priority": 21,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Completed 2026-01-08. addFavorite, removeFavorite, isFavorite, getFavorites in src/lib/favorites.ts"
     },
     {
       "id": "US-022",
@@ -346,8 +346,8 @@
         "npm run typecheck passes"
       ],
       "priority": 22,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Completed 2026-01-08. Save button checks isFavorite on mount and when quote changes, toggles via addFavorite/removeFavorite, filled/outline heart via isSaved prop."
     },
     {
       "id": "US-023",
@@ -363,8 +363,8 @@
         "npm run typecheck passes"
       ],
       "priority": 23,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Completed 2026-01-08. recordQuoteShown, getQuoteHistory, getFreshPullsToday, incrementFreshPulls, canGetAnother in src/lib/history.ts"
     },
     {
       "id": "US-024",
@@ -379,8 +379,8 @@
         "npm run typecheck passes"
       ],
       "priority": 24,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Completed 2026-01-08. Added remainingPulls state, checks getFreshPullsToday on mount, shows 'Another (X left)', button disabled at 0."
     },
     {
       "id": "US-025",
@@ -395,8 +395,8 @@
         "npm run typecheck passes"
       ],
       "priority": 25,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Completed 2026-01-08. Navigation component with Today/Archive/Favorites/Settings links, mobile bottom/desktop top positioning, current page highlighting."
     },
     {
       "id": "US-026",
@@ -409,8 +409,8 @@
         "npm run typecheck passes"
       ],
       "priority": 26,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Completed 2026-01-08. Navigation added to layout with body padding for fixed nav positioning."
     },
     {
       "id": "US-027",
@@ -426,8 +426,8 @@
         "npm run typecheck passes"
       ],
       "priority": 27,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Completed 2026-01-08. Archive page with deduplicated history, reflection snippets, formatted dates."
     },
     {
       "id": "US-028",
@@ -442,8 +442,8 @@
         "npm run typecheck passes"
       ],
       "priority": 28,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Completed 2026-01-08. Favorites page using Quote component, getFavorites() from lib, date saved display, empty state."
     },
     {
       "id": "US-029",

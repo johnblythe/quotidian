@@ -1,0 +1,9 @@
+US-013 is complete. There are still 17 stories with `passes: false` (US-014 through US-030), so the next iteration will pick up US-014.
+
+**Summary of US-013:**
+- Converted homepage to client component with three states: loading, onboarding, quote
+- Homepage checks `isOnboarded()` on mount
+- Shows Onboarding component if not onboarded
+- Transitions to quote view after onboarding completes
+- Shows quote immediately if already onboarded
+- All quality checks pass, committed successfully

@@ -1,0 +1,6 @@
+**US-010 Complete.** Added Step 2 notification time picker to Onboarding component with:
+- Step state management (1 or 2)
+- Time picker defaulting to 08:00
+- Complete button that calls onComplete callback with name and notificationTime
+
+There are still stories with `passes: false` remaining (US-011 through US-030), so another iteration will pick up the next story.

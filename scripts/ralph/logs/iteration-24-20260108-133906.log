@@ -1,0 +1,10 @@
+There are still 3 stories with `passes: false` (US-028, US-029, US-030). 
+
+**Completed US-027: Create Archive page**
+
+- Created `src/app/archive/page.tsx` as a client component
+- Lists past quotes from history (newest first) with deduplication by quoteId
+- Shows quote text, author, formatted date, and reflection snippet (truncated)
+- Empty state displays "No quotes yet" with helper text
+- Gracefully handles missing quotes
+- Typecheck and build pass

@@ -1,0 +1,9 @@
+US-018 is complete. There are still stories with `passes: false` (US-019 through US-030), so another iteration will continue with the next story.
+
+**Summary of US-018:**
+- Created `src/lib/journal.ts` with three functions:
+  - `saveJournalEntry(quoteId, content)` - saves/updates journal entries
+  - `getJournalEntry(quoteId)` - retrieves entry for a quote
+  - `getRecentEntries(limit)` - gets recent entries, newest first
+- All typecheck and build checks pass
+- Committed: `feat: US-018 - Create journal entry helper functions`

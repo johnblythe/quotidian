@@ -1,0 +1,12 @@
+**US-007 Complete!**
+
+Implemented:
+- `src/lib/quotes.ts` with:
+  - `getTodaysQuote()` - deterministic quote based on date hash
+  - `getRandomQuote(excludeId)` - random quote excluding specified ID
+  - `getAllQuotes()` - returns all quotes
+  - `getQuoteById(id)` - lookup by ID
+
+Quality checks passed (typecheck, build). Committed as `feat: US-007 - Create quote selection logic`.
+
+There are still stories with `passes: false` remaining (US-008 through US-030). The next iteration should pick up **US-008: Build basic Today's Quote page**.

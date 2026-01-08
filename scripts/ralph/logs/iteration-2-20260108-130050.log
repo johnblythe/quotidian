@@ -1,0 +1,11 @@
+US-005 is complete. There are still stories with `passes: false` remaining (US-006 through US-030, which is 25 stories).
+
+**Summary of US-005: Create seed quotes JSON file**
+
+Completed:
+- Created `src/data/quotes.json` with 15 philosophical quotes
+- 3 quotes each from: Seneca, Marcus Aurelius, Epictetus, Naval Ravikant, Alan Watts
+- Each quote has id, text, author, source, and some have context
+- IDs follow author-number pattern (e.g., "seneca-001")
+- All quotes properly attributed with sources
+- Typecheck and build pass
