@@ -1,7 +1,70 @@
 # Ralph Progress Log - Beta Phase
-Started: (pending)
+Started: 2026-01-08
 
 ## Codebase Patterns
 (Inherited from alpha - see scripts/ralph/progress.txt)
+- Theme type in src/types/index.ts - 10 theme categories for quotes
+- Quote interface now has optional themes: Theme[] field
 
+---
+
+## 2026-01-08 - US-B01: Update Quote interface to include themes array
+- Added Theme type with 10 theme categories: 'adversity' | 'death' | 'discipline' | 'joy' | 'relationships' | 'work' | 'identity' | 'time' | 'wisdom' | 'simplicity'
+- Updated Quote interface to include optional themes: Theme[] field
+- Updated all 55 quotes in quotes.json to include empty themes arrays
+- Files modified: src/types/index.ts, src/data/quotes.json
+- **Learnings for future iterations:**
+  - Theme field is optional (themes?: Theme[]) for backwards compatibility
+  - Empty arrays in JSON are valid - future stories will populate actual themes
+  - All acceptance criteria items must be verified before marking passes: true
+---
+
+## 2026-01-08 - US-B02: Research and add 25 Seneca quotes with themes
+- Added 25 new Seneca quotes (seneca-011 through seneca-035) with properly tagged themes
+- Sources used: Letters to Lucilius (various letters), On the Shortness of Life, On Anger, On Providence, On Tranquility of Mind
+- Themes covered: adversity (7), time (10), discipline (11), wisdom (10), simplicity (4), death (2), relationships (1), identity (3), joy (1)
+- Also added themes to seneca-010 which previously had empty themes array
+- Files modified: src/data/quotes.json
+- **Learnings for future iterations:**
+  - Quote IDs follow pattern: author-NNN (e.g., seneca-011)
+  - Each quote should have 1-2 themes tagged, based on primary message
+  - Sources should be specific when possible (e.g., "Letters to Lucilius, Letter 7")
+  - Ensure no text duplicates by reading existing quotes first
+---
+
+## 2026-01-08 - US-B03: Research and add 25 Marcus Aurelius quotes with themes
+- Added 25 new Marcus Aurelius quotes (marcus-011 through marcus-035) with properly tagged themes
+- All quotes sourced from Meditations (Books 2, 4, 5, 6, 7, 10, 12)
+- Added themes to existing 10 Marcus Aurelius quotes (marcus-001 through marcus-010)
+- Themes covered: death (7), time (8), adversity (8), discipline (11), wisdom (9), identity (9), simplicity (4), joy (6), relationships (3), work (2)
+- Files modified: src/data/quotes.json
+- **Learnings for future iterations:**
+  - Marcus Aurelius quotes all from Meditations - cite specific Book number
+  - Some quotes are variations on same theme (e.g., morning gratitude) - ensure text is distinct
+  - Existing quotes with empty themes should also be populated when adding new ones from same author
+---
+
+## 2026-01-08 - US-B04: Research and add 20 Epictetus quotes with themes
+- Added 20 new Epictetus quotes (epictetus-011 through epictetus-030) with properly tagged themes
+- Also added themes to existing 10 Epictetus quotes (epictetus-001 through epictetus-010)
+- Sources used: Enchiridion (14 quotes) and Discourses Books 1, 2, 3 (16 quotes)
+- Themes covered: adversity (9), discipline (13), identity (13), wisdom (15), simplicity (4), relationships (4), joy (2), work (2), time (1)
+- Files modified: src/data/quotes.json
+- **Learnings for future iterations:**
+  - Epictetus quotes primarily from Enchiridion (handbook) and Discourses (longer lectures)
+  - Discourses should cite specific Book number when possible (Book 1, 2, or 3)
+  - Epictetus emphasizes dichotomy of control - many quotes fit adversity + discipline themes
+---
+
+## 2026-01-08 - US-B05: Research and add 20 Naval Ravikant quotes with themes
+- Added 20 new Naval Ravikant quotes (naval-011 through naval-030) with properly tagged themes
+- Also added themes to existing 10 Naval quotes (naval-001 through naval-010)
+- Sources used: The Almanack of Naval Ravikant, How to Get Rich (tweetstorm), Twitter/X posts
+- Themes covered: work (10), identity (8), wisdom (9), joy (6), relationships (5), discipline (6), time (5), simplicity (4), adversity (3), death (1)
+- Fixed potential duplicate (naval-013 was similar to naval-002) by replacing with different quote
+- Files modified: src/data/quotes.json
+- **Learnings for future iterations:**
+  - Naval quotes come from: The Almanack of Naval Ravikant, How to Get Rich tweetstorm, Twitter/X posts
+  - Always check for near-duplicates when adding quotes - some are variations on same idea
+  - Naval emphasizes wealth, happiness, and self-improvement - many quotes fit work + wisdom themes
 ---

@@ -459,8 +459,8 @@
         "npm run typecheck passes"
       ],
       "priority": 29,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Completed 2026-01-08. Settings page with name/time inputs, pre-filled from preferences, Save button with 'Saved!' confirmation."
     },
     {
       "id": "US-030",
@@ -474,8 +474,8 @@
         "npm run typecheck passes"
       ],
       "priority": 30,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Completed 2026-01-08. Expanded to 55 quotes: Seneca (10), Marcus Aurelius (10), Epictetus (10), Naval Ravikant (10), Alan Watts (10), James Stockdale (5)."
     }
   ]
 }

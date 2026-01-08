@@ -399,3 +399,34 @@ Started: 2026-01-08
   - FavoriteItem interface wraps favorite with resolved quote
   - No deduplication needed (unlike archive) since favorites are unique by quoteId
 ---
+
+## 2026-01-08 - US-029: Create Settings page
+- Created src/app/settings/page.tsx as client component
+- Name input and notification time picker pre-filled from getPreferences()
+- Save button calls savePreferences() with updated values
+- Shows "Saved!" confirmation for 2 seconds after save
+- Styled consistently with app aesthetic (max-w-md, serif headings, underline inputs)
+- Disabled save button when name is empty
+- Files created: src/app/settings/page.tsx
+- **Learnings for future iterations:**
+  - Settings page at src/app/settings/page.tsx - accessible via /settings route
+  - Reuses savePreferences() and getPreferences() from existing lib/preferences.ts
+  - Same input styling as Onboarding (border-b-2, transparent bg)
+  - showSaved state pattern with setTimeout for temporary confirmation display
+---
+
+## 2026-01-08 - US-030: Expand quote seed data
+- Expanded src/data/quotes.json from 15 to 55 quotes
+- Seneca: 10 quotes (was 3) - Letters from a Stoic, On the Shortness of Life, On Anger
+- Marcus Aurelius: 10 quotes (was 3) - all from Meditations (Books 5, 6, 7, 10)
+- Epictetus: 10 quotes (was 3) - Enchiridion and Discourses
+- Naval Ravikant: 10 quotes (was 3) - Almanack and Twitter
+- Alan Watts: 10 quotes (was 3) - The Wisdom of Insecurity, The Way of Zen, The Book
+- James Stockdale: 5 quotes (NEW) - Stockdale Paradox, Courage Under Fire, Philosophical Fighter Pilot
+- All quotes properly attributed with source, some with context
+- Files modified: src/data/quotes.json
+- **Learnings for future iterations:**
+  - Quote ID pattern maintained: author-number (e.g., stockdale-001)
+  - James Stockdale was a Stoic POW who applied Epictetus in Vietnam - good modern Stoic source
+  - 55 quotes gives ~2 months of unique daily quotes before cycling
+---

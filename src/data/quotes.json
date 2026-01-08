@@ -915,70 +915,210 @@
     "text": "The only way to make sense out of change is to plunge into it, move with it, and join the dance.",
     "author": "Alan Watts",
     "source": "The Wisdom of Insecurity",
-    "themes": []
+    "themes": ["adversity", "time"]
   },
   {
     "id": "watts-002",
     "text": "Muddy water is best cleared by leaving it alone.",
     "author": "Alan Watts",
     "source": "The Way of Zen",
-    "themes": []
+    "themes": ["simplicity", "wisdom"]
   },
   {
     "id": "watts-003",
     "text": "This is the real secret of life — to be completely engaged with what you are doing in the here and now.",
     "author": "Alan Watts",
     "source": "The Essential Alan Watts",
-    "themes": []
+    "themes": ["time", "joy"]
   },
   {
     "id": "watts-004",
     "text": "You are an aperture through which the universe is looking at and exploring itself.",
     "author": "Alan Watts",
     "source": "The Book: On the Taboo Against Knowing Who You Are",
-    "themes": []
+    "themes": ["identity", "wisdom"]
   },
   {
     "id": "watts-005",
     "text": "The meaning of life is just to be alive. It is so plain and so obvious and so simple.",
     "author": "Alan Watts",
     "source": "The Culture of Counter-Culture",
-    "themes": []
+    "themes": ["simplicity", "joy"]
   },
   {
     "id": "watts-006",
     "text": "Problems that remain persistently insoluble should always be suspected as questions asked in the wrong way.",
     "author": "Alan Watts",
     "source": "The Book: On the Taboo Against Knowing Who You Are",
-    "themes": []
+    "themes": ["wisdom", "adversity"]
   },
   {
     "id": "watts-007",
     "text": "Trying to define yourself is like trying to bite your own teeth.",
     "author": "Alan Watts",
     "source": "Life and Music",
-    "themes": []
+    "themes": ["identity", "wisdom"]
   },
   {
     "id": "watts-008",
     "text": "No one is more dangerously insane than one who is sane all the time.",
     "author": "Alan Watts",
     "source": "The Book: On the Taboo Against Knowing Who You Are",
-    "themes": []
+    "themes": ["wisdom", "joy"]
   },
   {
     "id": "watts-009",
     "text": "Every intelligent individual wants to know what makes him tick, and yet is at once fascinated and frustrated by the fact that oneself is the most difficult of all things to know.",
     "author": "Alan Watts",
     "source": "The Book: On the Taboo Against Knowing Who You Are",
-    "themes": []
+    "themes": ["identity", "wisdom"]
   },
   {
     "id": "watts-010",
     "text": "We seldom realize that our most private thoughts and emotions are not actually our own.",
     "author": "Alan Watts",
     "source": "The Book: On the Taboo Against Knowing Who You Are",
-    "themes": []
+    "themes": ["identity", "relationships"]
+  },
+  {
+    "id": "watts-011",
+    "text": "We do not come into this world; we come out of it, as leaves from a tree.",
+    "author": "Alan Watts",
+    "source": "The Book: On the Taboo Against Knowing Who You Are",
+    "themes": ["identity", "wisdom"]
+  },
+  {
+    "id": "watts-012",
+    "text": "Man suffers only because he takes seriously what the gods made for fun.",
+    "author": "Alan Watts",
+    "source": "The Tao of Philosophy",
+    "themes": ["joy", "adversity"]
+  },
+  {
+    "id": "watts-013",
+    "text": "To have faith is to trust yourself to the water. When you swim you don't grab hold of the water, because if you do you will sink and drown.",
+    "author": "Alan Watts",
+    "source": "The Essence of Alan Watts",
+    "themes": ["adversity", "wisdom"]
+  },
+  {
+    "id": "watts-014",
+    "text": "The art of living is neither careless drifting on the one hand nor fearful clinging to the past on the other.",
+    "author": "Alan Watts",
+    "source": "The Wisdom of Insecurity",
+    "themes": ["time", "simplicity"]
+  },
+  {
+    "id": "watts-015",
+    "text": "Running away from fear is fear; fighting pain is pain; trying to be brave is being scared.",
+    "author": "Alan Watts",
+    "source": "The Wisdom of Insecurity",
+    "themes": ["adversity", "identity"]
+  },
+  {
+    "id": "watts-016",
+    "text": "We are living in a culture entirely hypnotized by the illusion of time.",
+    "author": "Alan Watts",
+    "source": "The Essential Alan Watts",
+    "themes": ["time", "wisdom"]
+  },
+  {
+    "id": "watts-017",
+    "text": "Things are as they are. Looking out into the universe at night, we make no comparisons between right and wrong stars, nor between well and badly arranged constellations.",
+    "author": "Alan Watts",
+    "source": "The Way of Zen",
+    "themes": ["simplicity", "wisdom"]
+  },
+  {
+    "id": "watts-018",
+    "text": "You and I are all as much continuous with the physical universe as a wave is continuous with the ocean.",
+    "author": "Alan Watts",
+    "source": "The Book: On the Taboo Against Knowing Who You Are",
+    "themes": ["identity", "wisdom"]
+  },
+  {
+    "id": "watts-019",
+    "text": "Zen does not confuse spirituality with thinking about God while one is peeling potatoes. Zen spirituality is just to peel the potatoes.",
+    "author": "Alan Watts",
+    "source": "The Way of Zen",
+    "themes": ["simplicity", "time"]
+  },
+  {
+    "id": "watts-020",
+    "text": "Tomorrow and plans for tomorrow can have no significance at all unless you are in full contact with the reality of the present.",
+    "author": "Alan Watts",
+    "source": "The Wisdom of Insecurity",
+    "themes": ["time", "wisdom"]
+  },
+  {
+    "id": "watts-021",
+    "text": "No work is stressful. It is your inability to manage your body, mind, and emotions that makes it stressful.",
+    "author": "Alan Watts",
+    "source": "The Essence of Alan Watts",
+    "themes": ["work", "discipline"]
+  },
+  {
+    "id": "watts-022",
+    "text": "The past and future are real illusions, that they exist in the present, which is what there is and all there is.",
+    "author": "Alan Watts",
+    "source": "The Essence of Alan Watts",
+    "themes": ["time", "wisdom"]
+  },
+  {
+    "id": "watts-023",
+    "text": "What I am really saying is that you don't need to do anything, because if you see yourself in the correct way, you are all as much extraordinary phenomenon of nature as trees, clouds, the patterns in running water.",
+    "author": "Alan Watts",
+    "source": "Out of Your Mind",
+    "themes": ["identity", "simplicity"]
+  },
+  {
+    "id": "watts-024",
+    "text": "The menu is not the meal.",
+    "author": "Alan Watts",
+    "source": "The Book: On the Taboo Against Knowing Who You Are",
+    "themes": ["wisdom", "simplicity"]
+  },
+  {
+    "id": "watts-025",
+    "text": "The more a thing tends to be permanent, the more it tends to be lifeless.",
+    "author": "Alan Watts",
+    "source": "The Wisdom of Insecurity",
+    "themes": ["time", "death"]
+  },
+  {
+    "id": "watts-026",
+    "text": "Waking up to who you are requires letting go of who you imagine yourself to be.",
+    "author": "Alan Watts",
+    "source": "The Joyous Cosmology",
+    "themes": ["identity", "wisdom"]
+  },
+  {
+    "id": "watts-027",
+    "text": "A scholar tries to learn something everyday; a student of Buddhism tries to unlearn something daily.",
+    "author": "Alan Watts",
+    "source": "The Way of Zen",
+    "themes": ["wisdom", "simplicity"]
+  },
+  {
+    "id": "watts-028",
+    "text": "Advice? I don't have advice. Stop aspiring and start writing. If you're writing, you're a writer. Write like you're a goddamn death row inmate and the governor is out of the country.",
+    "author": "Alan Watts",
+    "source": "Lecture recording",
+    "themes": ["work", "discipline"]
+  },
+  {
+    "id": "watts-029",
+    "text": "But I'll tell you what hermits realize. If you go off into a far, far forest and get very quiet, you'll come to understand that you're connected with everything.",
+    "author": "Alan Watts",
+    "source": "Out of Your Mind",
+    "themes": ["relationships", "identity"]
+  },
+  {
+    "id": "watts-030",
+    "text": "Life is like music for its own sake. We are living in an eternal now, and when we listen to music we are not listening to the past, we are not listening to the future, we are listening to an expanded present.",
+    "author": "Alan Watts",
+    "source": "The Tao of Philosophy",
+    "themes": ["time", "joy"]
   },
   {
     "id": "stockdale-001",

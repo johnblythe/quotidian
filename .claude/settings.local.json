@@ -6,7 +6,12 @@
       "Bash(curl:*)",
       "Bash(git init:*)",
       "Bash(claude:*)",
-      "Bash(./scripts/ralph/ralph.sh:*)"
+      "Bash(./scripts/ralph/ralph.sh:*)",
+      "Bash(gh repo create:*)",
+      "Bash(gh repo edit:*)",
+      "Bash(git stash:*)",
+      "Bash(git pull:*)",
+      "Bash(./scripts/ralph-beta/ralph.sh:*)"
     ]
   }
 }
