@@ -1,14 +1,17 @@
+import { Quote } from "@/components/Quote";
+
+const sampleQuote = {
+  id: "marcus-001",
+  text: "You have power over your mind — not outside events. Realize this, and you will find strength.",
+  author: "Marcus Aurelius",
+  source: "Meditations, Book 6",
+};
+
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center px-6">
-      <main className="flex w-full max-w-2xl flex-col items-center text-center">
-        <p className="quote-text mb-8">
-          &ldquo;The happiness of your life depends upon the quality of your
-          thoughts.&rdquo;
-        </p>
-        <p className="body-text text-foreground/70">
-          — Marcus Aurelius, <em>Meditations</em>
-        </p>
+    <div className="flex min-h-screen items-center justify-center">
+      <main className="w-full">
+        <Quote quote={sampleQuote} />
       </main>
     </div>
   );
