@@ -325,3 +325,34 @@ Started: 2026-01-08
   - Use .filter() for additional filtering after where() (e.g., filtering by freshPull boolean)
   - getTodayStart() helper creates midnight Date for today comparison
 ---
+
+## 2026-01-08 - US-024: Wire up Another button with daily limit
+- Modified src/components/ActionButtons.tsx to accept remainingPulls prop
+- Added isAnotherDisabled computed from remainingPulls <= 0
+- Button shows "Another (X left)" with remaining count, disabled when 0
+- Modified src/app/page.tsx to wire up daily limit logic
+- Added remainingPulls state, checks getFreshPullsToday on mount
+- handleAnother: checks limit, gets random quote, increments fresh pulls, decrements remaining
+- Also records today's quote being shown on mount (freshPull=false for daily quote)
+- Files modified: src/components/ActionButtons.tsx, src/app/page.tsx
+- **Learnings for future iterations:**
+  - Use Math.max(0, 3 - pullsUsed) to compute remaining pulls
+  - Guard early return in handleAnother when remainingPulls <= 0
+  - recordQuoteShown with freshPull=false for daily quote, true for "Another" pulls
+---
+
+## 2026-01-08 - US-025: Create Navigation component
+- Created src/components/Navigation.tsx with "use client" directive
+- Links: Today (home), Archive, Favorites, Settings with SVG icons
+- Mobile: fixed bottom nav with horizontal layout (justify-around)
+- Desktop (lg:): fixed top nav with centered layout (justify-center, gap-12)
+- Uses usePathname() from next/navigation for current page detection
+- Active page: full opacity text-foreground, inactive: text-foreground/50
+- NavItem interface and navItems array for clean data structure
+- Files created: src/components/Navigation.tsx
+- **Learnings for future iterations:**
+  - Navigation at src/components/Navigation.tsx - import { Navigation } from '@/components/Navigation'
+  - Use usePathname() from next/navigation for route-based active state
+  - Fixed positioning with z-50 ensures nav stays above content
+  - lg: breakpoint toggles between bottom (mobile) and top (desktop) positioning
+---

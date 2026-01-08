@@ -1,0 +1,11 @@
+**US-025 completed.** 
+
+Checking remaining stories - there are still stories with `passes: false` (US-026 through US-030), so another iteration will pick up the next story.
+
+**Summary:**
+- Created `src/components/Navigation.tsx` with links to Today, Archive, Favorites, Settings
+- Mobile: fixed bottom navigation with icons and labels
+- Desktop (lg:): fixed top navigation
+- Current page highlighted via `usePathname()` hook
+- TypeScript and build pass
+- Committed: `feat: US-025 - Create Navigation component`

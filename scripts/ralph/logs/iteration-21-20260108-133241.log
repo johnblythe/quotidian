@@ -1,0 +1,9 @@
+US-024 is complete. There are still stories with `passes: false` (US-025 through US-030), so another iteration will pick up the next story.
+
+**Summary of US-024 implementation:**
+- Added `remainingPulls` prop to `ActionButtons` component
+- Button displays "Another (X left)" showing remaining daily pulls
+- Button is disabled (grayed out, non-clickable) when 0 pulls remaining
+- Homepage tracks remaining pulls state, checks `getFreshPullsToday()` on mount
+- Each "Another" click increments fresh pulls in history and decrements the count
+- Also records today's initial quote being shown (not counted as a fresh pull)

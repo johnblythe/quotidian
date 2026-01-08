@@ -6,6 +6,7 @@ import "@fontsource/inter/400.css";
 import "@fontsource/inter/500.css";
 import "@fontsource/inter/600.css";
 import "./globals.css";
+import { Navigation } from "@/components/Navigation";
 
 export const metadata: Metadata = {
   title: "Quotidian",
@@ -19,7 +20,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="antialiased">
+      <body className="antialiased pb-16 lg:pb-0 lg:pt-14">
+        <Navigation />
         {children}
       </body>
     </html>
