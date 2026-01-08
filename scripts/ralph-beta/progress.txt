@@ -307,3 +307,53 @@ Started: 2026-01-08
   - Double-check first-time logic: check both localStorage flag AND database state
   - For one-time events, localStorage is simpler than IndexedDB schema changes
 ---
+
+## 2026-01-08 - US-B20: Design and implement empty state for favorites
+- Redesigned empty state with visually pleasing layout:
+  - Large decorative heart icon in a subtle circular background
+  - "Your collection awaits" heading in serif font
+  - Helpful text about tapping hearts to save quotes
+  - Link with arrow icon to go find first quote
+- Used PageTransition wrapper for consistency with other pages
+- Applied existing btn-nav class to CTA link for hover effects
+- Files modified: src/app/favorites/page.tsx
+- **Learnings for future iterations:**
+  - Empty states should have: icon/visual, heading, helper text, and CTA
+  - Use quote-text for headings, body-text for descriptions
+  - Wrap empty states in PageTransition for consistent page enter animations
+  - Use aria-hidden="true" on decorative SVGs
+---
+
+## 2026-01-08 - US-B21: Design and implement empty state for archive
+- Redesigned archive empty state with visually pleasing layout following favorites pattern:
+  - Large decorative open book icon in subtle circular background
+  - "Your journey begins" heading in serif font
+  - Helpful text explaining archive will collect quote history and reflections
+  - CTA link with arrow icon to see today's quote
+- Used PageTransition wrapper for consistency with other pages
+- Applied existing btn-nav class to CTA link for hover effects
+- Files modified: src/app/archive/page.tsx
+- **Learnings for future iterations:**
+  - Empty states follow consistent pattern: icon, heading, description, CTA
+  - Book icon (M12 6.253v13...) good for archive/history contexts
+  - Heart icon for favorites, book icon for archive - semantic distinction
+---
+
+## 2026-01-08 - US-B22: Design and implement empty state for reflections
+- Added ReflectionEmptyState component inside ReflectionEditor.tsx
+- Empty state displays when:
+  - Editor is loaded (isLoaded=true)
+  - No existing reflection (content.length === 0)
+  - User hasn't started writing yet (hasStartedWriting=false)
+- Design is minimal and subtle:
+  - Small pencil/pen icon in foreground/20 color
+  - Italic serif prompt: "Wisdom grows when written"
+  - Clickable to focus and start writing
+- Clicking the empty state transitions to the regular textarea with placeholder
+- Files modified: src/components/ReflectionEditor.tsx
+- **Learnings for future iterations:**
+  - ReflectionEmptyState is internal to ReflectionEditor (not exported)
+  - Track hasStartedWriting state to distinguish between "no reflection" and "cleared reflection"
+  - Empty state in editors should be clickable to transition to editing mode
+  - Pencil icon path: M15.232 5.232l3.536...z (heroicons)
+---

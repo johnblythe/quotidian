@@ -27,6 +27,39 @@ function countWords(text: string): number {
   return text.trim().split(/\s+/).filter(Boolean).length;
 }
 
+// Empty state component for when no reflection has been written yet
+function ReflectionEmptyState({ onFocus }: { onFocus: () => void }) {
+  return (
+    <div
+      className="text-center py-4 cursor-text"
+      onClick={onFocus}
+    >
+      {/* Decorative feather/pen icon */}
+      <div className="mb-3 flex justify-center">
+        <svg
+          className="w-6 h-6 text-foreground/20"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={1.5}
+            d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+          />
+        </svg>
+      </div>
+
+      {/* Encouraging prompt */}
+      <p className="quote-text text-sm text-foreground/40 italic">
+        Wisdom grows when written
+      </p>
+    </div>
+  );
+}
+
 export function ReflectionEditor({
   quoteId,
   initialContent = "",
@@ -35,6 +68,7 @@ export function ReflectionEditor({
   const [content, setContent] = useState(initialContent);
   const [showSaved, setShowSaved] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [hasStartedWriting, setHasStartedWriting] = useState(false);
   const [milestoneToShow, setMilestoneToShow] = useState<number | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const debounceRef = useRef<NodeJS.Timeout | null>(null);
@@ -50,11 +84,24 @@ export function ReflectionEditor({
       const entry = await getJournalEntry(quoteId);
       if (entry) {
         setContent(entry.content);
+        setHasStartedWriting(true); // User has previously written a reflection
       }
       setIsLoaded(true);
     }
     loadEntry();
   }, [quoteId]);
+
+  // Determine if we should show the empty state
+  const showEmptyState = isLoaded && content.length === 0 && !hasStartedWriting;
+
+  // Focus the textarea and mark writing as started
+  const handleEmptyStateFocus = useCallback(() => {
+    setHasStartedWriting(true);
+    // Focus textarea on next tick after state update
+    setTimeout(() => {
+      textareaRef.current?.focus();
+    }, 0);
+  }, []);
 
   // Debounced save function
   const debouncedSave = useCallback(
@@ -169,40 +216,46 @@ export function ReflectionEditor({
             : "px-8 py-10"
         }`}
       >
-        <textarea
-          ref={textareaRef}
-          value={content}
-          onChange={handleChange}
-          placeholder="What does this stir in you?"
-          className={`w-full bg-transparent resize-none outline-none
-                     font-serif leading-relaxed
-                     placeholder:text-foreground/40
-                     border-none focus:ring-0
-                     textarea-smooth-resize ${
-            editorState === "minimal"
-              ? "min-h-[80px] text-base"
-              : editorState === "standard"
-              ? "min-h-[120px] text-lg"
-              : "min-h-[160px] text-xl leading-loose"
-          }`}
-          data-quote-id={quoteId}
-        />
-        <div className="flex justify-between items-center text-sm text-foreground/40">
-          <span
-            className={`transition-opacity duration-300 ${
-              showSaved ? "opacity-100" : "opacity-0"
-            }`}
-          >
-            Saved
-          </span>
-          <span
-            className={`transition-opacity duration-300 ${
-              editorState === "focused" ? "opacity-100" : "opacity-0"
-            }`}
-          >
-            {wordCount} {wordCount === 1 ? "word" : "words"}
-          </span>
-        </div>
+        {showEmptyState ? (
+          <ReflectionEmptyState onFocus={handleEmptyStateFocus} />
+        ) : (
+          <>
+            <textarea
+              ref={textareaRef}
+              value={content}
+              onChange={handleChange}
+              placeholder="What does this stir in you?"
+              className={`w-full bg-transparent resize-none outline-none
+                         font-serif leading-relaxed
+                         placeholder:text-foreground/40
+                         border-none focus:ring-0
+                         textarea-smooth-resize ${
+                editorState === "minimal"
+                  ? "min-h-[80px] text-base"
+                  : editorState === "standard"
+                  ? "min-h-[120px] text-lg"
+                  : "min-h-[160px] text-xl leading-loose"
+              }`}
+              data-quote-id={quoteId}
+            />
+            <div className="flex justify-between items-center text-sm text-foreground/40">
+              <span
+                className={`transition-opacity duration-300 ${
+                  showSaved ? "opacity-100" : "opacity-0"
+                }`}
+              >
+                Saved
+              </span>
+              <span
+                className={`transition-opacity duration-300 ${
+                  editorState === "focused" ? "opacity-100" : "opacity-0"
+                }`}
+              >
+                {wordCount} {wordCount === 1 ? "word" : "words"}
+              </span>
+            </div>
+          </>
+        )}
       </div>
 
       <MilestoneCelebration
