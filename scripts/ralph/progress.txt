@@ -356,3 +356,46 @@ Started: 2026-01-08
   - Fixed positioning with z-50 ensures nav stays above content
   - lg: breakpoint toggles between bottom (mobile) and top (desktop) positioning
 ---
+
+## 2026-01-08 - US-026: Add Navigation to layout
+- Added Navigation component import to src/app/layout.tsx
+- Added Navigation component rendering above {children} in body
+- Added body padding: pb-16 (bottom) on mobile, lg:pb-0 lg:pt-14 (top) on desktop
+- Padding accounts for fixed nav height (~60px mobile bottom, ~56px desktop top)
+- Files modified: src/app/layout.tsx
+- **Learnings for future iterations:**
+  - Navigation is always visible since it's in layout.tsx - applies to all routes
+  - Body padding prevents content from being hidden behind fixed nav
+  - pb-16 = 64px bottom padding (mobile), lg:pt-14 = 56px top padding (desktop)
+  - Navigation component handles its own responsive positioning (bottom vs top)
+---
+
+## 2026-01-08 - US-027: Create Archive page
+- Created src/app/archive/page.tsx as client component
+- Lists past quotes from history (newest first) with deduplication by quoteId
+- Shows quote text, author, date displayed, and reflection snippet (truncated to 100 chars)
+- Empty state: "No quotes yet" with subtle helper text
+- Uses getQuoteHistory(), getJournalEntry(), getQuoteById() from existing lib helpers
+- Gracefully handles missing quotes ("Quote no longer available")
+- Files created: src/app/archive/page.tsx
+- **Learnings for future iterations:**
+  - Archive page at src/app/archive/page.tsx - accessible via /archive route
+  - Deduplicate history entries by quoteId to show each quote only once
+  - Use Promise.all for parallel loading of quotes and reflections
+  - Date formatting: use toLocaleDateString with month short format
+---
+
+## 2026-01-08 - US-028: Create Favorites page
+- Created src/app/favorites/page.tsx as client component
+- Lists all favorited quotes using getFavorites() (newest first via savedAt)
+- Uses Quote component from src/components/Quote.tsx for proper quote display
+- Shows date saved below each quote using formatDate helper
+- Empty state: "No favorites yet" with helper text "Save quotes by tapping the heart icon"
+- Gracefully handles missing quotes ("Quote no longer available")
+- Files created: src/app/favorites/page.tsx
+- **Learnings for future iterations:**
+  - Favorites page at src/app/favorites/page.tsx - accessible via /favorites route
+  - Reuses Quote component for consistent quote display
+  - FavoriteItem interface wraps favorite with resolved quote
+  - No deduplication needed (unlike archive) since favorites are unique by quoteId
+---

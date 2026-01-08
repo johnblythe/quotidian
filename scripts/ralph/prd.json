@@ -409,8 +409,8 @@
         "npm run typecheck passes"
       ],
       "priority": 26,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Completed 2026-01-08. Navigation added to layout with body padding for fixed nav positioning."
     },
     {
       "id": "US-027",
@@ -426,8 +426,8 @@
         "npm run typecheck passes"
       ],
       "priority": 27,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Completed 2026-01-08. Archive page with deduplicated history, reflection snippets, formatted dates."
     },
     {
       "id": "US-028",
@@ -442,8 +442,8 @@
         "npm run typecheck passes"
       ],
       "priority": 28,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Completed 2026-01-08. Favorites page using Quote component, getFavorites() from lib, date saved display, empty state."
     },
     {
       "id": "US-029",
