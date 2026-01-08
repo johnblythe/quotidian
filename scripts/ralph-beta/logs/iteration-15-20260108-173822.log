@@ -1,0 +1,17 @@
+There are still 10 stories with `passes: false`. The story US-B15 is complete. The next iteration will pick up US-B16 (milestone celebration for 100 reflections).
+
+**Summary of US-B15 Implementation:**
+
+- **Created** `src/hooks/useKeyboardShortcuts.ts` - reusable hook for global keyboard shortcuts
+- **Created** `src/components/KeyboardShortcutsHelp.tsx` - modal showing available shortcuts
+- **Updated** `src/app/page.tsx` - added s, r, Escape, ? shortcuts on home page
+- **Updated** `src/app/archive/page.tsx` - added j/k navigation with visual selection
+- **Updated** `src/app/favorites/page.tsx` - added j/k navigation with visual selection
+
+**Keyboard Shortcuts Implemented:**
+- `s` - toggle save/favorite (home page)
+- `r` - open/close reflection editor (home page)
+- `j` - navigate to next item (archive/favorites)
+- `k` - navigate to previous item (archive/favorites)
+- `Escape` - close modals/editors, clear selection
+- `?` - show keyboard shortcuts help

@@ -4,8 +4,9 @@ import type { JournalEntry } from '@/types';
 /**
  * Save or update a journal entry for a quote
  * Updates existing entry if present, creates new if not
+ * @returns true if this was a new entry, false if updating existing
  */
-export async function saveJournalEntry(quoteId: string, content: string): Promise<void> {
+export async function saveJournalEntry(quoteId: string, content: string): Promise<boolean> {
   const existing = await db.journalEntries.where('quoteId').equals(quoteId).first();
 
   if (existing) {
@@ -13,6 +14,7 @@ export async function saveJournalEntry(quoteId: string, content: string): Promis
       content,
       updatedAt: new Date(),
     });
+    return false;
   } else {
     await db.journalEntries.add({
       quoteId,
@@ -20,6 +22,7 @@ export async function saveJournalEntry(quoteId: string, content: string): Promis
       createdAt: new Date(),
       updatedAt: new Date(),
     });
+    return true;
   }
 }
 
@@ -42,4 +45,11 @@ export async function getRecentEntries(limit: number = 10): Promise<JournalEntry
     .reverse()
     .limit(limit)
     .toArray();
+}
+
+/**
+ * Get total count of journal entries (reflections)
+ */
+export async function getTotalReflectionCount(): Promise<number> {
+  return db.journalEntries.count();
 }

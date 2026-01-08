@@ -1,8 +1,13 @@
 "use client";
 
 import { useState, useRef, useEffect, useMemo, useCallback } from "react";
-import { saveJournalEntry, getJournalEntry } from "@/lib/journal";
+import { saveJournalEntry, getJournalEntry, getTotalReflectionCount } from "@/lib/journal";
 import { useToast } from "@/components/Toast";
+import {
+  MilestoneCelebration,
+  shouldShowMilestone,
+  markMilestoneShown,
+} from "@/components/MilestoneCelebration";
 
 interface ReflectionEditorProps {
   quoteId: string;
@@ -30,6 +35,7 @@ export function ReflectionEditor({
   const [content, setContent] = useState(initialContent);
   const [showSaved, setShowSaved] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [milestoneToShow, setMilestoneToShow] = useState<number | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const debounceRef = useRef<NodeJS.Timeout | null>(null);
   const savedTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -59,11 +65,21 @@ export function ReflectionEditor({
       }
 
       debounceRef.current = setTimeout(async () => {
-        await saveJournalEntry(quoteId, newContent);
+        const isNewEntry = await saveJournalEntry(quoteId, newContent);
 
         // Show saved indicator
         setShowSaved(true);
         showToast("Reflection saved");
+
+        // Check for milestone celebration on new entries
+        if (isNewEntry) {
+          const count = await getTotalReflectionCount();
+          const milestone = shouldShowMilestone(count);
+          if (milestone) {
+            setMilestoneToShow(milestone);
+            markMilestoneShown(milestone);
+          }
+        }
 
         // Clear any existing saved timeout
         if (savedTimeoutRef.current) {
@@ -143,49 +159,57 @@ export function ReflectionEditor({
   };
 
   return (
-    <div
-      className={`max-w-[65ch] mx-auto transition-all duration-300 ease-in-out ${
-        editorState === "minimal"
-          ? "px-6 py-4"
-          : editorState === "standard"
-          ? "px-6 py-8"
-          : "px-8 py-10"
-      }`}
-    >
-      <textarea
-        ref={textareaRef}
-        value={content}
-        onChange={handleChange}
-        placeholder="What does this stir in you?"
-        className={`w-full bg-transparent resize-none outline-none
-                   font-serif leading-relaxed
-                   placeholder:text-foreground/40
-                   border-none focus:ring-0
-                   textarea-smooth-resize ${
+    <>
+      <div
+        className={`max-w-[65ch] mx-auto transition-all duration-300 ease-in-out ${
           editorState === "minimal"
-            ? "min-h-[80px] text-base"
+            ? "px-6 py-4"
             : editorState === "standard"
-            ? "min-h-[120px] text-lg"
-            : "min-h-[160px] text-xl leading-loose"
+            ? "px-6 py-8"
+            : "px-8 py-10"
         }`}
-        data-quote-id={quoteId}
-      />
-      <div className="flex justify-between items-center text-sm text-foreground/40">
-        <span
-          className={`transition-opacity duration-300 ${
-            showSaved ? "opacity-100" : "opacity-0"
+      >
+        <textarea
+          ref={textareaRef}
+          value={content}
+          onChange={handleChange}
+          placeholder="What does this stir in you?"
+          className={`w-full bg-transparent resize-none outline-none
+                     font-serif leading-relaxed
+                     placeholder:text-foreground/40
+                     border-none focus:ring-0
+                     textarea-smooth-resize ${
+            editorState === "minimal"
+              ? "min-h-[80px] text-base"
+              : editorState === "standard"
+              ? "min-h-[120px] text-lg"
+              : "min-h-[160px] text-xl leading-loose"
           }`}
-        >
-          Saved
-        </span>
-        <span
-          className={`transition-opacity duration-300 ${
-            editorState === "focused" ? "opacity-100" : "opacity-0"
-          }`}
-        >
-          {wordCount} {wordCount === 1 ? "word" : "words"}
-        </span>
+          data-quote-id={quoteId}
+        />
+        <div className="flex justify-between items-center text-sm text-foreground/40">
+          <span
+            className={`transition-opacity duration-300 ${
+              showSaved ? "opacity-100" : "opacity-0"
+            }`}
+          >
+            Saved
+          </span>
+          <span
+            className={`transition-opacity duration-300 ${
+              editorState === "focused" ? "opacity-100" : "opacity-0"
+            }`}
+          >
+            {wordCount} {wordCount === 1 ? "word" : "words"}
+          </span>
+        </div>
       </div>
-    </div>
+
+      <MilestoneCelebration
+        isOpen={milestoneToShow !== null}
+        onClose={() => setMilestoneToShow(null)}
+        milestone={milestoneToShow || 100}
+      />
+    </>
   );
 }

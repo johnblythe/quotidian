@@ -8,6 +8,8 @@ Started: 2026-01-08
 - Button CSS utilities: .btn-icon (scale), .btn-primary (glow), .btn-nav (background) in globals.css
 - Skeleton components in src/components/Skeleton.tsx: Skeleton (base), QuoteSkeleton, ArchiveItemSkeleton, FavoriteItemSkeleton
 - Toast system: ToastProvider in layout.tsx, useToast() hook for showToast(message)
+- Keyboard shortcuts hook: useKeyboardShortcuts() in src/hooks/useKeyboardShortcuts.ts
+- KeyboardShortcutsHelp modal component in src/components/KeyboardShortcutsHelp.tsx (context prop: "home" or "list")
 
 ---
 
@@ -218,4 +220,23 @@ Started: 2026-01-08
   - Use getBoundingClientRect() to force reflow before re-enabling transition
   - CSS class .textarea-smooth-resize provides 150ms height transition + overflow:hidden
   - Always add resize event listener for textareas when font sizes change responsively
+---
+
+## 2026-01-08 - US-B15: Add keyboard shortcuts
+- Created useKeyboardShortcuts hook in src/hooks/useKeyboardShortcuts.ts
+- Created KeyboardShortcutsHelp modal component in src/components/KeyboardShortcutsHelp.tsx
+- Home page shortcuts: s (save/unsave), r (reflect), Escape (close reflection/modal), ? (show help)
+- Archive/Favorites pages: j (next item), k (previous item), Escape (clear selection), ? (show help)
+- Shortcuts ignore key presses when user is typing in input/textarea (except Escape)
+- Shortcuts ignore key presses when modifier keys (Ctrl, Alt, Meta) are pressed
+- Visual selection highlighting on archive/favorites items when navigated with j/k
+- Items scroll into view when selected via keyboard
+- Files created: src/hooks/useKeyboardShortcuts.ts, src/components/KeyboardShortcutsHelp.tsx
+- Files modified: src/app/page.tsx, src/app/archive/page.tsx, src/app/favorites/page.tsx
+- **Learnings for future iterations:**
+  - useKeyboardShortcuts hook takes object with optional handlers: onSave, onReflect, onEscape, onNavigateUp, onNavigateDown, onHelp
+  - KeyboardShortcutsHelp takes context prop ("home" or "list") to show relevant shortcuts
+  - Use useRef to store handlers and avoid stale closure issues
+  - Use itemRefs array with ref callbacks to track DOM elements for scrollIntoView
+  - Selected items get bg-foreground/5 highlight with smooth transition
 ---
