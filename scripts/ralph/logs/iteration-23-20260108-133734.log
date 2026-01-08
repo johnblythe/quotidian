@@ -1,0 +1,8 @@
+There are still 4 stories with `passes: false` remaining (US-027 Archive page, US-028 Favorites page, US-029 Settings page, US-030 Expand quotes). Another iteration will pick up the next story.
+
+**US-026 Complete:**
+- Added Navigation component to layout.tsx
+- Navigation is now visible on all pages
+- Body padding added for mobile (pb-16 bottom) and desktop (lg:pt-14 top)
+- Both typecheck and build pass
+- Committed with message: `feat: US-026 - Add Navigation to layout`
