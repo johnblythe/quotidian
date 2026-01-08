@@ -9,6 +9,12 @@ Started: 2026-01-08
 - PWA: manifest.json in public/, icons in public/icons/
 - Build uses webpack mode (--webpack flag) for next-pwa compatibility
 - Custom type declarations in src/types/ for untyped packages
+- Fonts: Lora (serif) for quotes, Inter (sans) for body - imported in layout.tsx
+- Typography utilities: .quote-text (serif, large) and .body-text (sans) in globals.css
+- Database: Dexie in src/lib/db.ts - tables: preferences, journalEntries, favorites, quoteHistory
+- Types: src/types/index.ts has Quote, JournalEntry, UserPreferences, FavoriteQuote, QuoteHistory
+- Quotes: src/data/quotes.json - 15 seed quotes, IDs like "seneca-001", "marcus-002"
+- Quote logic: src/lib/quotes.ts - getTodaysQuote(), getRandomQuote(excludeId), getQuoteById(id)
 
 ---
 
@@ -37,4 +43,96 @@ Started: 2026-01-08
   - @types/next-pwa only supports Next 12/13 - create custom .d.ts for Next 16
   - next-pwa generates sw.js in public/, not .next/
   - Add turbopack: {} to next.config.ts to silence webpack/turbopack config warning
+---
+
+## 2026-01-08 - US-003: Set up typography and base styles
+- Installed @fontsource/lora and @fontsource/inter packages
+- Imported font CSS files in src/app/layout.tsx (400, 400-italic, 700 for Lora; 400, 500, 600 for Inter)
+- Updated globals.css: background #fafaf8, text color #1a1a1a
+- Configured Tailwind v4 @theme with --font-serif (Lora) and --font-sans (Inter)
+- Created .quote-text utility (serif, large, elegant line-height) and .body-text utility (sans, readable)
+- Updated homepage to display sample quote with new typography
+- Files modified: src/app/layout.tsx, src/app/globals.css, src/app/page.tsx, package.json
+- **Learnings for future iterations:**
+  - Tailwind v4 uses CSS @theme directive instead of tailwind.config.ts for fonts
+  - @fontsource packages provide individual weight CSS files (e.g., @fontsource/lora/400.css)
+  - No dark mode in this app - removed prefers-color-scheme media query
+---
+
+## 2026-01-08 - US-004: Set up IndexedDB with Dexie
+- Installed dexie package
+- Created src/types/index.ts with Quote, JournalEntry, UserPreferences, FavoriteQuote, QuoteHistory interfaces
+- Created src/lib/db.ts with QuotidianDB class extending Dexie
+- Defined tables: preferences, journalEntries, favorites, quoteHistory with typed EntityTable
+- Exported singleton db instance
+- Files created: src/types/index.ts, src/lib/db.ts
+- Files modified: package.json, package-lock.json
+- **Learnings for future iterations:**
+  - Use Dexie EntityTable<T, 'id'> for typed table access
+  - Schema indices: ++id for auto-increment primary key, add fields for queryable columns
+  - Import types from @/types (configured alias)
+---
+
+## 2026-01-08 - US-005: Create seed quotes JSON file
+- Created src/data/quotes.json with 15 philosophical quotes
+- Authors: Seneca (3), Marcus Aurelius (3), Epictetus (3), Naval Ravikant (3), Alan Watts (3)
+- Each quote has: id, text, author, source (all have sources), context (some have)
+- ID format: author-number (e.g., seneca-001, marcus-002)
+- Files created: src/data/quotes.json
+- **Learnings for future iterations:**
+  - Quotes data in src/data/quotes.json - can be imported directly in TS files
+  - Quote IDs follow author-number pattern for easy identification
+  - All quotes include source attribution for credibility
+---
+
+## 2026-01-08 - US-006: Create Quote display component
+- Created src/components/Quote.tsx with Quote type import
+- Props: quote object with text, author, source
+- Layout: blockquote centered, max-width 65ch, generous padding (py-12 px-6)
+- Typography: quote-text class for quote, body-text for attribution
+- Author prefixed with em dash, source shown in smaller text below
+- Updated homepage to use Quote component for visual verification
+- Files created: src/components/Quote.tsx
+- Files modified: src/app/page.tsx
+- **Learnings for future iterations:**
+  - Quote component at src/components/Quote.tsx - reusable for archive, favorites
+  - Use quote-text class for quote display, body-text for attribution
+  - Homepage currently displays sample quote - will be replaced with getTodaysQuote() in US-008
+---
+
+## 2026-01-08 - US-007: Create quote selection logic
+- Created src/lib/quotes.ts with quote selection functions
+- getTodaysQuote(): uses date-based hash for deterministic daily quote
+- getRandomQuote(excludeId): random selection excluding specified ID
+- Also added getAllQuotes() and getQuoteById() helper functions
+- Files created: src/lib/quotes.ts
+- **Learnings for future iterations:**
+  - Quote selection in src/lib/quotes.ts - import { getTodaysQuote, getRandomQuote } from '@/lib/quotes'
+  - Date hash: sums char codes of YYYY-MM-DD string, mods by quote count
+  - getRandomQuote falls back to any quote if all excluded
+---
+
+## 2026-01-08 - US-008: Build basic Today's Quote page
+- Updated src/app/page.tsx to use getTodaysQuote() from @/lib/quotes
+- Removed hardcoded sampleQuote, replaced with dynamic daily quote
+- Content remains centered vertically and horizontally (flex min-h-screen items-center)
+- Quote component already handles max-width and typography
+- Files modified: src/app/page.tsx
+- **Learnings for future iterations:**
+  - getTodaysQuote() is synchronous, can be used in server components
+  - Page works as static content - no client-side JS needed for basic display
+---
+
+## 2026-01-08 - US-009: Create Onboarding component - name input
+- Created src/components/Onboarding.tsx with "use client" directive
+- Step 1: "What should we call you?" heading with text input
+- Input styled: transparent bg, bottom border, centered text, placeholder styling
+- Next button: disabled when name empty, bg-foreground/text-background contrast
+- Component accepts onComplete callback prop for future wiring (US-012)
+- Files created: src/components/Onboarding.tsx
+- **Learnings for future iterations:**
+  - Onboarding is client component ("use client") - needed for useState
+  - Input uses underline style (border-b-2) for minimal aesthetic
+  - Button uses bg-foreground text-background for consistent contrast
+  - autoFocus on input for immediate typing
 ---

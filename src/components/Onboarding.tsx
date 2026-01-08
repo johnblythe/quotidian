@@ -7,36 +7,70 @@ interface OnboardingProps {
 }
 
 export function Onboarding({ onComplete }: OnboardingProps) {
+  const [step, setStep] = useState(1);
   const [name, setName] = useState("");
+  const [notificationTime, setNotificationTime] = useState("08:00");
 
   const handleNext = () => {
-    // For now, just log - will wire up in US-010/US-012
-    console.log("Name entered:", name);
+    setStep(2);
+  };
+
+  const handleComplete = () => {
+    onComplete?.({ name: name.trim(), notificationTime });
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center px-6">
       <div className="max-w-md w-full text-center">
-        <h1 className="quote-text mb-8">What should we call you?</h1>
-        <input
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="Your name"
-          className="w-full px-4 py-3 text-lg bg-transparent border-b-2 border-foreground/20
-                     focus:border-foreground/50 focus:outline-none text-center body-text
-                     placeholder:text-foreground/30 transition-colors"
-          autoFocus
-        />
-        <button
-          onClick={handleNext}
-          disabled={!name.trim()}
-          className="mt-8 px-8 py-3 bg-foreground text-background body-text
-                     disabled:opacity-30 disabled:cursor-not-allowed
-                     hover:opacity-90 transition-opacity rounded-sm"
-        >
-          Next
-        </button>
+        {step === 1 ? (
+          <>
+            <h1 className="quote-text mb-8">What should we call you?</h1>
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Your name"
+              className="w-full px-4 py-3 text-lg bg-transparent border-b-2 border-foreground/20
+                         focus:border-foreground/50 focus:outline-none text-center body-text
+                         placeholder:text-foreground/30 transition-colors"
+              autoFocus
+            />
+            <button
+              onClick={handleNext}
+              disabled={!name.trim()}
+              className="mt-8 px-8 py-3 bg-foreground text-background body-text
+                         disabled:opacity-30 disabled:cursor-not-allowed
+                         hover:opacity-90 transition-opacity rounded-sm"
+            >
+              Next
+            </button>
+          </>
+        ) : (
+          <>
+            <h1 className="quote-text mb-8">
+              When would you like your daily reflection?
+            </h1>
+            <input
+              type="time"
+              value={notificationTime}
+              onChange={(e) => setNotificationTime(e.target.value)}
+              className="w-full px-4 py-3 text-lg bg-transparent border-b-2 border-foreground/20
+                         focus:border-foreground/50 focus:outline-none text-center body-text
+                         transition-colors appearance-none"
+              autoFocus
+            />
+            <p className="mt-4 text-sm text-foreground/50 body-text">
+              We&apos;ll send you a gentle reminder at this time each day
+            </p>
+            <button
+              onClick={handleComplete}
+              className="mt-8 px-8 py-3 bg-foreground text-background body-text
+                         hover:opacity-90 transition-opacity rounded-sm"
+            >
+              Complete
+            </button>
+          </>
+        )}
       </div>
     </div>
   );

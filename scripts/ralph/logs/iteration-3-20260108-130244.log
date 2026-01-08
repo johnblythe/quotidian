@@ -1,0 +1,11 @@
+**US-006 Complete.** 
+
+The Quote component has been created with:
+- Centered blockquote with max-width 65ch
+- Serif font (quote-text class) with elegant line-height
+- Em dash prefix for author attribution  
+- Source displayed in smaller text if present
+- Generous padding for breathing room
+- Homepage updated to display using the component
+
+There are still stories with `passes: false` in the PRD (US-007 through US-030), so another iteration will pick up the next story.

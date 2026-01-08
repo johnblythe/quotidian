@@ -48,8 +48,8 @@
         "npm run typecheck passes"
       ],
       "priority": 3,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Completed 2026-01-08. Tailwind v4 uses @theme for font config."
     },
     {
       "id": "US-004",
@@ -64,8 +64,8 @@
         "npm run typecheck passes"
       ],
       "priority": 4,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Completed 2026-01-08. Dexie EntityTable for typed tables."
     },
     {
       "id": "US-005",
@@ -79,8 +79,8 @@
         "npm run typecheck passes"
       ],
       "priority": 5,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Completed 2026-01-08. 15 quotes from Seneca, Marcus Aurelius, Epictetus, Naval, Alan Watts."
     },
     {
       "id": "US-006",
@@ -98,8 +98,8 @@
         "npm run typecheck passes"
       ],
       "priority": 6,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Completed 2026-01-08. Quote component with centered text, max-width 65ch, serif font, em dash author prefix, source in smaller text."
     },
     {
       "id": "US-007",
@@ -114,8 +114,8 @@
         "npm run typecheck passes"
       ],
       "priority": 7,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Completed 2026-01-08. Date-based hash for deterministic daily quote, random with exclude support."
     },
     {
       "id": "US-008",
@@ -129,8 +129,8 @@
         "npm run typecheck passes"
       ],
       "priority": 8,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Completed 2026-01-08. Updated homepage to use getTodaysQuote() for deterministic daily quote."
     },
     {
       "id": "US-009",
@@ -145,8 +145,8 @@
         "npm run typecheck passes"
       ],
       "priority": 9,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Completed 2026-01-08. Step 1 with name input, Next button disabled when empty."
     },
     {
       "id": "US-010",

@@ -1,0 +1,13 @@
+**US-004 Complete!**
+
+## Summary
+
+Completed **US-004: Set up IndexedDB with Dexie**:
+- Installed `dexie` package
+- Created `src/types/index.ts` with interfaces: Quote, JournalEntry, UserPreferences, FavoriteQuote, QuoteHistory
+- Created `src/lib/db.ts` with QuotidianDB class and typed tables
+- All quality checks pass (`npm run typecheck`, `npm run build`)
+- Committed: `feat: US-004 - Set up IndexedDB with Dexie`
+- Updated prd.json and progress.txt
+
+There are still stories with `passes: false` remaining (US-005 through US-030). The next iteration will pick up US-005: Create seed quotes JSON file.
