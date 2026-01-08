@@ -131,7 +131,7 @@ export default function FavoritesPage() {
             </h2>
 
             {/* Helper text */}
-            <p className="body-text text-foreground/40 text-sm mb-8 leading-relaxed">
+            <p className="body-text text-foreground/60 text-sm mb-8 leading-relaxed">
               When a quote speaks to you, tap the heart to save it here.
               Build a personal treasury of wisdom.
             </p>
@@ -188,12 +188,12 @@ export default function FavoritesPage() {
                   {item.quote ? (
                     <Quote quote={item.quote} />
                   ) : (
-                    <p className="body-text text-foreground/40 italic mb-2 text-center py-8">
+                    <p className="body-text text-foreground/60 italic mb-2 text-center py-8">
                       Quote no longer available
                     </p>
                   )}
 
-                  <div className="text-center text-sm text-foreground/40 body-text mt-2">
+                  <div className="text-center text-sm text-foreground/60 body-text mt-2">
                     <time dateTime={new Date(item.favorite.savedAt).toISOString()}>
                       Saved {formatDate(item.favorite.savedAt)}
                     </time>

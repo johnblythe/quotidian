@@ -53,7 +53,7 @@ function ReflectionEmptyState({ onFocus }: { onFocus: () => void }) {
       </div>
 
       {/* Encouraging prompt */}
-      <p className="quote-text text-sm text-foreground/40 italic">
+      <p className="quote-text text-sm text-foreground/60 italic">
         Wisdom grows when written
       </p>
     </div>
@@ -227,7 +227,7 @@ export function ReflectionEditor({
               placeholder="What does this stir in you?"
               className={`w-full bg-transparent resize-none outline-none
                          font-serif leading-relaxed
-                         placeholder:text-foreground/40
+                         placeholder:text-foreground/50
                          border-none focus:ring-0
                          textarea-smooth-resize ${
                 editorState === "minimal"
@@ -238,7 +238,7 @@ export function ReflectionEditor({
               }`}
               data-quote-id={quoteId}
             />
-            <div className="flex justify-between items-center text-sm text-foreground/40">
+            <div className="flex justify-between items-center text-sm text-foreground/60">
               <span
                 className={`transition-opacity duration-300 ${
                   showSaved ? "opacity-100" : "opacity-0"

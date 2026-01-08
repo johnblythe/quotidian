@@ -22,9 +22,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="antialiased pb-16 lg:pb-0 lg:pt-14">
+        <a href="#main-content" className="skip-to-content body-text">
+          Skip to content
+        </a>
         <ToastProvider>
           <Navigation />
-          {children}
+          <div id="main-content">
+            {children}
+          </div>
         </ToastProvider>
       </body>
     </html>

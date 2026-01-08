@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useCallback } from "react";
 
 interface MilestoneCelebrationProps {
   isOpen: boolean;
@@ -23,17 +23,55 @@ export function MilestoneCelebration({
   milestone,
 }: MilestoneCelebrationProps) {
   const dialogRef = useRef<HTMLDivElement>(null);
+  const continueButtonRef = useRef<HTMLButtonElement>(null);
+  const previousActiveElement = useRef<Element | null>(null);
 
-  // Close on Escape
+  // Store previous focus and focus continue button when opening
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && isOpen) {
-        onClose();
+    if (isOpen) {
+      previousActiveElement.current = document.activeElement;
+      // Small delay to ensure dialog is rendered
+      requestAnimationFrame(() => {
+        continueButtonRef.current?.focus();
+      });
+    } else if (previousActiveElement.current instanceof HTMLElement) {
+      previousActiveElement.current.focus();
+    }
+  }, [isOpen]);
+
+  // Handle keyboard events (Escape to close, Tab to trap focus)
+  const handleKeyDown = useCallback((e: KeyboardEvent) => {
+    if (!isOpen) return;
+
+    if (e.key === "Escape") {
+      onClose();
+      return;
+    }
+
+    // Focus trap - Tab cycles within dialog (only one button, so just prevent leaving)
+    if (e.key === "Tab") {
+      const focusableElements = dialogRef.current?.querySelectorAll(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      );
+      if (!focusableElements || focusableElements.length === 0) return;
+
+      const firstElement = focusableElements[0] as HTMLElement;
+      const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
+
+      if (e.shiftKey && document.activeElement === firstElement) {
+        e.preventDefault();
+        lastElement.focus();
+      } else if (!e.shiftKey && document.activeElement === lastElement) {
+        e.preventDefault();
+        firstElement.focus();
       }
-    };
+    }
+  }, [isOpen, onClose]);
+
+  useEffect(() => {
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isOpen, onClose]);
+  }, [handleKeyDown]);
 
   // Close on click outside
   useEffect(() => {
@@ -82,6 +120,7 @@ export function MilestoneCelebration({
         </div>
 
         <button
+          ref={continueButtonRef}
           onClick={onClose}
           className="btn-primary px-6 py-2 bg-foreground text-background rounded-lg font-medium"
         >

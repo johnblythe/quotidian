@@ -88,7 +88,7 @@ function Toast({ message, onDismiss }: ToastProps) {
       <span className="flex-1">{message}</span>
       <button
         onClick={onDismiss}
-        className="text-background/60 hover:text-background transition-colors"
+        className="toast-dismiss-btn text-background/60 hover:text-background transition-colors"
         aria-label="Dismiss notification"
       >
         <svg

@@ -190,6 +190,61 @@ body {
   }
 }
 
+/* ===========================================
+   ACCESSIBILITY ENHANCEMENTS
+   =========================================== */
+
+/* Focus visible styles for all interactive elements */
+:focus-visible {
+  outline: 2px solid var(--foreground);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Remove default focus outline when using focus-visible */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Skip to content link - visually hidden until focused */
+.skip-to-content {
+  position: absolute;
+  top: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 8px 16px;
+  background: var(--foreground);
+  color: var(--background);
+  text-decoration: none;
+  z-index: 100;
+  transition: top 200ms ease-out;
+}
+
+.skip-to-content:focus {
+  top: 8px;
+}
+
+/* Respect reduced motion for skip link */
+@media (prefers-reduced-motion: reduce) {
+  .skip-to-content {
+    transition: none;
+  }
+}
+
+/* High contrast focus ring for buttons */
+.btn-icon:focus-visible,
+.btn-primary:focus-visible,
+.btn-nav:focus-visible {
+  outline: 2px solid var(--foreground);
+  outline-offset: 2px;
+}
+
+/* Ensure focus is visible on dark backgrounds (toast) */
+.toast-dismiss-btn:focus-visible {
+  outline: 2px solid var(--background);
+  outline-offset: 2px;
+}
+
 /* Toast notification */
 .toast-enter {
   animation: toast-slide-in 200ms ease-out;

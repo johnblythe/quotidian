@@ -35,7 +35,7 @@ export function Onboarding({ onComplete }: OnboardingProps) {
               placeholder="Your name"
               className="w-full px-4 py-3 text-lg bg-transparent border-b-2 border-foreground/20
                          focus:border-foreground/50 focus:outline-none text-center body-text
-                         placeholder:text-foreground/30 transition-colors"
+                         placeholder:text-foreground/50 transition-colors"
               autoFocus
             />
             <button

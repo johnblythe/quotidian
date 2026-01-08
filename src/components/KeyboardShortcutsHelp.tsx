@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useCallback } from "react";
 
 interface KeyboardShortcutsHelpProps {
   isOpen: boolean;
@@ -30,17 +30,55 @@ export function KeyboardShortcutsHelp({
   context = "home",
 }: KeyboardShortcutsHelpProps) {
   const dialogRef = useRef<HTMLDivElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const previousActiveElement = useRef<Element | null>(null);
 
-  // Close on Escape
+  // Store previous focus and focus close button when opening
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && isOpen) {
-        onClose();
+    if (isOpen) {
+      previousActiveElement.current = document.activeElement;
+      // Small delay to ensure dialog is rendered
+      requestAnimationFrame(() => {
+        closeButtonRef.current?.focus();
+      });
+    } else if (previousActiveElement.current instanceof HTMLElement) {
+      previousActiveElement.current.focus();
+    }
+  }, [isOpen]);
+
+  // Focus trap
+  const handleKeyDown = useCallback((e: KeyboardEvent) => {
+    if (!isOpen) return;
+
+    if (e.key === "Escape") {
+      onClose();
+      return;
+    }
+
+    // Focus trap - Tab cycles within dialog
+    if (e.key === "Tab") {
+      const focusableElements = dialogRef.current?.querySelectorAll(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      );
+      if (!focusableElements || focusableElements.length === 0) return;
+
+      const firstElement = focusableElements[0] as HTMLElement;
+      const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
+
+      if (e.shiftKey && document.activeElement === firstElement) {
+        e.preventDefault();
+        lastElement.focus();
+      } else if (!e.shiftKey && document.activeElement === lastElement) {
+        e.preventDefault();
+        firstElement.focus();
       }
-    };
+    }
+  }, [isOpen, onClose]);
+
+  useEffect(() => {
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isOpen, onClose]);
+  }, [handleKeyDown]);
 
   // Close on click outside
   useEffect(() => {
@@ -75,6 +113,7 @@ export function KeyboardShortcutsHelp({
             Keyboard Shortcuts
           </h2>
           <button
+            ref={closeButtonRef}
             onClick={onClose}
             className="btn-icon text-foreground/60 hover:text-foreground"
             aria-label="Close"
@@ -134,7 +173,7 @@ export function KeyboardShortcutsHelp({
           </div>
         </div>
 
-        <p className="text-xs text-foreground/40 mt-4 text-center">
+        <p className="text-xs text-foreground/60 mt-4 text-center">
           Press <kbd className="px-1 py-0.5 bg-foreground/5 border border-foreground/10 rounded text-xs font-mono">Esc</kbd> to close
         </p>
       </div>

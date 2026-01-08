@@ -149,7 +149,7 @@ export default function ArchivePage() {
             </h2>
 
             {/* Helper text */}
-            <p className="body-text text-foreground/40 text-sm mb-8 leading-relaxed">
+            <p className="body-text text-foreground/60 text-sm mb-8 leading-relaxed">
               Each day brings a new quote for reflection. Your history of
               quotes and thoughts will be collected here.
             </p>
@@ -213,12 +213,12 @@ export default function ArchivePage() {
                       </p>
                     </>
                   ) : (
-                    <p className="body-text text-foreground/40 italic mb-2">
+                    <p className="body-text text-foreground/60 italic mb-2">
                       Quote no longer available
                     </p>
                   )}
 
-                  <div className="flex items-center justify-between text-sm text-foreground/40 body-text">
+                  <div className="flex items-center justify-between text-sm text-foreground/60 body-text">
                     <time dateTime={new Date(item.history.shownAt).toISOString()}>
                       {formatDate(item.history.shownAt)}
                     </time>

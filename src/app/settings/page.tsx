@@ -77,7 +77,7 @@ export default function SettingsPage() {
               className="w-full bg-transparent border-b-2 border-foreground/20 focus:border-foreground/60
                          outline-none py-2 text-lg font-serif transition-colors appearance-none"
             />
-            <p className="body-text text-xs text-foreground/40">
+            <p className="body-text text-xs text-foreground/60">
               We&apos;ll remind you to reflect at this time
             </p>
           </div>
