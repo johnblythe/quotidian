@@ -1,14 +1,17 @@
 "use client";
 
 import { useEffect, useState, useCallback, useRef } from "react";
+import dynamic from "next/dynamic";
 import { getQuoteHistory } from "@/lib/history";
 import { getJournalEntry } from "@/lib/journal";
 import { getQuoteById } from "@/lib/quotes";
 import { PageTransition } from "@/components/PageTransition";
 import { ArchiveItemSkeleton } from "@/components/Skeleton";
-import { KeyboardShortcutsHelp } from "@/components/KeyboardShortcutsHelp";
 import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
 import type { Quote, QuoteHistory, JournalEntry } from "@/types";
+
+// Lazy load modal component
+const KeyboardShortcutsHelp = dynamic(() => import("@/components/KeyboardShortcutsHelp").then(mod => ({ default: mod.KeyboardShortcutsHelp })), { ssr: false });
 
 interface ArchiveItem {
   history: QuoteHistory;

@@ -1,14 +1,17 @@
 "use client";
 
 import { useEffect, useState, useCallback, useRef } from "react";
+import dynamic from "next/dynamic";
 import { getFavorites } from "@/lib/favorites";
 import { getQuoteById } from "@/lib/quotes";
 import { Quote } from "@/components/Quote";
 import { PageTransition } from "@/components/PageTransition";
 import { FavoriteItemSkeleton } from "@/components/Skeleton";
-import { KeyboardShortcutsHelp } from "@/components/KeyboardShortcutsHelp";
 import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
 import type { Quote as QuoteType, FavoriteQuote } from "@/types";
+
+// Lazy load modal component
+const KeyboardShortcutsHelp = dynamic(() => import("@/components/KeyboardShortcutsHelp").then(mod => ({ default: mod.KeyboardShortcutsHelp })), { ssr: false });
 
 interface FavoriteItem {
   favorite: FavoriteQuote;

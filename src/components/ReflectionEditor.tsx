@@ -1,13 +1,16 @@
 "use client";
 
 import { useState, useRef, useEffect, useMemo, useCallback } from "react";
+import dynamic from "next/dynamic";
 import { saveJournalEntry, getJournalEntry, getTotalReflectionCount } from "@/lib/journal";
 import { useToast } from "@/components/Toast";
 import {
-  MilestoneCelebration,
   shouldShowMilestone,
   markMilestoneShown,
 } from "@/components/MilestoneCelebration";
+
+// Lazy load milestone celebration modal
+const MilestoneCelebration = dynamic(() => import("@/components/MilestoneCelebration").then(mod => ({ default: mod.MilestoneCelebration })), { ssr: false });
 
 interface ReflectionEditorProps {
   quoteId: string;

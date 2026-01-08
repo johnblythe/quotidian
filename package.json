@@ -10,8 +10,6 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@fontsource/inter": "^5.2.8",
-    "@fontsource/lora": "^5.2.8",
     "dexie": "^4.2.1",
     "next": "16.1.1",
     "next-pwa": "^5.6.0",

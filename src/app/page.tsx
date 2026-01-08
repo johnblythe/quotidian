@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
+import dynamic from "next/dynamic";
 import { Quote } from "@/components/Quote";
 import { Onboarding } from "@/components/Onboarding";
 import { Greeting } from "@/components/Greeting";
@@ -9,16 +10,19 @@ import { ReflectionEditor } from "@/components/ReflectionEditor";
 import { PageTransition } from "@/components/PageTransition";
 import { QuoteSkeleton } from "@/components/Skeleton";
 import { useToast } from "@/components/Toast";
-import { KeyboardShortcutsHelp } from "@/components/KeyboardShortcutsHelp";
 import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
 import { getTodaysQuote, getRandomQuote, getRandomAuthor, getTodaysQuoteByAuthor, getRandomQuoteByAuthor } from "@/lib/quotes";
 import { useKonamiCode } from "@/hooks/useKonamiCode";
-import { PhilosopherModeActivated } from "@/components/PhilosopherMode";
-import { Confetti, hasShownFirstFavoriteConfetti, markFirstFavoriteConfettiShown } from "@/components/Confetti";
+import { hasShownFirstFavoriteConfetti, markFirstFavoriteConfettiShown } from "@/components/Confetti";
 import { getPreferences } from "@/lib/preferences";
 import { isFavorite, addFavorite, removeFavorite, getFavorites } from "@/lib/favorites";
 import { getFreshPullsToday, incrementFreshPulls, recordQuoteShown } from "@/lib/history";
 import type { Quote as QuoteType } from "@/types";
+
+// Lazy load rarely-used modal components
+const KeyboardShortcutsHelp = dynamic(() => import("@/components/KeyboardShortcutsHelp").then(mod => ({ default: mod.KeyboardShortcutsHelp })), { ssr: false });
+const PhilosopherModeActivated = dynamic(() => import("@/components/PhilosopherMode").then(mod => ({ default: mod.PhilosopherModeActivated })), { ssr: false });
+const Confetti = dynamic(() => import("@/components/Confetti").then(mod => ({ default: mod.Confetti })), { ssr: false });
 
 type PageState = "loading" | "onboarding" | "quote";
 
