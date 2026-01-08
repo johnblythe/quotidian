@@ -165,3 +165,19 @@ Started: 2026-01-08
   - Show 2-3 skeleton items in lists to indicate content is coming
   - Include aria-hidden="true" on skeleton divs for accessibility
 ---
+
+## 2026-01-08 - US-B12: Add heart fill animation on favorite
+- Added heart-pop animation (300ms cubic-bezier bounce) for favoriting
+- Added heart-shrink animation (200ms ease-out) for unfavoriting
+- Created heart-icon CSS class in globals.css with animation keyframes
+- Updated ActionButtons to use useRef and useEffect for tracking state changes
+- Animation only triggers on actual save/unsave state change, not on mount
+- Uses getBoundingClientRect() to force reflow for animation restart
+- Added prefers-reduced-motion support to disable animations
+- Files modified: src/app/globals.css, src/components/ActionButtons.tsx
+- **Learnings for future iterations:**
+  - Heart animation CSS classes: .heart-icon (base), .heart-filled (pop), .heart-unfilled (shrink)
+  - Use getBoundingClientRect() (not offsetWidth) to force reflow on SVG elements for TypeScript
+  - Track previous state with useRef to only animate on actual changes
+  - Animation timing: 300ms for emphasis (favorite), 200ms for de-emphasis (unfavorite)
+---

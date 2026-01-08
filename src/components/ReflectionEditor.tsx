@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect, useMemo, useCallback } from "react";
 import { saveJournalEntry, getJournalEntry } from "@/lib/journal";
+import { useToast } from "@/components/Toast";
 
 interface ReflectionEditorProps {
   quoteId: string;
@@ -32,6 +33,7 @@ export function ReflectionEditor({
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const debounceRef = useRef<NodeJS.Timeout | null>(null);
   const savedTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const { showToast } = useToast();
 
   const editorState = useMemo(() => getEditorState(content.length), [content.length]);
   const wordCount = useMemo(() => countWords(content), [content]);
@@ -61,6 +63,7 @@ export function ReflectionEditor({
 
         // Show saved indicator
         setShowSaved(true);
+        showToast("Reflection saved");
 
         // Clear any existing saved timeout
         if (savedTimeoutRef.current) {
@@ -73,7 +76,7 @@ export function ReflectionEditor({
         }, 2000);
       }, 1000); // 1 second debounce
     },
-    [quoteId]
+    [quoteId, showToast]
   );
 
   // Cleanup timeouts on unmount

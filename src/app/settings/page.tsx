@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { getPreferences, savePreferences } from '@/lib/preferences';
 import { PageTransition } from '@/components/PageTransition';
+import { useToast } from '@/components/Toast';
 
 export default function SettingsPage() {
   const [name, setName] = useState('');
@@ -10,6 +11,7 @@ export default function SettingsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [showSaved, setShowSaved] = useState(false);
+  const { showToast } = useToast();
 
   useEffect(() => {
     async function loadPreferences() {
@@ -28,6 +30,7 @@ export default function SettingsPage() {
     await savePreferences({ name, notificationTime });
     setIsSaving(false);
     setShowSaved(true);
+    showToast("Settings saved");
     setTimeout(() => setShowSaved(false), 2000);
   };
 

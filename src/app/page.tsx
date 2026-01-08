@@ -8,6 +8,7 @@ import { ActionButtons } from "@/components/ActionButtons";
 import { ReflectionEditor } from "@/components/ReflectionEditor";
 import { PageTransition } from "@/components/PageTransition";
 import { QuoteSkeleton } from "@/components/Skeleton";
+import { useToast } from "@/components/Toast";
 import { getTodaysQuote, getRandomQuote } from "@/lib/quotes";
 import { getPreferences } from "@/lib/preferences";
 import { isFavorite, addFavorite, removeFavorite } from "@/lib/favorites";
@@ -23,6 +24,7 @@ export default function Home() {
   const [showReflection, setShowReflection] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
   const [remainingPulls, setRemainingPulls] = useState<number>(3);
+  const { showToast } = useToast();
 
   useEffect(() => {
     const checkOnboarding = async () => {
@@ -55,9 +57,11 @@ export default function Home() {
     if (isSaved) {
       await removeFavorite(currentQuote.id);
       setIsSaved(false);
+      showToast("Removed from favorites");
     } else {
       await addFavorite(currentQuote.id);
       setIsSaved(true);
+      showToast("Saved to favorites");
     }
   };
 

@@ -176,3 +176,26 @@ body {
     transition: none;
   }
 }
+
+/* Toast notification */
+.toast-enter {
+  animation: toast-slide-in 200ms ease-out;
+}
+
+@keyframes toast-slide-in {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Respect reduced motion for toast */
+@media (prefers-reduced-motion: reduce) {
+  .toast-enter {
+    animation: none;
+  }
+}

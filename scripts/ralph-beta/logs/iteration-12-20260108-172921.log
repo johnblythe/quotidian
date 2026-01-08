@@ -1,0 +1,10 @@
+US-B12 completed. There are still more stories with `passes: false` (US-B13 through US-B25), so the next iteration will pick up US-B13.
+
+**Summary - US-B12: Add heart fill animation on favorite**
+
+Implemented:
+- Heart icon animates from outline to filled with a scale bounce (heart-pop: 300ms cubic-bezier)
+- Unfavorite has reverse animation (heart-shrink: 200ms ease-out)
+- Animation only triggers on state change, not initial mount
+- Respects prefers-reduced-motion for accessibility
+- All acceptance criteria met, typecheck and build pass
