@@ -87,14 +87,53 @@ export function ReflectionEditor({
     };
   }, []);
 
-  // Auto-grow textarea with content
-  useEffect(() => {
+  // Auto-grow textarea with smooth resize
+  const adjustHeight = useCallback(() => {
     const textarea = textareaRef.current;
-    if (textarea) {
-      textarea.style.height = "auto";
-      textarea.style.height = `${textarea.scrollHeight}px`;
-    }
-  }, [content]);
+    if (!textarea) return;
+
+    // Get current height for comparison
+    const currentHeight = textarea.offsetHeight;
+
+    // Get minimum height from the CSS class
+    const computedStyle = window.getComputedStyle(textarea);
+    const minHeight = parseFloat(computedStyle.minHeight) || 80;
+
+    // Temporarily disable transition for measurement
+    textarea.style.transition = "none";
+    textarea.style.height = "auto";
+
+    // Force reflow to apply the style change
+    const scrollHeight = textarea.scrollHeight;
+
+    // Calculate target height (at least minHeight)
+    const targetHeight = Math.max(scrollHeight, minHeight);
+
+    // Restore to current height (without transition)
+    textarea.style.height = `${currentHeight}px`;
+
+    // Force another reflow before re-enabling transition
+    textarea.getBoundingClientRect();
+
+    // Re-enable transition and set final height
+    textarea.style.transition = "";
+
+    // Use requestAnimationFrame to ensure smooth transition
+    requestAnimationFrame(() => {
+      textarea.style.height = `${targetHeight}px`;
+    });
+  }, []);
+
+  // Adjust height on content change
+  useEffect(() => {
+    adjustHeight();
+  }, [content, adjustHeight]);
+
+  // Adjust height on window resize (for responsive font size changes)
+  useEffect(() => {
+    window.addEventListener("resize", adjustHeight);
+    return () => window.removeEventListener("resize", adjustHeight);
+  }, [adjustHeight]);
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newContent = e.target.value;
@@ -122,7 +161,7 @@ export function ReflectionEditor({
                    font-serif leading-relaxed
                    placeholder:text-foreground/40
                    border-none focus:ring-0
-                   transition-all duration-300 ease-in-out ${
+                   textarea-smooth-resize ${
           editorState === "minimal"
             ? "min-h-[80px] text-base"
             : editorState === "standard"
