@@ -1,0 +1,26 @@
+There are still 9 stories remaining with `passes: false`. US-B16 is complete.
+
+---
+
+**US-B16: Add milestone celebration for 100 reflections - COMPLETE**
+
+**What was implemented:**
+- Created `MilestoneCelebration` modal component in `src/components/MilestoneCelebration.tsx`
+- Added `getTotalReflectionCount()` function to `src/lib/journal.ts`
+- Modified `saveJournalEntry()` to return boolean indicating if entry is new vs update
+- Integrated milestone check into `ReflectionEditor` - checks after each new reflection is saved
+- Milestone tracking uses localStorage (`quotidian_shown_milestones`) to ensure modal only shows once
+
+**Files created:**
+- `src/components/MilestoneCelebration.tsx`
+
+**Files modified:**
+- `src/lib/journal.ts`
+- `src/components/ReflectionEditor.tsx`
+
+**UI description:** When user creates their 100th reflection, a centered modal appears with:
+- A decorative ✦ symbol
+- Title: "A Century of Reflections"
+- Message celebrating the milestone
+- "Continue" button to dismiss
+- Can also click outside or press Escape to close

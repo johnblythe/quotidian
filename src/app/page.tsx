@@ -14,8 +14,9 @@ import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
 import { getTodaysQuote, getRandomQuote, getRandomAuthor, getTodaysQuoteByAuthor, getRandomQuoteByAuthor } from "@/lib/quotes";
 import { useKonamiCode } from "@/hooks/useKonamiCode";
 import { PhilosopherModeActivated } from "@/components/PhilosopherMode";
+import { Confetti, hasShownFirstFavoriteConfetti, markFirstFavoriteConfettiShown } from "@/components/Confetti";
 import { getPreferences } from "@/lib/preferences";
-import { isFavorite, addFavorite, removeFavorite } from "@/lib/favorites";
+import { isFavorite, addFavorite, removeFavorite, getFavorites } from "@/lib/favorites";
 import { getFreshPullsToday, incrementFreshPulls, recordQuoteShown } from "@/lib/history";
 import type { Quote as QuoteType } from "@/types";
 
@@ -31,6 +32,7 @@ export default function Home() {
   const [showShortcutsHelp, setShowShortcutsHelp] = useState(false);
   const [philosopherMode, setPhilosopherMode] = useState<string | null>(null);
   const [showPhilosopherActivated, setShowPhilosopherActivated] = useState(false);
+  const [showConfetti, setShowConfetti] = useState(false);
   const { showToast } = useToast();
 
   // Konami code easter egg
@@ -53,9 +55,20 @@ export default function Home() {
       setIsSaved(false);
       showToast("Removed from favorites");
     } else {
+      // Check if this is the very first favorite
+      const isFirstFavorite = !hasShownFirstFavoriteConfetti();
+      const currentFavorites = await getFavorites();
+      const isActuallyFirst = isFirstFavorite && currentFavorites.length === 0;
+
       await addFavorite(currentQuote.id);
       setIsSaved(true);
       showToast("Saved to favorites");
+
+      // Trigger confetti on first favorite ever
+      if (isActuallyFirst) {
+        setShowConfetti(true);
+        markFirstFavoriteConfettiShown();
+      }
     }
   }, [pageState, isSaved, currentQuote.id, showToast]);
 
@@ -116,9 +129,20 @@ export default function Home() {
       setIsSaved(false);
       showToast("Removed from favorites");
     } else {
+      // Check if this is the very first favorite
+      const isFirstFavorite = !hasShownFirstFavoriteConfetti();
+      const currentFavorites = await getFavorites();
+      const isActuallyFirst = isFirstFavorite && currentFavorites.length === 0;
+
       await addFavorite(currentQuote.id);
       setIsSaved(true);
       showToast("Saved to favorites");
+
+      // Trigger confetti on first favorite ever
+      if (isActuallyFirst) {
+        setShowConfetti(true);
+        markFirstFavoriteConfettiShown();
+      }
     }
   };
 
@@ -197,6 +221,10 @@ export default function Home() {
           onDismiss={() => setShowPhilosopherActivated(false)}
         />
       )}
+      <Confetti
+        isActive={showConfetti}
+        onComplete={() => setShowConfetti(false)}
+      />
     </>
   );
 }

@@ -10,6 +10,7 @@ Started: 2026-01-08
 - Toast system: ToastProvider in layout.tsx, useToast() hook for showToast(message)
 - Keyboard shortcuts hook: useKeyboardShortcuts() in src/hooks/useKeyboardShortcuts.ts
 - KeyboardShortcutsHelp modal component in src/components/KeyboardShortcutsHelp.tsx (context prop: "home" or "list")
+- Milestone celebration: MilestoneCelebration component + localStorage tracking in src/components/MilestoneCelebration.tsx
 
 ---
 
@@ -239,4 +240,52 @@ Started: 2026-01-08
   - Use useRef to store handlers and avoid stale closure issues
   - Use itemRefs array with ref callbacks to track DOM elements for scrollIntoView
   - Selected items get bg-foreground/5 highlight with smooth transition
+---
+
+## 2026-01-08 - US-B16: Add milestone celebration for 100 reflections
+- Created MilestoneCelebration modal component in src/components/MilestoneCelebration.tsx
+- Added getTotalReflectionCount function to journal.ts
+- Modified saveJournalEntry to return boolean indicating if entry is new
+- Integrated milestone check into ReflectionEditor debounced save
+- Milestone tracking uses localStorage (key: quotidian_shown_milestones)
+- Modal shows congratulatory message for 100 reflections milestone
+- Only shows once per milestone (tracked via localStorage array)
+- Files created: src/components/MilestoneCelebration.tsx
+- Files modified: src/lib/journal.ts, src/components/ReflectionEditor.tsx
+- **Learnings for future iterations:**
+  - MilestoneCelebration exports: MilestoneCelebration (modal), getMilestones, markMilestoneShown, shouldShowMilestone
+  - saveJournalEntry returns true for new entry, false for update
+  - getTotalReflectionCount() returns number of journal entries
+  - Milestone modal follows same pattern as KeyboardShortcutsHelp (click outside to dismiss, Escape to close)
+  - localStorage used instead of IndexedDB for simple boolean tracking to avoid schema version bump
+---
+
+## 2026-01-08 - US-B17: Add seasonal greeting variants
+- Added getSeason() function to detect season from date (Northern Hemisphere)
+- Season boundaries: Winter (Dec 21-Mar 20), Spring (Mar 21-Jun 20), Summer (Jun 21-Sep 22), Autumn (Sep 23-Dec 20)
+- Updated greeting format from "Good morning, John" to "Good winter morning, John"
+- Greetings now include all 4 seasons × 3 time periods (morning/afternoon/evening)
+- Files modified: src/components/Greeting.tsx
+- **Learnings for future iterations:**
+  - Season type: 'winter' | 'spring' | 'summer' | 'autumn'
+  - getSeason() uses month (0-11) and day to determine season
+  - Northern Hemisphere seasons assumed - could add hemisphere detection in future
+  - Greeting format is subtle: "Good {season} {timeOfDay}, {name}"
+---
+
+## 2026-01-08 - US-B18: Add Konami code easter egg
+- Created useKonamiCode hook in src/hooks/useKonamiCode.ts to detect konami sequence
+- Created PhilosopherModeActivated component in src/components/PhilosopherMode.tsx for activation modal
+- Added quote helper functions to src/lib/quotes.ts: getAllAuthors(), getRandomAuthor(), getQuotesByAuthor(), getTodaysQuoteByAuthor(), getRandomQuoteByAuthor()
+- Integrated philosopher mode state into home page - tracks selected philosopher
+- "Another" button respects philosopher mode and only shows quotes from that philosopher
+- State resets on page refresh (session-only, not persisted)
+- Modal auto-dismisses after 4 seconds or on click
+- Files created: src/hooks/useKonamiCode.ts, src/components/PhilosopherMode.tsx
+- Files modified: src/lib/quotes.ts, src/app/page.tsx
+- **Learnings for future iterations:**
+  - Konami code: ArrowUp, ArrowUp, ArrowDown, ArrowDown, ArrowLeft, ArrowRight, ArrowLeft, ArrowRight, KeyB, KeyA (uses event.code)
+  - useKonamiCode(callback) hook tracks key sequence and calls callback when matched
+  - Quote helpers for author filtering are in src/lib/quotes.ts
+  - Session-only state uses React useState (not localStorage) so it resets on refresh
 ---

@@ -212,3 +212,51 @@ body {
     animation: none;
   }
 }
+
+/* Confetti animation */
+.confetti-piece {
+  top: -10px;
+  animation: confetti-fall linear forwards;
+  border-radius: 2px;
+}
+
+@keyframes confetti-fall {
+  0% {
+    top: -10px;
+    opacity: 1;
+    transform: rotate(0deg) translateX(0);
+  }
+  25% {
+    opacity: 1;
+  }
+  100% {
+    top: 100vh;
+    opacity: 0;
+    transform: rotate(720deg) translateX(calc((var(--random, 0.5) - 0.5) * 100px));
+  }
+}
+
+/* Add horizontal drift variation with CSS custom properties */
+.confetti-piece:nth-child(odd) {
+  --random: 0.8;
+}
+
+.confetti-piece:nth-child(even) {
+  --random: 0.2;
+}
+
+.confetti-piece:nth-child(3n) {
+  --random: 0.6;
+}
+
+.confetti-piece:nth-child(5n) {
+  --random: 0.3;
+}
+
+/* Respect reduced motion for confetti */
+@media (prefers-reduced-motion: reduce) {
+  .confetti-piece {
+    animation: none;
+    display: none;
+  }
+}
