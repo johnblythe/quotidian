@@ -1191,5 +1191,215 @@
     "author": "James Stockdale",
     "source": "Courage Under Fire: Testing Epictetus's Doctrines",
     "themes": ["adversity", "discipline"]
+  },
+  {
+    "id": "laotzu-001",
+    "text": "The journey of a thousand miles begins with a single step.",
+    "author": "Lao Tzu",
+    "source": "Tao Te Ching, Chapter 64",
+    "themes": ["discipline", "simplicity"]
+  },
+  {
+    "id": "laotzu-002",
+    "text": "When I let go of what I am, I become what I might be.",
+    "author": "Lao Tzu",
+    "source": "Tao Te Ching",
+    "themes": ["identity", "wisdom"]
+  },
+  {
+    "id": "laotzu-003",
+    "text": "Nature does not hurry, yet everything is accomplished.",
+    "author": "Lao Tzu",
+    "source": "Tao Te Ching",
+    "themes": ["time", "simplicity"]
+  },
+  {
+    "id": "laotzu-004",
+    "text": "He who knows others is wise; he who knows himself is enlightened.",
+    "author": "Lao Tzu",
+    "source": "Tao Te Ching, Chapter 33",
+    "themes": ["wisdom", "identity"]
+  },
+  {
+    "id": "laotzu-005",
+    "text": "The softest things in the world overcome the hardest things in the world.",
+    "author": "Lao Tzu",
+    "source": "Tao Te Ching, Chapter 43",
+    "themes": ["adversity", "wisdom"]
+  },
+  {
+    "id": "laotzu-006",
+    "text": "Be content with what you have; rejoice in the way things are. When you realize there is nothing lacking, the whole world belongs to you.",
+    "author": "Lao Tzu",
+    "source": "Tao Te Ching, Chapter 44",
+    "themes": ["simplicity", "joy"]
+  },
+  {
+    "id": "laotzu-007",
+    "text": "Silence is a source of great strength.",
+    "author": "Lao Tzu",
+    "source": "Tao Te Ching",
+    "themes": ["discipline", "wisdom"]
+  },
+  {
+    "id": "laotzu-008",
+    "text": "If you do not change direction, you may end up where you are heading.",
+    "author": "Lao Tzu",
+    "source": "Tao Te Ching",
+    "themes": ["wisdom", "time"]
+  },
+  {
+    "id": "laotzu-009",
+    "text": "Mastering others is strength. Mastering yourself is true power.",
+    "author": "Lao Tzu",
+    "source": "Tao Te Ching, Chapter 33",
+    "themes": ["discipline", "identity"]
+  },
+  {
+    "id": "laotzu-010",
+    "text": "Those who know do not speak. Those who speak do not know.",
+    "author": "Lao Tzu",
+    "source": "Tao Te Ching, Chapter 56",
+    "themes": ["wisdom", "simplicity"]
+  },
+  {
+    "id": "buddha-001",
+    "text": "The mind is everything. What you think you become.",
+    "author": "Buddha",
+    "source": "Dhammapada",
+    "themes": ["identity", "wisdom"]
+  },
+  {
+    "id": "buddha-002",
+    "text": "Peace comes from within. Do not seek it without.",
+    "author": "Buddha",
+    "source": "Dhammapada",
+    "themes": ["joy", "simplicity"]
+  },
+  {
+    "id": "buddha-003",
+    "text": "You will not be punished for your anger, you will be punished by your anger.",
+    "author": "Buddha",
+    "source": "Dhammapada",
+    "themes": ["discipline", "adversity"]
+  },
+  {
+    "id": "buddha-004",
+    "text": "In the end, only three things matter: how much you loved, how gently you lived, and how gracefully you let go of things not meant for you.",
+    "author": "Buddha",
+    "source": "Dhammapada",
+    "themes": ["relationships", "simplicity"]
+  },
+  {
+    "id": "buddha-005",
+    "text": "Do not dwell in the past, do not dream of the future, concentrate the mind on the present moment.",
+    "author": "Buddha",
+    "source": "Dhammapada",
+    "themes": ["time", "discipline"]
+  },
+  {
+    "id": "buddha-006",
+    "text": "No one saves us but ourselves. No one can and no one may. We ourselves must walk the path.",
+    "author": "Buddha",
+    "source": "Dhammapada, Verse 165",
+    "themes": ["identity", "discipline"]
+  },
+  {
+    "id": "buddha-007",
+    "text": "Holding on to anger is like grasping a hot coal with the intent of throwing it at someone else; you are the one who gets burned.",
+    "author": "Buddha",
+    "source": "Dhammapada",
+    "themes": ["discipline", "relationships"]
+  },
+  {
+    "id": "buddha-008",
+    "text": "Three things cannot be long hidden: the sun, the moon, and the truth.",
+    "author": "Buddha",
+    "source": "Dhammapada",
+    "themes": ["wisdom", "time"]
+  },
+  {
+    "id": "buddha-009",
+    "text": "Every morning we are born again. What we do today is what matters most.",
+    "author": "Buddha",
+    "source": "Dhammapada",
+    "themes": ["time", "discipline"]
+  },
+  {
+    "id": "buddha-010",
+    "text": "It is better to conquer yourself than to win a thousand battles. Then the victory is yours. It cannot be taken from you.",
+    "author": "Buddha",
+    "source": "Dhammapada",
+    "themes": ["discipline", "identity"]
+  },
+  {
+    "id": "rumi-001",
+    "text": "The wound is the place where the Light enters you.",
+    "author": "Rumi",
+    "source": "Selected Poems",
+    "themes": ["adversity", "wisdom"]
+  },
+  {
+    "id": "rumi-002",
+    "text": "Don't grieve. Anything you lose comes round in another form.",
+    "author": "Rumi",
+    "source": "Selected Poems",
+    "themes": ["adversity", "time"]
+  },
+  {
+    "id": "rumi-003",
+    "text": "Yesterday I was clever, so I wanted to change the world. Today I am wise, so I am changing myself.",
+    "author": "Rumi",
+    "source": "Selected Poems",
+    "themes": ["wisdom", "identity"]
+  },
+  {
+    "id": "rumi-004",
+    "text": "What you seek is seeking you.",
+    "author": "Rumi",
+    "source": "Selected Poems",
+    "themes": ["identity", "wisdom"]
+  },
+  {
+    "id": "rumi-005",
+    "text": "Let silence take you to the core of life.",
+    "author": "Rumi",
+    "source": "Selected Poems",
+    "themes": ["simplicity", "wisdom"]
+  },
+  {
+    "id": "rumi-006",
+    "text": "Raise your words, not voice. It is rain that grows flowers, not thunder.",
+    "author": "Rumi",
+    "source": "Selected Poems",
+    "themes": ["relationships", "wisdom"]
+  },
+  {
+    "id": "rumi-007",
+    "text": "You were born with wings, why prefer to crawl through life?",
+    "author": "Rumi",
+    "source": "Selected Poems",
+    "themes": ["identity", "joy"]
+  },
+  {
+    "id": "rumi-008",
+    "text": "The art of knowing is knowing what to ignore.",
+    "author": "Rumi",
+    "source": "Selected Poems",
+    "themes": ["wisdom", "simplicity"]
+  },
+  {
+    "id": "rumi-009",
+    "text": "Be like a tree and let the dead leaves drop.",
+    "author": "Rumi",
+    "source": "Selected Poems",
+    "themes": ["simplicity", "adversity"]
+  },
+  {
+    "id": "rumi-010",
+    "text": "Set your life on fire. Seek those who fan your flames.",
+    "author": "Rumi",
+    "source": "Selected Poems",
+    "themes": ["relationships", "joy"]
   }
 ]
