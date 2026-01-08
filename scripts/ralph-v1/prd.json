@@ -1,0 +1,298 @@
+{
+  "project": "Quotidian",
+  "branchName": "ralph/v1-personalization",
+  "description": "V1.0: Personalization - Algorithm, Journeys, Smart Timing",
+  "userStories": [
+    {
+      "id": "US-V01",
+      "title": "Create signals table in IndexedDB",
+      "description": "As a developer, I need to track user signals for the algorithm.",
+      "acceptanceCriteria": [
+        "Add signals table to Dexie schema",
+        "Fields: id, quoteId, signal (type), timestamp, themes (from quote)",
+        "Signal types: 'favorite', 'reflected', 'reflected_long', 'viewed', 'another', 'unfavorited'",
+        "Export typed interface",
+        "npm run typecheck passes"
+      ],
+      "priority": 1,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-V02",
+      "title": "Record signals on user actions",
+      "description": "As a developer, I need to capture user behavior signals.",
+      "acceptanceCriteria": [
+        "Record 'favorite' signal when user favorites (weight: +3)",
+        "Record 'unfavorited' signal when user unfavorites (weight: -2)",
+        "Record 'reflected' signal when user saves reflection (weight: +2)",
+        "Record 'reflected_long' when reflection > 500 chars (weight: +3)",
+        "Record 'another' signal when user requests another quote (weight: -1)",
+        "Record 'viewed' signal when quote is displayed (weight: 0)",
+        "npm run typecheck passes"
+      ],
+      "priority": 2,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-V03",
+      "title": "Calculate theme affinity scores from signals",
+      "description": "As a developer, I need to compute which themes the user prefers.",
+      "acceptanceCriteria": [
+        "Create getThemeAffinities() function",
+        "Aggregate signal weights by theme",
+        "Return sorted list of themes with scores",
+        "Handle case with no signals (return empty)",
+        "npm run typecheck passes"
+      ],
+      "priority": 3,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-V04",
+      "title": "Implement weighted quote selection algorithm",
+      "description": "As a user, I want quotes that match my preferences.",
+      "acceptanceCriteria": [
+        "Create selectNextQuote() function",
+        "Filter out quotes shown in last 30 days",
+        "Score each quote: base random + theme bonus + author bonus - recency penalty",
+        "Theme bonus: +0.5 for each matching high-affinity theme",
+        "Author bonus: +0.3 if user favorited quotes from same author",
+        "Recency penalty: -0.2 if shown in last 60 days",
+        "Select highest scoring quote",
+        "npm run typecheck passes"
+      ],
+      "priority": 4,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-V05",
+      "title": "Add cold start logic for new users",
+      "description": "As a new user, I should get random quotes until enough data collected.",
+      "acceptanceCriteria": [
+        "Check signal count on quote selection",
+        "If < 14 days of signals, use pure random selection",
+        "After 14 days, switch to weighted algorithm",
+        "Track 'algorithm_enabled' date in preferences",
+        "npm run typecheck passes"
+      ],
+      "priority": 5,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-V06",
+      "title": "Show 'Personalization unlocked' message on day 15",
+      "description": "As a user, I want to know when personalization kicks in.",
+      "acceptanceCriteria": [
+        "Detect when algorithm becomes enabled",
+        "Show one-time celebratory message",
+        "Message explains quotes are now personalized",
+        "Store 'personalization_celebrated' flag",
+        "npm run typecheck passes"
+      ],
+      "priority": 6,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-V07",
+      "title": "Create journeys table in IndexedDB",
+      "description": "As a developer, I need to track active and completed journeys.",
+      "acceptanceCriteria": [
+        "Add journeys table to Dexie schema",
+        "Fields: id, journeyId, startedAt, completedAt, day, quotesShown[]",
+        "Export typed interface",
+        "npm run typecheck passes"
+      ],
+      "priority": 7,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-V08",
+      "title": "Seed journey definitions",
+      "description": "As a developer, I need predefined journeys to offer users.",
+      "acceptanceCriteria": [
+        "Create src/data/journeys.json with 7 journeys",
+        "7 Days with Seneca (author filter)",
+        "Week of Stillness - Alan Watts (author filter)",
+        "Stoic Fundamentals (authors: Marcus, Epictetus, Seneca)",
+        "Facing Mortality (theme: death, 5 days)",
+        "Building Discipline (theme: discipline, 7 days)",
+        "Finding Joy (theme: joy, 5 days)",
+        "Naval on Wealth & Happiness (author filter, 7 days)",
+        "npm run typecheck passes"
+      ],
+      "priority": 8,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-V09",
+      "title": "Create Journeys page in settings",
+      "description": "As a user, I want to browse and start journeys.",
+      "acceptanceCriteria": [
+        "Create src/app/journeys/page.tsx",
+        "List all available journeys with title, description, duration",
+        "Show journey icon/emoji",
+        "Add link in navigation or settings",
+        "npm run typecheck passes"
+      ],
+      "priority": 9,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-V10",
+      "title": "Implement start journey flow",
+      "description": "As a user, I want to start a journey.",
+      "acceptanceCriteria": [
+        "Start button on each journey card",
+        "Check if another journey is active (show warning)",
+        "Create journey record in IndexedDB",
+        "Set day = 1, quotesShown = []",
+        "Redirect to home to see first journey quote",
+        "npm run typecheck passes"
+      ],
+      "priority": 10,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-V11",
+      "title": "Update homepage for active journey display",
+      "description": "As a user on a journey, I want to see my progress.",
+      "acceptanceCriteria": [
+        "Detect active journey on homepage",
+        "Show 'Day X of Y: Journey Name' header",
+        "Select quote from journey filter (author or theme)",
+        "Exclude already-shown quotes in this journey",
+        "Track quote in quotesShown array",
+        "npm run typecheck passes"
+      ],
+      "priority": 11,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-V12",
+      "title": "Implement exit journey flow with confirmation",
+      "description": "As a user, I want to exit a journey early if needed.",
+      "acceptanceCriteria": [
+        "Add 'Exit Journey' button on homepage during journey",
+        "Show confirmation dialog",
+        "On confirm, delete active journey record",
+        "Return to normal quote selection",
+        "npm run typecheck passes"
+      ],
+      "priority": 12,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-V13",
+      "title": "Add journey completion celebration",
+      "description": "As a user, I want to celebrate finishing a journey.",
+      "acceptanceCriteria": [
+        "Detect when journey day > duration",
+        "Show celebration modal with congratulations",
+        "Mark journey as completed (set completedAt)",
+        "Offer to start another journey or return to normal",
+        "npm run typecheck passes"
+      ],
+      "priority": 13,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-V14",
+      "title": "Track completed journeys in archive",
+      "description": "As a user, I want to see my completed journeys.",
+      "acceptanceCriteria": [
+        "Add 'Completed Journeys' section to archive or settings",
+        "List completed journeys with dates",
+        "Show which quotes were part of each journey",
+        "npm run typecheck passes"
+      ],
+      "priority": 14,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-V15",
+      "title": "Create engagement table in IndexedDB",
+      "description": "As a developer, I need to track when users engage.",
+      "acceptanceCriteria": [
+        "Add engagement table to Dexie schema",
+        "Fields: date (string YYYY-MM-DD), openedAt, engagedAt",
+        "engagedAt = when user favorited or reflected",
+        "npm run typecheck passes"
+      ],
+      "priority": 15,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-V16",
+      "title": "Record engagement times on app open",
+      "description": "As a developer, I need to capture when users use the app.",
+      "acceptanceCriteria": [
+        "Record openedAt on app load",
+        "Update engagedAt when user favorites or reflects",
+        "One record per day (upsert)",
+        "npm run typecheck passes"
+      ],
+      "priority": 16,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-V17",
+      "title": "Calculate suggested notification time",
+      "description": "As a developer, I need to compute optimal notification time.",
+      "acceptanceCriteria": [
+        "Create calculateOptimalTime() function",
+        "Average engagement times from last 7 days",
+        "Return formatted time string (HH:MM)",
+        "Handle case with insufficient data (return null)",
+        "npm run typecheck passes"
+      ],
+      "priority": 17,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-V18",
+      "title": "Show timing suggestion in settings",
+      "description": "As a user, I want to see suggested notification time.",
+      "acceptanceCriteria": [
+        "Display 'Suggested time: X:XX AM based on your habits'",
+        "Show only if suggestion available",
+        "Add 'Use suggested time' button",
+        "Clicking updates notification time preference",
+        "npm run typecheck passes"
+      ],
+      "priority": 18,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-V19",
+      "title": "Implement weekly timing recalculation",
+      "description": "As a user, I want suggestions to update as my habits change.",
+      "acceptanceCriteria": [
+        "Recalculate suggested time weekly (every Sunday)",
+        "Store last_calculation_date in preferences",
+        "Show notification if suggestion differs from current by > 30 min",
+        "npm run typecheck passes"
+      ],
+      "priority": 19,
+      "passes": false,
+      "notes": ""
+    }
+  ]
+}

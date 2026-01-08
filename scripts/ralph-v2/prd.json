@@ -1,0 +1,309 @@
+{
+  "project": "Quotidian",
+  "branchName": "ralph/v2-collections",
+  "description": "V2.0: Collections - User-curated quote bundles, discovery, journey integration",
+  "userStories": [
+    {
+      "id": "US-C01",
+      "title": "Create collections table in Supabase",
+      "description": "As a developer, I need database table for collections.",
+      "acceptanceCriteria": [
+        "Create collections table with: id, user_id, title, description, quote_ids[], visibility, timestamps",
+        "visibility: 'private' | 'public'",
+        "Enable RLS",
+        "Policy: users own their collections",
+        "Policy: public collections are readable by all",
+        "npm run typecheck passes"
+      ],
+      "priority": 1,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-C02",
+      "title": "Create collection_follows table in Supabase",
+      "description": "As a developer, I need to track who follows which collections.",
+      "acceptanceCriteria": [
+        "Create collection_follows table with: user_id, collection_id, followed_at",
+        "Primary key: (user_id, collection_id)",
+        "Enable RLS",
+        "Policy: users can manage their own follows",
+        "npm run typecheck passes"
+      ],
+      "priority": 2,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-C03",
+      "title": "Add 'Add to collection' button on quote display",
+      "description": "As a user, I want to add quotes to collections.",
+      "acceptanceCriteria": [
+        "Add + icon button to action buttons row",
+        "Button visible when signed in",
+        "Clicking opens add-to-collection modal",
+        "npm run typecheck passes"
+      ],
+      "priority": 3,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-C04",
+      "title": "Create 'Add to collection' modal",
+      "description": "As a user, I want to choose which collection to add to.",
+      "acceptanceCriteria": [
+        "Modal lists user's existing collections",
+        "Radio button selection",
+        "Shows check mark on already-added collections",
+        "Confirm button adds quote to selected collection",
+        "npm run typecheck passes"
+      ],
+      "priority": 4,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-C05",
+      "title": "Create 'New collection' form",
+      "description": "As a user, I want to create new collections.",
+      "acceptanceCriteria": [
+        "'+ New Collection' button in add modal",
+        "Form: title (required), description (optional)",
+        "Visibility toggle: Private / Public",
+        "Create button saves to Supabase",
+        "New collection auto-selected after creation",
+        "npm run typecheck passes"
+      ],
+      "priority": 5,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-C06",
+      "title": "Create My Collections page",
+      "description": "As a user, I want to see all my collections.",
+      "acceptanceCriteria": [
+        "Create src/app/collections/page.tsx",
+        "List all user's collections",
+        "Show: title, quote count, visibility icon",
+        "Show follower count for public collections",
+        "Add link in navigation",
+        "npm run typecheck passes"
+      ],
+      "priority": 6,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-C07",
+      "title": "Create Collection detail page",
+      "description": "As a user, I want to view a collection's contents.",
+      "acceptanceCriteria": [
+        "Create src/app/collections/[id]/page.tsx",
+        "Show collection title, description, visibility",
+        "List all quotes in collection",
+        "Show Quote component for each",
+        "npm run typecheck passes"
+      ],
+      "priority": 7,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-C08",
+      "title": "Implement add quote to collection",
+      "description": "As a user, I want to add quotes to my collections.",
+      "acceptanceCriteria": [
+        "Create addQuoteToCollection(collectionId, quoteId) function",
+        "Update quote_ids array in Supabase",
+        "Prevent duplicates",
+        "Show success toast",
+        "npm run typecheck passes"
+      ],
+      "priority": 8,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-C09",
+      "title": "Implement remove quote from collection",
+      "description": "As a user, I want to remove quotes from collections.",
+      "acceptanceCriteria": [
+        "Remove button on each quote in collection view",
+        "Confirmation dialog",
+        "Update quote_ids array in Supabase",
+        "Show success toast",
+        "npm run typecheck passes"
+      ],
+      "priority": 9,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-C10",
+      "title": "Implement delete collection",
+      "description": "As a user, I want to delete collections.",
+      "acceptanceCriteria": [
+        "Delete button on collection detail page",
+        "Confirmation dialog with warning",
+        "Delete from Supabase",
+        "Delete associated follows",
+        "Redirect to My Collections",
+        "npm run typecheck passes"
+      ],
+      "priority": 10,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-C11",
+      "title": "Implement edit collection",
+      "description": "As a user, I want to edit collection details.",
+      "acceptanceCriteria": [
+        "Edit button on collection detail page",
+        "Edit form: title, description, visibility",
+        "Save updates to Supabase",
+        "Show success toast",
+        "npm run typecheck passes"
+      ],
+      "priority": 11,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-C12",
+      "title": "Create Discover page",
+      "description": "As a user, I want to discover public collections.",
+      "acceptanceCriteria": [
+        "Create src/app/discover/page.tsx",
+        "Add link in navigation",
+        "Header: 'Discover Collections'",
+        "Placeholder for collection lists",
+        "npm run typecheck passes"
+      ],
+      "priority": 12,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-C13",
+      "title": "Implement popular collections query",
+      "description": "As a user, I want to see popular collections.",
+      "acceptanceCriteria": [
+        "'Popular' section on Discover page",
+        "Query collections ordered by follower count",
+        "Show top 10",
+        "Display: title, creator, follower count",
+        "npm run typecheck passes"
+      ],
+      "priority": 13,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-C14",
+      "title": "Implement new collections query",
+      "description": "As a user, I want to see new collections.",
+      "acceptanceCriteria": [
+        "'New' section on Discover page",
+        "Query collections ordered by created_at desc",
+        "Show top 10 from last 30 days",
+        "Display: title, creator, quote count",
+        "npm run typecheck passes"
+      ],
+      "priority": 14,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-C15",
+      "title": "Implement follow collection",
+      "description": "As a user, I want to follow public collections.",
+      "acceptanceCriteria": [
+        "Follow button on collection detail page (public only)",
+        "Insert into collection_follows",
+        "Button changes to 'Following' after follow",
+        "Update follower count display",
+        "npm run typecheck passes"
+      ],
+      "priority": 15,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-C16",
+      "title": "Implement unfollow collection",
+      "description": "As a user, I want to unfollow collections.",
+      "acceptanceCriteria": [
+        "'Following' button shows unfollow on click",
+        "Confirmation dialog",
+        "Delete from collection_follows",
+        "Update button and follower count",
+        "npm run typecheck passes"
+      ],
+      "priority": 16,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-C17",
+      "title": "Show followed collections in My Collections",
+      "description": "As a user, I want to see collections I follow.",
+      "acceptanceCriteria": [
+        "'Following' section on My Collections page",
+        "List collections user follows",
+        "Click to view collection detail",
+        "Distinguish from owned collections",
+        "npm run typecheck passes"
+      ],
+      "priority": 17,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-C18",
+      "title": "Extend Journey type for collections",
+      "description": "As a developer, I need journeys to support collections.",
+      "acceptanceCriteria": [
+        "Add type field to Journey: 'preset' | 'collection'",
+        "Add optional collectionId field",
+        "Update journey selection logic",
+        "npm run typecheck passes"
+      ],
+      "priority": 18,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-C19",
+      "title": "Add 'Start Journey' button on collection",
+      "description": "As a user, I want to use a collection as a journey.",
+      "acceptanceCriteria": [
+        "'Start Journey' button on collection detail page",
+        "Only for collections with 3+ quotes",
+        "Creates journey with type='collection', collectionId set",
+        "Duration = quote count",
+        "npm run typecheck passes"
+      ],
+      "priority": 19,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-C20",
+      "title": "Implement collection-based journey flow",
+      "description": "As a user, I want journeys from collections to work.",
+      "acceptanceCriteria": [
+        "Homepage detects collection-based journey",
+        "Fetches quotes from collection's quote_ids",
+        "Shows collection name in journey header",
+        "Same completion flow as preset journeys",
+        "npm run typecheck passes"
+      ],
+      "priority": 20,
+      "passes": false,
+      "notes": ""
+    }
+  ]
+}

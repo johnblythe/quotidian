@@ -1,0 +1,386 @@
+{
+  "project": "Quotidian",
+  "branchName": "ralph/beta-polish",
+  "description": "Beta: Polish, accessibility, and 150+ curated quotes",
+  "userStories": [
+    {
+      "id": "US-B01",
+      "title": "Update Quote interface to include themes array",
+      "description": "As a developer, I need to add theme tagging to quotes for future algorithm.",
+      "acceptanceCriteria": [
+        "Add Theme type: 'adversity' | 'death' | 'discipline' | 'joy' | 'relationships' | 'work' | 'identity' | 'time' | 'wisdom' | 'simplicity'",
+        "Update Quote interface to include themes: Theme[]",
+        "Update existing quotes.json to include themes array (can be empty initially)",
+        "npm run typecheck passes"
+      ],
+      "priority": 1,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-B02",
+      "title": "Research and add 25 Seneca quotes with themes",
+      "description": "As a user, I want more Seneca quotes to reflect on.",
+      "acceptanceCriteria": [
+        "Add 25 new Seneca quotes to quotes.json",
+        "Each quote has: text, author ('Seneca'), source (book/letter), themes array",
+        "Sources include: Letters to Lucilius, On the Shortness of Life, On Anger",
+        "Themes are accurately tagged",
+        "No duplicate quotes",
+        "npm run typecheck passes"
+      ],
+      "priority": 2,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-B03",
+      "title": "Research and add 25 Marcus Aurelius quotes with themes",
+      "description": "As a user, I want more Marcus Aurelius quotes to reflect on.",
+      "acceptanceCriteria": [
+        "Add 25 new Marcus Aurelius quotes to quotes.json",
+        "Each quote has: text, author ('Marcus Aurelius'), source ('Meditations, Book X'), themes array",
+        "Themes are accurately tagged",
+        "No duplicate quotes",
+        "npm run typecheck passes"
+      ],
+      "priority": 3,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-B04",
+      "title": "Research and add 20 Epictetus quotes with themes",
+      "description": "As a user, I want more Epictetus quotes to reflect on.",
+      "acceptanceCriteria": [
+        "Add 20 new Epictetus quotes to quotes.json",
+        "Each quote has: text, author ('Epictetus'), source ('Enchiridion' or 'Discourses'), themes array",
+        "Themes are accurately tagged",
+        "No duplicate quotes",
+        "npm run typecheck passes"
+      ],
+      "priority": 4,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-B05",
+      "title": "Research and add 20 Naval Ravikant quotes with themes",
+      "description": "As a user, I want more Naval quotes to reflect on.",
+      "acceptanceCriteria": [
+        "Add 20 new Naval Ravikant quotes to quotes.json",
+        "Each quote has: text, author ('Naval Ravikant'), source (Almanack/podcast/tweet), themes array",
+        "Themes are accurately tagged",
+        "No duplicate quotes",
+        "npm run typecheck passes"
+      ],
+      "priority": 5,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-B06",
+      "title": "Research and add 20 Alan Watts quotes with themes",
+      "description": "As a user, I want more Alan Watts quotes to reflect on.",
+      "acceptanceCriteria": [
+        "Add 20 new Alan Watts quotes to quotes.json",
+        "Each quote has: text, author ('Alan Watts'), source (book/lecture), themes array",
+        "Themes are accurately tagged",
+        "No duplicate quotes",
+        "npm run typecheck passes"
+      ],
+      "priority": 6,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-B07",
+      "title": "Research and add 10 James Stockdale quotes with themes",
+      "description": "As a user, I want more Stockdale quotes to reflect on.",
+      "acceptanceCriteria": [
+        "Add 10 new James Stockdale quotes to quotes.json",
+        "Each quote has: text, author ('James Stockdale'), source, themes array",
+        "Themes are accurately tagged",
+        "No duplicate quotes",
+        "npm run typecheck passes"
+      ],
+      "priority": 7,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-B08",
+      "title": "Research and add 30 misc quotes (Lao Tzu, Buddha, Rumi) with themes",
+      "description": "As a user, I want variety in philosophical traditions.",
+      "acceptanceCriteria": [
+        "Add 10 Lao Tzu quotes (Tao Te Ching)",
+        "Add 10 Buddha quotes (Dhammapada)",
+        "Add 10 Rumi quotes (selected poems)",
+        "Each quote has proper attribution and themes",
+        "No duplicate quotes",
+        "npm run typecheck passes"
+      ],
+      "priority": 8,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-B09",
+      "title": "Add page transition animations",
+      "description": "As a user, I want smooth transitions between pages.",
+      "acceptanceCriteria": [
+        "Add fade-in animation on page load (200ms)",
+        "Smooth transition when navigating between pages",
+        "No jarring flashes of unstyled content",
+        "Respects prefers-reduced-motion",
+        "npm run typecheck passes"
+      ],
+      "priority": 9,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-B10",
+      "title": "Add button hover and active states",
+      "description": "As a user, I want visual feedback when interacting with buttons.",
+      "acceptanceCriteria": [
+        "All buttons have hover state (subtle scale or glow)",
+        "All buttons have active/pressed state",
+        "Transitions are smooth (150ms)",
+        "Consistent across all pages",
+        "npm run typecheck passes"
+      ],
+      "priority": 10,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-B11",
+      "title": "Add loading skeletons to async components",
+      "description": "As a user, I want to see loading states while data loads.",
+      "acceptanceCriteria": [
+        "Quote component shows skeleton while loading",
+        "Archive list shows skeleton items while loading",
+        "Favorites list shows skeleton items while loading",
+        "Skeletons match approximate size of loaded content",
+        "npm run typecheck passes"
+      ],
+      "priority": 11,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-B12",
+      "title": "Add heart fill animation on favorite",
+      "description": "As a user, I want delightful feedback when saving a quote.",
+      "acceptanceCriteria": [
+        "Heart icon animates from outline to filled",
+        "Animation includes subtle scale bounce",
+        "Unfavorite has reverse animation",
+        "Animation is smooth and not distracting",
+        "npm run typecheck passes"
+      ],
+      "priority": 12,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-B13",
+      "title": "Add toast notification system",
+      "description": "As a user, I want confirmation when actions complete.",
+      "acceptanceCriteria": [
+        "Create reusable Toast component",
+        "Toast appears at bottom of screen",
+        "Auto-dismisses after 3 seconds",
+        "Show toast on: save favorite, save reflection, update settings",
+        "npm run typecheck passes"
+      ],
+      "priority": 13,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-B14",
+      "title": "Improve textarea auto-resize smoothness",
+      "description": "As a user, I want the reflection editor to resize smoothly.",
+      "acceptanceCriteria": [
+        "Textarea grows smoothly as content increases",
+        "No jumpy resizing behavior",
+        "Minimum height maintained",
+        "Works on mobile and desktop",
+        "npm run typecheck passes"
+      ],
+      "priority": 14,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-B15",
+      "title": "Add keyboard shortcuts",
+      "description": "As a power user, I want keyboard shortcuts for common actions.",
+      "acceptanceCriteria": [
+        "j/k: navigate between quotes in archive/favorites",
+        "s: toggle save/favorite",
+        "r: open reflection editor",
+        "Escape: close modals/editors",
+        "Shortcuts shown in tooltip or help",
+        "npm run typecheck passes"
+      ],
+      "priority": 15,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-B16",
+      "title": "Add milestone celebration for 100 reflections",
+      "description": "As a user, I want to feel accomplished when I hit milestones.",
+      "acceptanceCriteria": [
+        "Track total reflection count",
+        "Show celebration modal at 100 reflections",
+        "Celebration includes congratulatory message",
+        "User can dismiss and continue",
+        "Only shows once per milestone",
+        "npm run typecheck passes"
+      ],
+      "priority": 16,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-B17",
+      "title": "Add seasonal greeting variants",
+      "description": "As a user, I want greetings that reflect the season.",
+      "acceptanceCriteria": [
+        "Winter mornings: 'Good winter morning, John'",
+        "Summer evenings: 'Good summer evening, John'",
+        "Detect season from date",
+        "Subtle, not over-the-top",
+        "npm run typecheck passes"
+      ],
+      "priority": 17,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-B18",
+      "title": "Add Konami code easter egg",
+      "description": "As a user, I want a fun hidden feature.",
+      "acceptanceCriteria": [
+        "Konami code (up up down down left right left right b a) triggers easter egg",
+        "Easter egg: 'Philosopher mode' - all quotes from one random thinker for the day",
+        "Shows playful message when activated",
+        "Resets on page refresh",
+        "npm run typecheck passes"
+      ],
+      "priority": 18,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-B19",
+      "title": "Add first-favorite confetti",
+      "description": "As a new user, I want celebration on my first favorite.",
+      "acceptanceCriteria": [
+        "Track if user has ever favorited",
+        "First favorite triggers subtle confetti animation",
+        "Only happens once ever",
+        "Confetti is brief and tasteful",
+        "npm run typecheck passes"
+      ],
+      "priority": 19,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-B20",
+      "title": "Design and implement empty state for favorites",
+      "description": "As a user with no favorites, I want a helpful empty state.",
+      "acceptanceCriteria": [
+        "Show friendly message: 'Your collection awaits'",
+        "Include hint about how to favorite",
+        "Visually pleasing, not just text",
+        "Link or prompt to go find quotes",
+        "npm run typecheck passes"
+      ],
+      "priority": 20,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-B21",
+      "title": "Design and implement empty state for archive",
+      "description": "As a new user, I want a helpful archive empty state.",
+      "acceptanceCriteria": [
+        "Show friendly message for new users",
+        "Explain what archive will contain",
+        "Visually pleasing design",
+        "npm run typecheck passes"
+      ],
+      "priority": 21,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-B22",
+      "title": "Design and implement empty state for reflections",
+      "description": "As a user who hasn't reflected, I want encouragement.",
+      "acceptanceCriteria": [
+        "Show when viewing a quote with no reflection",
+        "Friendly prompt: 'Wisdom grows when written'",
+        "Subtle, not pushy",
+        "npm run typecheck passes"
+      ],
+      "priority": 22,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-B23",
+      "title": "Accessibility audit and fixes",
+      "description": "As a user with disabilities, I need the app to be accessible.",
+      "acceptanceCriteria": [
+        "Color contrast meets WCAG AA (4.5:1)",
+        "All interactive elements have focus indicators",
+        "Screen reader testing passes",
+        "Keyboard navigation works throughout",
+        "Add prefers-reduced-motion support",
+        "npm run typecheck passes"
+      ],
+      "priority": 23,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-B24",
+      "title": "Performance optimization pass",
+      "description": "As a user, I want a fast experience.",
+      "acceptanceCriteria": [
+        "Lighthouse performance score 95+",
+        "First contentful paint < 1.5s",
+        "Time to interactive < 3s",
+        "Bundle size optimized (check for unused deps)",
+        "Images optimized",
+        "npm run typecheck passes"
+      ],
+      "priority": 24,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-B25",
+      "title": "Cross-browser and device testing fixes",
+      "description": "As a user on any device, I want a consistent experience.",
+      "acceptanceCriteria": [
+        "Test and fix issues on iOS Safari",
+        "Test and fix issues on Android Chrome",
+        "Test and fix issues on desktop Chrome, Firefox, Safari",
+        "PWA install flow works on all platforms",
+        "Offline mode works correctly",
+        "npm run typecheck passes"
+      ],
+      "priority": 25,
+      "passes": false,
+      "notes": ""
+    }
+  ]
+}
