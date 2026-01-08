@@ -11,7 +11,9 @@ import { QuoteSkeleton } from "@/components/Skeleton";
 import { useToast } from "@/components/Toast";
 import { KeyboardShortcutsHelp } from "@/components/KeyboardShortcutsHelp";
 import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
-import { getTodaysQuote, getRandomQuote } from "@/lib/quotes";
+import { getTodaysQuote, getRandomQuote, getRandomAuthor, getTodaysQuoteByAuthor, getRandomQuoteByAuthor } from "@/lib/quotes";
+import { useKonamiCode } from "@/hooks/useKonamiCode";
+import { PhilosopherModeActivated } from "@/components/PhilosopherMode";
 import { getPreferences } from "@/lib/preferences";
 import { isFavorite, addFavorite, removeFavorite } from "@/lib/favorites";
 import { getFreshPullsToday, incrementFreshPulls, recordQuoteShown } from "@/lib/history";
@@ -27,7 +29,21 @@ export default function Home() {
   const [isSaved, setIsSaved] = useState(false);
   const [remainingPulls, setRemainingPulls] = useState<number>(3);
   const [showShortcutsHelp, setShowShortcutsHelp] = useState(false);
+  const [philosopherMode, setPhilosopherMode] = useState<string | null>(null);
+  const [showPhilosopherActivated, setShowPhilosopherActivated] = useState(false);
   const { showToast } = useToast();
+
+  // Konami code easter egg
+  const handleKonamiCode = useCallback(() => {
+    if (philosopherMode) return; // Already active
+    const randomPhilosopher = getRandomAuthor();
+    setPhilosopherMode(randomPhilosopher);
+    setShowPhilosopherActivated(true);
+    // Switch to a quote from this philosopher
+    setCurrentQuote(getTodaysQuoteByAuthor(randomPhilosopher));
+  }, [philosopherMode]);
+
+  useKonamiCode(handleKonamiCode);
 
   // Keyboard shortcut handlers
   const handleKeyboardSave = useCallback(async () => {
@@ -113,7 +129,10 @@ export default function Home() {
   const handleAnother = async () => {
     if (remainingPulls <= 0) return;
 
-    const newQuote = getRandomQuote(currentQuote.id);
+    // Use philosopher-specific quotes if in philosopher mode
+    const newQuote = philosopherMode
+      ? getRandomQuoteByAuthor(philosopherMode, currentQuote.id)
+      : getRandomQuote(currentQuote.id);
     setCurrentQuote(newQuote);
     setShowReflection(false);
 
@@ -172,6 +191,12 @@ export default function Home() {
         onClose={() => setShowShortcutsHelp(false)}
         context="home"
       />
+      {showPhilosopherActivated && philosopherMode && (
+        <PhilosopherModeActivated
+          philosopher={philosopherMode}
+          onDismiss={() => setShowPhilosopherActivated(false)}
+        />
+      )}
     </>
   );
 }
