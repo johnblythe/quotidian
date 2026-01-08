@@ -1,0 +1,344 @@
+{
+  "project": "Quotidian",
+  "branchName": "ralph/v1.5-sync",
+  "description": "V1.5: Sync & Sharing - Accounts, cross-device sync, share cards, email digest",
+  "userStories": [
+    {
+      "id": "US-S01",
+      "title": "Set up Supabase project and auth",
+      "description": "As a developer, I need Supabase configured for auth and data.",
+      "acceptanceCriteria": [
+        "Create Supabase project",
+        "Install @supabase/supabase-js",
+        "Create src/lib/supabase.ts with client initialization",
+        "Configure environment variables (NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY)",
+        "Add .env.local to .gitignore",
+        "npm run typecheck passes"
+      ],
+      "priority": 1,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-S02",
+      "title": "Create account settings page",
+      "description": "As a user, I want to manage my account.",
+      "acceptanceCriteria": [
+        "Create src/app/account/page.tsx",
+        "Show signed-out state with sign-in prompt",
+        "Show signed-in state with email and sign-out button",
+        "Add link in navigation or settings",
+        "npm run typecheck passes"
+      ],
+      "priority": 2,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-S03",
+      "title": "Implement magic link sign-in flow",
+      "description": "As a user, I want to sign in without a password.",
+      "acceptanceCriteria": [
+        "Email input field on account page",
+        "Send magic link button",
+        "Call Supabase auth.signInWithOtp({ email })",
+        "Show 'Check your email' message after sending",
+        "Handle magic link callback in app",
+        "npm run typecheck passes"
+      ],
+      "priority": 3,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-S04",
+      "title": "Implement sign-out flow",
+      "description": "As a user, I want to sign out.",
+      "acceptanceCriteria": [
+        "Sign out button on account page",
+        "Call Supabase auth.signOut()",
+        "Clear any cached auth state",
+        "Redirect to account page showing signed-out state",
+        "Local data remains intact",
+        "npm run typecheck passes"
+      ],
+      "priority": 4,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-S05",
+      "title": "Show signed-in state throughout app",
+      "description": "As a user, I want to see my signed-in status.",
+      "acceptanceCriteria": [
+        "Create useAuth hook to track auth state",
+        "Show sync indicator in navigation when signed in",
+        "Update account page dynamically on auth change",
+        "npm run typecheck passes"
+      ],
+      "priority": 5,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-S06",
+      "title": "Create Supabase schema (tables, RLS)",
+      "description": "As a developer, I need database tables for sync.",
+      "acceptanceCriteria": [
+        "Create preferences table (user_id, name, notification_time, etc.)",
+        "Create journal_entries table (user_id, quote_id, content, timestamps)",
+        "Create favorites table (user_id, quote_id, saved_at)",
+        "Create quote_history table (user_id, quote_id, shown_at)",
+        "Create signals table (user_id, quote_id, signal, timestamp)",
+        "Enable RLS on all tables",
+        "Create policies: users can only access their own data",
+        "npm run typecheck passes"
+      ],
+      "priority": 6,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-S07",
+      "title": "Create sync service for preferences",
+      "description": "As a signed-in user, I want my preferences synced.",
+      "acceptanceCriteria": [
+        "Create src/lib/sync/preferences.ts",
+        "pushPreferences(): upload local to Supabase",
+        "pullPreferences(): download from Supabase to local",
+        "Handle merge conflicts (last-write-wins by updated_at)",
+        "npm run typecheck passes"
+      ],
+      "priority": 7,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-S08",
+      "title": "Create sync service for journal entries",
+      "description": "As a signed-in user, I want my reflections synced.",
+      "acceptanceCriteria": [
+        "Create src/lib/sync/journal.ts",
+        "pushJournalEntries(): upload local to Supabase",
+        "pullJournalEntries(): download from Supabase to local",
+        "Handle merge conflicts (last-write-wins)",
+        "npm run typecheck passes"
+      ],
+      "priority": 8,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-S09",
+      "title": "Create sync service for favorites",
+      "description": "As a signed-in user, I want my favorites synced.",
+      "acceptanceCriteria": [
+        "Create src/lib/sync/favorites.ts",
+        "pushFavorites(): upload local to Supabase",
+        "pullFavorites(): download from Supabase to local",
+        "Handle add/remove correctly",
+        "npm run typecheck passes"
+      ],
+      "priority": 9,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-S10",
+      "title": "Create sync service for quote history",
+      "description": "As a signed-in user, I want my history synced.",
+      "acceptanceCriteria": [
+        "Create src/lib/sync/history.ts",
+        "pushHistory(): upload local to Supabase",
+        "pullHistory(): download from Supabase to local",
+        "Deduplicate on sync",
+        "npm run typecheck passes"
+      ],
+      "priority": 10,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-S11",
+      "title": "Implement offline queue for pending syncs",
+      "description": "As a user, I want changes saved when offline.",
+      "acceptanceCriteria": [
+        "Create pending_syncs table in IndexedDB",
+        "Queue changes when offline",
+        "Process queue when online",
+        "Show sync indicator when queue not empty",
+        "npm run typecheck passes"
+      ],
+      "priority": 11,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-S12",
+      "title": "Implement conflict resolution (last-write-wins)",
+      "description": "As a user, I don't want to lose data on sync conflicts.",
+      "acceptanceCriteria": [
+        "Compare updated_at timestamps on conflicts",
+        "Keep newer version",
+        "Log conflicts for debugging",
+        "No user-facing merge dialogs (automatic)",
+        "npm run typecheck passes"
+      ],
+      "priority": 12,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-S13",
+      "title": "Create share card generator (canvas)",
+      "description": "As a developer, I need to generate share images.",
+      "acceptanceCriteria": [
+        "Create src/lib/shareCard.ts",
+        "generateShareCard(quote): returns Blob",
+        "Canvas size: 1200x630 (social preview)",
+        "Background: #fafaf8",
+        "Quote text in serif, centered",
+        "Author attribution below",
+        "quotidian.app branding at bottom",
+        "npm run typecheck passes"
+      ],
+      "priority": 13,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-S14",
+      "title": "Add share button to quote display",
+      "description": "As a user, I want to share quotes.",
+      "acceptanceCriteria": [
+        "Add share icon button to action buttons",
+        "Clicking opens share options modal",
+        "Generate share card on demand",
+        "npm run typecheck passes"
+      ],
+      "priority": 14,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-S15",
+      "title": "Implement copy to clipboard",
+      "description": "As a user, I want to copy the share image.",
+      "acceptanceCriteria": [
+        "Copy image to clipboard button",
+        "Use Clipboard API with blob",
+        "Show success toast",
+        "Handle browsers that don't support image clipboard",
+        "npm run typecheck passes"
+      ],
+      "priority": 15,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-S16",
+      "title": "Implement download as PNG",
+      "description": "As a user, I want to download the share image.",
+      "acceptanceCriteria": [
+        "Download button in share modal",
+        "Downloads PNG with filename: quotidian-[quote-id].png",
+        "Works on mobile and desktop",
+        "npm run typecheck passes"
+      ],
+      "priority": 16,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-S17",
+      "title": "Implement native share (Web Share API)",
+      "description": "As a mobile user, I want to use native sharing.",
+      "acceptanceCriteria": [
+        "Detect Web Share API support",
+        "Share button uses native share sheet when available",
+        "Share includes image and quote text",
+        "Fallback to copy/download on unsupported browsers",
+        "npm run typecheck passes"
+      ],
+      "priority": 17,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-S18",
+      "title": "Set up Resend integration",
+      "description": "As a developer, I need email sending capability.",
+      "acceptanceCriteria": [
+        "Create Resend account",
+        "Add RESEND_API_KEY to environment",
+        "Create src/lib/email.ts with send function",
+        "Verify sending works with test email",
+        "npm run typecheck passes"
+      ],
+      "priority": 18,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-S19",
+      "title": "Create digest email template",
+      "description": "As a developer, I need an email template for weekly digest.",
+      "acceptanceCriteria": [
+        "Create email template with React Email or HTML",
+        "Include: greeting, favorite quote of week, reflection highlight, CTA",
+        "Matches app aesthetic",
+        "Responsive for email clients",
+        "npm run typecheck passes"
+      ],
+      "priority": 19,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-S20",
+      "title": "Create Supabase Edge Function for weekly send",
+      "description": "As a user with digest enabled, I want weekly emails.",
+      "acceptanceCriteria": [
+        "Create Supabase Edge Function",
+        "Cron: every Sunday 8am UTC",
+        "Query users with digest enabled",
+        "Fetch their week's data",
+        "Send personalized email via Resend",
+        "npm run typecheck passes"
+      ],
+      "priority": 20,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-S21",
+      "title": "Add digest settings toggle",
+      "description": "As a user, I want to enable/disable email digest.",
+      "acceptanceCriteria": [
+        "Add toggle in settings: 'Send weekly digest'",
+        "Requires signed-in account",
+        "Show email that will receive digest",
+        "Save preference to Supabase",
+        "npm run typecheck passes"
+      ],
+      "priority": 21,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-S22",
+      "title": "Implement unsubscribe flow",
+      "description": "As a user, I want to unsubscribe from emails.",
+      "acceptanceCriteria": [
+        "Include unsubscribe link in email footer",
+        "Link goes to /unsubscribe?token=xxx",
+        "Validates token and disables digest",
+        "Shows confirmation page",
+        "npm run typecheck passes"
+      ],
+      "priority": 22,
+      "passes": false,
+      "notes": ""
+    }
+  ]
+}
