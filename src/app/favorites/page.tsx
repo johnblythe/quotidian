@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { getFavorites } from "@/lib/favorites";
 import { getQuoteById } from "@/lib/quotes";
 import { Quote } from "@/components/Quote";
+import { PageTransition } from "@/components/PageTransition";
 import type { Quote as QuoteType, FavoriteQuote } from "@/types";
 
 interface FavoriteItem {
@@ -61,35 +62,37 @@ export default function FavoritesPage() {
   }
 
   return (
-    <div className="min-h-screen py-8 px-4">
-      <div className="max-w-2xl mx-auto">
-        <h1 className="quote-text text-2xl text-center mb-8 text-foreground/80">
-          Favorites
-        </h1>
+    <PageTransition>
+      <div className="min-h-screen py-8 px-4">
+        <div className="max-w-2xl mx-auto">
+          <h1 className="quote-text text-2xl text-center mb-8 text-foreground/80">
+            Favorites
+          </h1>
 
-        <div className="space-y-8">
-          {items.map((item) => (
-            <article
-              key={item.favorite.id}
-              className="border-b border-foreground/10 pb-6"
-            >
-              {item.quote ? (
-                <Quote quote={item.quote} />
-              ) : (
-                <p className="body-text text-foreground/40 italic mb-2 text-center py-8">
-                  Quote no longer available
-                </p>
-              )}
+          <div className="space-y-8">
+            {items.map((item) => (
+              <article
+                key={item.favorite.id}
+                className="border-b border-foreground/10 pb-6"
+              >
+                {item.quote ? (
+                  <Quote quote={item.quote} />
+                ) : (
+                  <p className="body-text text-foreground/40 italic mb-2 text-center py-8">
+                    Quote no longer available
+                  </p>
+                )}
 
-              <div className="text-center text-sm text-foreground/40 body-text mt-2">
-                <time dateTime={new Date(item.favorite.savedAt).toISOString()}>
-                  Saved {formatDate(item.favorite.savedAt)}
-                </time>
-              </div>
-            </article>
-          ))}
+                <div className="text-center text-sm text-foreground/40 body-text mt-2">
+                  <time dateTime={new Date(item.favorite.savedAt).toISOString()}>
+                    Saved {formatDate(item.favorite.savedAt)}
+                  </time>
+                </div>
+              </article>
+            ))}
+          </div>
         </div>
       </div>
-    </div>
+    </PageTransition>
   );
 }

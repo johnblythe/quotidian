@@ -6,6 +6,7 @@ import { Onboarding } from "@/components/Onboarding";
 import { Greeting } from "@/components/Greeting";
 import { ActionButtons } from "@/components/ActionButtons";
 import { ReflectionEditor } from "@/components/ReflectionEditor";
+import { PageTransition } from "@/components/PageTransition";
 import { getTodaysQuote, getRandomQuote } from "@/lib/quotes";
 import { getPreferences } from "@/lib/preferences";
 import { isFavorite, addFavorite, removeFavorite } from "@/lib/favorites";
@@ -98,22 +99,24 @@ export default function Home() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center">
-      <main className="w-full">
-        {userName && <Greeting name={userName} />}
-        <Quote quote={currentQuote} />
-        <ActionButtons
-          onSave={handleSave}
-          onReflect={handleReflect}
-          onAnother={handleAnother}
-          isSaved={isSaved}
-          isReflecting={showReflection}
-          remainingPulls={remainingPulls}
-        />
-        {showReflection && (
-          <ReflectionEditor quoteId={currentQuote.id} />
-        )}
-      </main>
-    </div>
+    <PageTransition>
+      <div className="flex min-h-screen items-center justify-center">
+        <main className="w-full">
+          {userName && <Greeting name={userName} />}
+          <Quote quote={currentQuote} />
+          <ActionButtons
+            onSave={handleSave}
+            onReflect={handleReflect}
+            onAnother={handleAnother}
+            isSaved={isSaved}
+            isReflecting={showReflection}
+            remainingPulls={remainingPulls}
+          />
+          {showReflection && (
+            <ReflectionEditor quoteId={currentQuote.id} />
+          )}
+        </main>
+      </div>
+    </PageTransition>
   );
 }

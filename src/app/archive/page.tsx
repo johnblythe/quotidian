@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { getQuoteHistory } from "@/lib/history";
 import { getJournalEntry } from "@/lib/journal";
 import { getQuoteById } from "@/lib/quotes";
+import { PageTransition } from "@/components/PageTransition";
 import type { Quote, QuoteHistory, JournalEntry } from "@/types";
 
 interface ArchiveItem {
@@ -78,47 +79,49 @@ export default function ArchivePage() {
   }
 
   return (
-    <div className="min-h-screen py-8 px-4">
-      <div className="max-w-2xl mx-auto">
-        <h1 className="quote-text text-2xl text-center mb-8 text-foreground/80">
-          Archive
-        </h1>
+    <PageTransition>
+      <div className="min-h-screen py-8 px-4">
+        <div className="max-w-2xl mx-auto">
+          <h1 className="quote-text text-2xl text-center mb-8 text-foreground/80">
+            Archive
+          </h1>
 
-        <div className="space-y-6">
-          {items.map((item) => (
-            <article
-              key={item.history.id}
-              className="border-b border-foreground/10 pb-6"
-            >
-              {item.quote ? (
-                <>
-                  <blockquote className="quote-text text-lg mb-3">
-                    "{item.quote.text}"
-                  </blockquote>
-                  <p className="body-text text-foreground/60 text-sm mb-2">
-                    — {item.quote.author}
+          <div className="space-y-6">
+            {items.map((item) => (
+              <article
+                key={item.history.id}
+                className="border-b border-foreground/10 pb-6"
+              >
+                {item.quote ? (
+                  <>
+                    <blockquote className="quote-text text-lg mb-3">
+                      "{item.quote.text}"
+                    </blockquote>
+                    <p className="body-text text-foreground/60 text-sm mb-2">
+                      — {item.quote.author}
+                    </p>
+                  </>
+                ) : (
+                  <p className="body-text text-foreground/40 italic mb-2">
+                    Quote no longer available
                   </p>
-                </>
-              ) : (
-                <p className="body-text text-foreground/40 italic mb-2">
-                  Quote no longer available
-                </p>
-              )}
-
-              <div className="flex items-center justify-between text-sm text-foreground/40 body-text">
-                <time dateTime={new Date(item.history.shownAt).toISOString()}>
-                  {formatDate(item.history.shownAt)}
-                </time>
-                {item.reflection && (
-                  <span className="text-foreground/50 italic ml-4 text-right flex-1">
-                    {truncateReflection(item.reflection.content)}
-                  </span>
                 )}
-              </div>
-            </article>
-          ))}
+
+                <div className="flex items-center justify-between text-sm text-foreground/40 body-text">
+                  <time dateTime={new Date(item.history.shownAt).toISOString()}>
+                    {formatDate(item.history.shownAt)}
+                  </time>
+                  {item.reflection && (
+                    <span className="text-foreground/50 italic ml-4 text-right flex-1">
+                      {truncateReflection(item.reflection.content)}
+                    </span>
+                  )}
+                </div>
+              </article>
+            ))}
+          </div>
         </div>
       </div>
-    </div>
+    </PageTransition>
   );
 }

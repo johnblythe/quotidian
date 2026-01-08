@@ -39,3 +39,29 @@ body {
   font-size: 1rem;
   line-height: 1.6;
 }
+
+/* Page transition animations */
+.page-transition {
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 200ms ease-out, transform 200ms ease-out;
+}
+
+.page-transition-enter {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Respect reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .page-transition {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .page-transition-enter {
+    opacity: 1;
+    transform: none;
+  }
+}
