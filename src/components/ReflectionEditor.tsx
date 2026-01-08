@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useRef, useEffect, useMemo } from "react";
+import { useState, useRef, useEffect, useMemo, useCallback } from "react";
+import { saveJournalEntry, getJournalEntry } from "@/lib/journal";
 
 interface ReflectionEditorProps {
   quoteId: string;
@@ -26,10 +27,62 @@ export function ReflectionEditor({
   onSave,
 }: ReflectionEditorProps) {
   const [content, setContent] = useState(initialContent);
+  const [showSaved, setShowSaved] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const debounceRef = useRef<NodeJS.Timeout | null>(null);
+  const savedTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const editorState = useMemo(() => getEditorState(content.length), [content.length]);
   const wordCount = useMemo(() => countWords(content), [content]);
+
+  // Load existing entry on mount
+  useEffect(() => {
+    async function loadEntry() {
+      const entry = await getJournalEntry(quoteId);
+      if (entry) {
+        setContent(entry.content);
+      }
+      setIsLoaded(true);
+    }
+    loadEntry();
+  }, [quoteId]);
+
+  // Debounced save function
+  const debouncedSave = useCallback(
+    (newContent: string) => {
+      // Clear existing timeout
+      if (debounceRef.current) {
+        clearTimeout(debounceRef.current);
+      }
+
+      debounceRef.current = setTimeout(async () => {
+        await saveJournalEntry(quoteId, newContent);
+
+        // Show saved indicator
+        setShowSaved(true);
+
+        // Clear any existing saved timeout
+        if (savedTimeoutRef.current) {
+          clearTimeout(savedTimeoutRef.current);
+        }
+
+        // Hide saved indicator after 2 seconds
+        savedTimeoutRef.current = setTimeout(() => {
+          setShowSaved(false);
+        }, 2000);
+      }, 1000); // 1 second debounce
+    },
+    [quoteId]
+  );
+
+  // Cleanup timeouts on unmount
+  useEffect(() => {
+    return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+      if (savedTimeoutRef.current) clearTimeout(savedTimeoutRef.current);
+    };
+  }, []);
 
   // Auto-grow textarea with content
   useEffect(() => {
@@ -44,6 +97,7 @@ export function ReflectionEditor({
     const newContent = e.target.value;
     setContent(newContent);
     onSave?.(newContent);
+    debouncedSave(newContent);
   };
 
   return (
@@ -74,12 +128,21 @@ export function ReflectionEditor({
         }`}
         data-quote-id={quoteId}
       />
-      <div
-        className={`text-right text-sm text-foreground/40 transition-opacity duration-300 ${
-          editorState === "focused" ? "opacity-100" : "opacity-0"
-        }`}
-      >
-        {wordCount} {wordCount === 1 ? "word" : "words"}
+      <div className="flex justify-between items-center text-sm text-foreground/40">
+        <span
+          className={`transition-opacity duration-300 ${
+            showSaved ? "opacity-100" : "opacity-0"
+          }`}
+        >
+          Saved
+        </span>
+        <span
+          className={`transition-opacity duration-300 ${
+            editorState === "focused" ? "opacity-100" : "opacity-0"
+          }`}
+        >
+          {wordCount} {wordCount === 1 ? "word" : "words"}
+        </span>
       </div>
     </div>
   );
