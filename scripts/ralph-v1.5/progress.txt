@@ -7,6 +7,10 @@ Started: 2026-01-08
 - Lib files use JSDoc comments for exports
 - Page styling: PageTransition wrapper, max-w-md mx-auto, font-serif for headings
 - Navigation is at bottom (mobile) / top (desktop) - already has 5 items, add new links in settings instead
+- Auth state: use useAuth() hook from src/hooks/useAuth.ts - returns user, isLoading, isSignedIn, isSupabaseConfigured
+- Supabase types in src/types/supabase.ts - SupabasePreferences, SupabaseJournalEntry, etc.
+- Schema migration in supabase/migrations/001_initial_schema.sql
+- Sync services in src/lib/sync/ - use upsert with onConflict for atomic operations
 
 ---
 
@@ -57,4 +61,63 @@ Started: 2026-01-08
   - Sign-out flow was already complete from US-S02 implementation
   - The onAuthStateChange pattern handles all auth state transitions automatically
   - No explicit redirect needed when already on account page
+---
+
+## 2026-01-08 - US-S05: Show signed-in state throughout app
+- Created src/hooks/useAuth.ts with useAuth() hook
+  - Returns user, isLoading, isSupabaseConfigured, isSignedIn
+  - Subscribes to onAuthStateChange for reactive updates
+  - Handles cleanup with mounted flag pattern
+- Updated Navigation component with SyncIndicator
+  - Green dot appears on Settings icon when signed in
+  - Uses useAuth hook to check auth state
+- Refactored account page to use useAuth hook (removes duplication)
+- **Learnings:**
+  - Reusable auth hook simplifies state management across pages
+  - Sync indicator on existing nav item better than adding new item (nav already crowded)
+  - mounted flag prevents state updates on unmounted components
+---
+
+## 2026-01-08 - US-S06: Create Supabase schema (tables, RLS)
+- Created supabase/migrations/001_initial_schema.sql with:
+  - preferences table (user settings, notification_time, digest_enabled)
+  - journal_entries table (reflections with quote_id, content, timestamps)
+  - favorites table (user_id, quote_id with unique constraint)
+  - quote_history table (quote_id, shown_at, fresh_pull flag)
+  - signals table (quote_id, signal type, themes array)
+- All tables have RLS enabled with user-scoped policies
+- Created src/types/supabase.ts with TypeScript types for all tables
+- Added updated_at trigger function for preferences and journal_entries
+- **Learnings:**
+  - Use UUID for Supabase primary keys, not auto-increment like IndexedDB
+  - UNIQUE(user_id, quote_id) prevents duplicate favorites
+  - themes stored as TEXT[] array in PostgreSQL
+  - Include digest_enabled in preferences for later email digest feature
+---
+
+## 2026-01-08 - US-S07: Create sync service for preferences
+- Created src/lib/sync/preferences.ts with:
+  - pushPreferences(): uploads local IndexedDB prefs to Supabase using upsert
+  - pullPreferences(): downloads from Supabase and merges to local using last-write-wins
+  - syncPreferences(): convenience function that pulls then pushes
+- Conversion functions between local camelCase and Supabase snake_case formats
+- Preserves digest_enabled setting when updating existing remote preferences
+- **Learnings:**
+  - Sync services live in src/lib/sync/ directory
+  - Use upsert with onConflict: 'user_id' for atomic insert-or-update
+  - PGRST116 error code means "no rows returned" - not a real error, just empty result
+  - Preserve remote-only fields (like digest_enabled) when pushing local changes
+---
+
+## 2026-01-08 - US-S08: Create sync service for journal entries
+- Created src/lib/sync/journal.ts with:
+  - pushJournalEntries(): uploads local entries to Supabase
+  - pullJournalEntries(): downloads from Supabase to local
+  - syncJournalEntries(): pulls then pushes for two-way sync
+- Uses quote_id as the unique key per user (each user has one reflection per quote)
+- Last-write-wins conflict resolution based on updated_at timestamp
+- **Learnings:**
+  - Journal entries are identified by (user_id, quote_id) tuple unlike preferences which are 1:1 with user
+  - Need to loop through all entries and compare timestamps individually
+  - Timestamps from Supabase are ISO strings, convert to Date for comparison
 ---

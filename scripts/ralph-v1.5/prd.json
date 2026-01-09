@@ -77,8 +77,8 @@
         "npm run typecheck passes"
       ],
       "priority": 5,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "useAuth hook in src/hooks/useAuth.ts. Green dot indicator on Settings nav item when signed in. Account page refactored to use useAuth hook."
     },
     {
       "id": "US-S06",
@@ -95,8 +95,8 @@
         "npm run typecheck passes"
       ],
       "priority": 6,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Schema in supabase/migrations/001_initial_schema.sql. TypeScript types in src/types/supabase.ts. All tables have RLS with user-scoped policies."
     },
     {
       "id": "US-S07",
@@ -110,8 +110,8 @@
         "npm run typecheck passes"
       ],
       "priority": 7,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Sync service at src/lib/sync/preferences.ts. Functions: pushPreferences(), pullPreferences(), syncPreferences(). Uses upsert with last-write-wins based on updated_at timestamp. Preserves digest_enabled setting when updating existing remote."
     },
     {
       "id": "US-S08",
@@ -125,8 +125,8 @@
         "npm run typecheck passes"
       ],
       "priority": 8,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Sync service at src/lib/sync/journal.ts. Push/pull/sync functions with last-write-wins conflict resolution based on updated_at timestamp. Uses quote_id as unique key per user."
     },
     {
       "id": "US-S09",
