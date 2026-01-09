@@ -1,8 +1,10 @@
 import { db } from '@/lib/db';
+import { recordSignal } from '@/lib/signals';
 import type { FavoriteQuote } from '@/types';
 
 /**
  * Add a quote to favorites
+ * Records 'favorite' signal (weight: +3)
  */
 export async function addFavorite(quoteId: string): Promise<void> {
   // Check if already favorited
@@ -13,13 +15,20 @@ export async function addFavorite(quoteId: string): Promise<void> {
     quoteId,
     savedAt: new Date(),
   });
+
+  // Record favorite signal for algorithm
+  await recordSignal(quoteId, 'favorite');
 }
 
 /**
  * Remove a quote from favorites
+ * Records 'unfavorited' signal (weight: -2)
  */
 export async function removeFavorite(quoteId: string): Promise<void> {
   await db.favorites.where('quoteId').equals(quoteId).delete();
+
+  // Record unfavorited signal for algorithm
+  await recordSignal(quoteId, 'unfavorited');
 }
 
 /**

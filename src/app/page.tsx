@@ -157,6 +157,9 @@ export default function Home() {
   const handleAnother = async () => {
     if (remainingPulls <= 0) return;
 
+    // Capture the current quote ID before changing
+    const rejectedQuoteId = currentQuote.id;
+
     // Use philosopher-specific quotes if in philosopher mode
     const newQuote = philosopherMode
       ? getRandomQuoteByAuthor(philosopherMode, currentQuote.id)
@@ -164,8 +167,8 @@ export default function Home() {
     setCurrentQuote(newQuote);
     setShowReflection(false);
 
-    // Record the fresh pull and decrement remaining
-    await incrementFreshPulls(newQuote.id);
+    // Record the fresh pull and 'another' signal for rejected quote
+    await incrementFreshPulls(newQuote.id, rejectedQuoteId);
     setRemainingPulls((prev) => Math.max(0, prev - 1));
   };
 
