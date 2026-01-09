@@ -74,3 +74,9 @@ export interface Signal {
   timestamp: Date;
   themes: Theme[];
 }
+
+/** Theme affinity score for algorithm */
+export interface ThemeAffinity {
+  theme: Theme;
+  score: number;
+}
