@@ -117,3 +117,22 @@ Started: 2026-01-08
   - Use `getSupabase()` not `createClient` - check for null before querying
   - Follow FavoritesPage pattern for page structure: loading → empty → content states
 ---
+
+## 2026-01-08 - US-C07: Create Collection detail page
+- Created `src/app/collections/[id]/page.tsx`:
+  - Dynamic route with useParams to get collection ID
+  - Fetches collection from Supabase (RLS handles access control)
+  - Shows collection title with visibility icon (lock/globe)
+  - Shows optional description and quote count
+  - Lists all quotes using Quote component from src/components/Quote.tsx
+  - Uses getQuoteById from src/lib/quotes.ts to resolve quote_ids to Quote objects
+  - Error state for not found / private collections
+  - Empty state for collections with no quotes
+  - Loading skeleton while fetching
+  - "Back to collections" link at bottom
+- **Learnings:**
+  - Dynamic routes: use `useParams()` from next/navigation, cast to string
+  - RLS automatically filters - if collection not found, could be private or deleted
+  - Supabase error code "PGRST116" = row not found in .single() query
+  - Track isOwner via `user?.id === collection.user_id` for conditional UI
+---

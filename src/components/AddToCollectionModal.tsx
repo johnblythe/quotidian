@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { getSupabase } from "@/lib/supabase";
 import { useAuth } from "@/hooks/useAuth";
+import { addQuoteToCollection } from "@/lib/collections";
 import type { Collection, CollectionVisibility } from "@/types";
 
 interface AddToCollectionModalProps {
@@ -148,7 +149,7 @@ export function AddToCollectionModal({
     const collection = collections.find((c) => c.id === selectedId);
     if (!collection) return;
 
-    // Check if quote already in collection
+    // Check if quote already in collection (local check for immediate feedback)
     if (collection.quote_ids.includes(quoteId)) {
       setError("Quote is already in this collection");
       return;
@@ -157,28 +158,16 @@ export function AddToCollectionModal({
     setIsSaving(true);
     setError(null);
 
-    const supabase = getSupabase();
-    if (!supabase) {
-      setError("Supabase not configured");
-      setIsSaving(false);
-      return;
-    }
+    const result = await addQuoteToCollection(selectedId, quoteId);
 
-    const updatedQuoteIds = [...collection.quote_ids, quoteId];
-
-    const { error: updateError } = await supabase
-      .from("collections")
-      .update({ quote_ids: updatedQuoteIds })
-      .eq("id", selectedId);
-
-    if (updateError) {
-      console.error("Failed to add quote to collection:", updateError);
-      setError("Failed to add quote to collection");
+    if (!result.success) {
+      setError(result.error || "Failed to add quote to collection");
       setIsSaving(false);
       return;
     }
 
     // Update local state
+    const updatedQuoteIds = [...collection.quote_ids, quoteId];
     setCollections((prev) =>
       prev.map((c) =>
         c.id === selectedId ? { ...c, quote_ids: updatedQuoteIds } : c

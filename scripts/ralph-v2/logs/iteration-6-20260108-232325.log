@@ -1,0 +1,17 @@
+There are still 14 stories with `passes: false`. US-C06 is now complete:
+
+**Summary - US-C06: Create My Collections page**
+
+Implemented:
+- Created `src/app/collections/page.tsx` with:
+  - User's collections list showing title, quote count, visibility icon
+  - Follower count display for public collections
+  - Links to collection detail pages
+  - Sign-in prompt, empty state, and loading skeleton
+- Added Collections link to Navigation between Favorites and Journeys
+
+Files changed:
+- `src/app/collections/page.tsx` (new)
+- `src/components/Navigation.tsx` (modified)
+- `scripts/ralph-v2/prd.json` (US-C06 passes: true)
+- `scripts/ralph-v2/progress.txt` (progress entry added)
