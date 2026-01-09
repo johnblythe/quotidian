@@ -2,6 +2,42 @@
 
 All notable changes to Quotidian will be documented in this file.
 
+## [1.5.0] - 2026-01-08
+
+### Added
+
+#### Authentication & Accounts
+- Supabase integration for auth and data
+- Magic link sign-in (passwordless)
+- Account settings page
+- Sign-out flow
+- Signed-in state indicators throughout app
+
+#### Cross-Device Sync
+- Supabase database schema with Row Level Security (RLS)
+- Sync service for preferences
+- Sync service for journal entries
+- Sync service for favorites
+- Sync service for quote history
+- Offline queue for pending syncs
+- Conflict resolution (last-write-wins)
+
+#### Sharing
+- Share card generator (canvas-based)
+- Share button on quote display
+- Copy to clipboard
+- Download as PNG
+- Native share via Web Share API
+
+#### Email Digest
+- Resend integration for transactional email
+- Weekly digest email template
+- Supabase Edge Function for scheduled sends
+- Digest settings toggle in preferences
+- Unsubscribe flow
+
+---
+
 ## [1.0.0] - 2026-01-08
 
 ### Added

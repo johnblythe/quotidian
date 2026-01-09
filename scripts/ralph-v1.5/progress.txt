@@ -366,3 +366,26 @@ Started: 2026-01-08
   - Create preferences row if it doesn't exist when toggling digest (user may sign in before syncing)
   - Show user email in settings so they know where digest will be sent
 ---
+
+## 2026-01-08 - US-S22: Implement unsubscribe flow
+- Created src/lib/unsubscribe.ts with token utilities:
+  - generateUnsubscribeToken(): base64 encodes user ID
+  - decodeUnsubscribeToken(): decodes token to user ID
+  - isValidUnsubscribeToken(): validates token decodes to UUID format
+- Created API route POST /api/unsubscribe:
+  - Validates token format and decodes user ID
+  - Uses SUPABASE_SERVICE_ROLE_KEY to bypass RLS
+  - Updates preferences.digest_enabled to false
+- Created /unsubscribe page with Suspense boundary:
+  - Uses useSearchParams() to get token from URL
+  - Calls API to process unsubscription
+  - Shows 4 states: loading, success, error, invalid
+  - Success shows confirmation with link back to app
+  - Error/invalid states direct user to Settings
+- Edge Function already generates unsubscribe URLs with btoa(userId) token
+- **Learnings:**
+  - useSearchParams() requires Suspense boundary in Next.js 14+ for static builds
+  - API routes can use service role key for admin operations
+  - Token validation should check UUID format for security
+  - Unsubscribe API needs service role key (not anon key) to update any user's preferences
+---
