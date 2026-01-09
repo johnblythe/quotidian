@@ -379,3 +379,26 @@ Started: 2026-01-08
   - Show informative message when blocked (existing journey) vs hiding button entirely
   - Navigate to home after starting journey so user sees first quote
 ---
+
+## 2026-01-09 - US-C20: Implement collection-based journey flow
+- Modified `src/lib/quotes.ts`:
+  - Added `getCollectionQuote(quoteIds, excludeIds)` function
+  - Returns quotes in order from collection's quote_ids (not random like preset journeys)
+  - Returns null when all quotes shown to trigger completion
+- Modified `src/app/page.tsx`:
+  - Imported `getCollectionQuote` and `getCollection` from libs
+  - Added `journeyCollection` state to store collection for collection journeys
+  - Updated checkOnboarding to detect collection-based journeys via `journey.type === 'collection'`
+  - Collection journeys: fetch collection from Supabase, get quote from quote_ids in order
+  - Handle deleted collections gracefully by ending the journey
+  - Added collection-specific JourneyHeader with 📚 emoji and collection title
+  - Added collection-specific JourneyCompletion dialog
+  - Updated exit confirmation dialog to show collection title when applicable
+  - Clear `journeyCollection` state in exit/completion handlers
+- Files changed: `src/lib/quotes.ts`, `src/app/page.tsx`
+- **Learnings:**
+  - Collection journeys show quotes in order (deterministic), preset journeys are random within filter
+  - Both journey types share same completion UI (JourneyCompletion) but with different emoji/title
+  - Handle "collection deleted while journey active" case by calling deleteActiveJourney()
+  - journeyDefinition and journeyCollection are mutually exclusive - one is null when other is set
+---
