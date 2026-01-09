@@ -92,3 +92,14 @@ export interface UserJourney {
   day: number; // Current day in the journey (1-indexed)
   quotesShown: string[]; // Array of quote IDs shown during this journey
 }
+
+/** Journey definition for curated quote sequences */
+export interface JourneyDefinition {
+  id: string;
+  title: string;
+  description: string;
+  emoji: string;
+  duration: number; // Number of days
+  filterType: 'author' | 'authors' | 'theme';
+  filterValue: string | string[]; // Author name(s) or theme
+}
