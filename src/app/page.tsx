@@ -32,6 +32,7 @@ const PhilosopherModeActivated = dynamic(() => import("@/components/PhilosopherM
 const Confetti = dynamic(() => import("@/components/Confetti").then(mod => ({ default: mod.Confetti })), { ssr: false });
 const PersonalizationUnlocked = dynamic(() => import("@/components/PersonalizationUnlocked").then(mod => ({ default: mod.PersonalizationUnlocked })), { ssr: false });
 const JourneyCompletion = dynamic(() => import("@/components/JourneyCompletion").then(mod => ({ default: mod.JourneyCompletion })), { ssr: false });
+const ShareModal = dynamic(() => import("@/components/ShareModal").then(mod => ({ default: mod.ShareModal })), { ssr: false });
 
 type PageState = "loading" | "onboarding" | "quote";
 
@@ -51,6 +52,7 @@ export default function Home() {
   const [journeyDefinition, setJourneyDefinition] = useState<JourneyDefinition | null>(null);
   const [showExitConfirmation, setShowExitConfirmation] = useState(false);
   const [showJourneyCompletion, setShowJourneyCompletion] = useState(false);
+  const [showShareModal, setShowShareModal] = useState(false);
   const { showToast } = useToast();
 
   // Konami code easter egg
@@ -225,6 +227,10 @@ export default function Home() {
     setShowReflection((prev) => !prev);
   };
 
+  const handleShare = () => {
+    setShowShareModal(true);
+  };
+
   const handleAnother = async () => {
     if (remainingPulls <= 0) return;
 
@@ -320,6 +326,7 @@ export default function Home() {
               onSave={handleSave}
               onReflect={handleReflect}
               onAnother={handleAnother}
+              onShare={handleShare}
               isSaved={isSaved}
               isReflecting={showReflection}
               remainingPulls={remainingPulls}
@@ -382,6 +389,11 @@ export default function Home() {
           onStartAnother={handleStartAnotherJourney}
         />
       )}
+      <ShareModal
+        quote={currentQuote}
+        isOpen={showShareModal}
+        onClose={() => setShowShareModal(false)}
+      />
     </>
   );
 }

@@ -1,0 +1,10 @@
+There are still 10 stories with `passes: false`. US-S12 is complete. The next iteration will pick up US-S13 (Create share card generator).
+
+**Summary of US-S12 completion:**
+- Created `src/lib/sync/conflicts.ts` - centralized conflict resolution module with:
+  - `resolveConflict()` - compares timestamps and logs conflicts
+  - `getConflictLog()` - returns recent conflicts for debugging
+  - `getConflictSummary()` - aggregate stats
+- Updated `src/lib/sync/preferences.ts` and `src/lib/sync/journal.ts` to use the new module
+- All conflicts are resolved automatically (last-write-wins) with debug logging
+- No user-facing merge dialogs needed
