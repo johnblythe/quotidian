@@ -31,8 +31,8 @@
         "npm run typecheck passes"
       ],
       "priority": 2,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Account page at /account. Link added to settings page. Shows 3 states: Supabase not configured, signed out, signed in."
     },
     {
       "id": "US-S03",
@@ -47,8 +47,8 @@
         "npm run typecheck passes"
       ],
       "priority": 3,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Sign-in page at /account/signin. Callback handler at /account/callback parses URL hash for tokens."
     },
     {
       "id": "US-S04",
@@ -63,8 +63,8 @@
         "npm run typecheck passes"
       ],
       "priority": 4,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "SignOutButton component already implemented in US-S02. Uses onAuthStateChange to auto-update UI on sign-out. Local IndexedDB data untouched."
     },
     {
       "id": "US-S05",

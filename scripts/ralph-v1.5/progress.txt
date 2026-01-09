@@ -5,6 +5,8 @@ Started: 2026-01-08
 - Supabase client in src/lib/supabase.ts - uses lazy init via getSupabase() to avoid build failures
 - .gitignore allows .env*.example files for documentation
 - Lib files use JSDoc comments for exports
+- Page styling: PageTransition wrapper, max-w-md mx-auto, font-serif for headings
+- Navigation is at bottom (mobile) / top (desktop) - already has 5 items, add new links in settings instead
 
 ---
 
@@ -17,4 +19,42 @@ Started: 2026-01-08
   - Cannot throw at module init time when env vars missing - breaks build
   - Use lazy initialization pattern: getSupabase() returns null if not configured
   - .env* in .gitignore needs !.env*.example exception
+---
+
+## 2026-01-08 - US-S02: Create account settings page
+- Created src/app/account/page.tsx with three states:
+  - Supabase not configured: shows info message
+  - Signed out: shows sign-in prompt with link to /account/signin
+  - Signed in: shows email, sync status, sign-out button
+- Added "Account & Sync" link to settings page (src/app/settings/page.tsx)
+- Uses PageTransition and existing styling patterns
+- **Learnings:**
+  - Account link fits better in settings page than crowding nav bar (already 5 items)
+  - Import User type from @supabase/supabase-js for user state typing
+  - onAuthStateChange subscription returns cleanup function for useEffect
+---
+
+## 2026-01-08 - US-S03: Implement magic link sign-in flow
+- Created src/app/account/signin/page.tsx with email input form
+- Uses signInWithOtp({ email }) to send magic link
+- Shows "Check your email" success state after sending
+- Created src/app/account/callback/page.tsx for magic link redirect
+- Callback parses URL hash, detects session, redirects to /account
+- **Learnings:**
+  - signInWithOtp needs emailRedirectTo option for callback URL
+  - Supabase sends tokens in URL hash fragment (after #)
+  - getSession() auto-parses hash tokens when called
+  - Use router.replace() not push() to avoid back-nav loops
+---
+
+## 2026-01-08 - US-S04: Implement sign-out flow
+- Already fully implemented in US-S02 as part of account page
+- SignOutButton component calls supabase.auth.signOut()
+- onAuthStateChange listener auto-updates user state to null
+- UI automatically switches to signed-out state (no redirect needed - same page)
+- Local IndexedDB data not touched during sign-out
+- **Learnings:**
+  - Sign-out flow was already complete from US-S02 implementation
+  - The onAuthStateChange pattern handles all auth state transitions automatically
+  - No explicit redirect needed when already on account page
 ---

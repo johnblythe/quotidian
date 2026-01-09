@@ -1,0 +1,14 @@
+**US-S03 Complete.** 
+
+Implemented:
+- `/account/signin` page with email input and "Send magic link" button
+- Uses `signInWithOtp({ email })` to send passwordless magic link
+- Shows "Check your email" confirmation after sending
+- `/account/callback` page handles the redirect from magic link click
+- Callback auto-parses tokens from URL hash, detects session, redirects to /account
+
+Files created:
+- `src/app/account/signin/page.tsx`
+- `src/app/account/callback/page.tsx`
+
+There are still stories with `passes: false` remaining (US-S04 through US-S22).
