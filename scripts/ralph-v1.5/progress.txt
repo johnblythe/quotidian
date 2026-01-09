@@ -242,3 +242,18 @@ Started: 2026-01-08
   - Always have text fallback - image clipboard has quirky cross-browser support
   - Safari requires user gesture and may need different handling in some contexts
 ---
+
+## 2026-01-08 - US-S16: Implement download as PNG
+- Added handleDownload function to ShareModal component
+- Generates fresh PNG blob using generateShareCard()
+- Creates invisible anchor element with download attribute
+- Filename format: quotidian-{quote.id}.png
+- Triggers click, then cleans up (removes link, revokes object URL)
+- Status states: idle, downloading, success, error with icon changes
+- Works on mobile and desktop via standard anchor download pattern
+- **Learnings:**
+  - Anchor download attribute is widely supported and works on mobile
+  - Must generate fresh blob (can't use object URL from preview)
+  - Append link to body, click, then remove for reliable downloads
+  - URL.revokeObjectURL cleanup prevents memory leaks
+---

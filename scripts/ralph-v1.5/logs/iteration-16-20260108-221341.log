@@ -1,0 +1,19 @@
+There are still 6 stories with `passes: false` (US-S17 through US-S22). This iteration is complete.
+
+---
+
+**US-S16: Implement download as PNG** - Completed
+
+**Changes made:**
+- Added `handleDownload` async function to ShareModal component
+- Generates fresh PNG blob using `generateShareCard(quote)`
+- Creates invisible anchor element with `download` attribute set to `quotidian-{quote.id}.png`
+- Triggers download, then cleans up link element and revokes object URL
+- Shows status states: idle (download icon), downloading (spinner), success (checkmark), error (X icon)
+
+**UI description:**
+- Download button in share modal now fully functional
+- Shows "Download" label with download icon by default
+- Shows "Downloading..." with spinner when generating
+- Shows "Downloaded!" with checkmark on success
+- Shows "Failed" with X icon on error (auto-resets after 3s)

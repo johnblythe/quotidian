@@ -246,8 +246,8 @@
         "npm run typecheck passes"
       ],
       "priority": 16,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Download button in ShareModal generates fresh PNG blob, creates invisible anchor element with download attribute, triggers click, then cleans up. Filename format: quotidian-{quote.id}.png. Status indicators for downloading/success/error."
     },
     {
       "id": "US-S17",

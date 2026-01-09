@@ -21,6 +21,13 @@ export function ShareModal({ quote, isOpen, onClose }: ShareModalProps) {
   const [copyStatus, setCopyStatus] = useState<"idle" | "copying" | "success" | "error">("idle");
   const [copyError, setCopyError] = useState<string | null>(null);
   const [downloadStatus, setDownloadStatus] = useState<"idle" | "downloading" | "success" | "error">("idle");
+  const [shareStatus, setShareStatus] = useState<"idle" | "sharing" | "success" | "error">("idle");
+  const [shareError, setShareError] = useState<string | null>(null);
+
+  // Check if browser supports Web Share API with files
+  const supportsNativeShare = typeof navigator !== "undefined" &&
+    "share" in navigator &&
+    "canShare" in navigator;
 
   // Check if browser supports image clipboard
   const supportsClipboardImage = typeof navigator !== "undefined" &&
@@ -105,6 +112,66 @@ export function ShareModal({ quote, isOpen, onClose }: ShareModalProps) {
       console.error("Failed to download image:", err);
       setDownloadStatus("error");
       setTimeout(() => setDownloadStatus("idle"), 3000);
+    }
+  };
+
+  // Share using Web Share API (native share sheet)
+  const handleShare = async () => {
+    setShareStatus("sharing");
+    setShareError(null);
+
+    try {
+      // Generate a fresh blob for sharing
+      const blob = await generateShareCard(quote);
+      const file = new File([blob], `quotidian-${quote.id}.png`, { type: "image/png" });
+
+      // Check if this specific file type can be shared
+      const shareData: ShareData = {
+        title: "Quote from Quotidian",
+        text: `"${quote.text}" — ${quote.author}`,
+        files: [file],
+      };
+
+      // Test if the browser can share files
+      if (supportsNativeShare && navigator.canShare(shareData)) {
+        await navigator.share(shareData);
+        setShareStatus("success");
+        setTimeout(() => setShareStatus("idle"), 2000);
+      } else if (supportsNativeShare) {
+        // Try sharing without the file (text only)
+        const textShareData: ShareData = {
+          title: "Quote from Quotidian",
+          text: `"${quote.text}" — ${quote.author}\n\nvia quotidian.app`,
+        };
+
+        if (navigator.canShare(textShareData)) {
+          await navigator.share(textShareData);
+          setShareStatus("success");
+          setShareError("Shared as text (image sharing not supported on this device)");
+          setTimeout(() => {
+            setShareStatus("idle");
+            setShareError(null);
+          }, 3000);
+        } else {
+          throw new Error("Sharing not supported");
+        }
+      } else {
+        throw new Error("Web Share API not supported");
+      }
+    } catch (err) {
+      // User cancelled share is not an error
+      if (err instanceof Error && err.name === "AbortError") {
+        setShareStatus("idle");
+        return;
+      }
+
+      console.error("Failed to share:", err);
+      setShareStatus("error");
+      setShareError("Native sharing not available. Try Copy or Download instead.");
+      setTimeout(() => {
+        setShareStatus("idle");
+        setShareError(null);
+      }, 3000);
     }
   };
 
@@ -206,19 +273,25 @@ export function ShareModal({ quote, isOpen, onClose }: ShareModalProps) {
           </div>
         </div>
 
-        {/* Toast notification for copy status */}
-        {(copyStatus === "success" || copyStatus === "error") && (
+        {/* Toast notification for copy/share status */}
+        {(copyStatus === "success" || copyStatus === "error" || shareStatus === "success" || shareStatus === "error") && (
           <div className="px-4">
             <div
               className={`px-4 py-2 rounded-md text-sm text-center ${
-                copyStatus === "success"
+                (copyStatus === "success" || shareStatus === "success")
                   ? "bg-green-100 text-green-800"
                   : "bg-red-100 text-red-800"
               }`}
             >
               {copyStatus === "success" && !copyError
                 ? "Image copied to clipboard!"
-                : copyError || "Failed to copy"}
+                : copyStatus === "error"
+                ? copyError || "Failed to copy"
+                : shareStatus === "success" && !shareError
+                ? "Shared successfully!"
+                : shareStatus === "success" && shareError
+                ? shareError
+                : shareError || "Failed to share"}
             </div>
           </div>
         )}
@@ -361,27 +434,82 @@ export function ShareModal({ quote, isOpen, onClose }: ShareModalProps) {
               : "Download"}
           </button>
           <button
-            disabled={!imageUrl}
+            onClick={handleShare}
+            disabled={!imageUrl || shareStatus === "sharing"}
             className="btn-nav px-4 py-2 text-sm border border-foreground/20 rounded-md hover:bg-foreground/5 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
-            aria-label="Share (coming soon)"
-            title="Coming soon"
+            aria-label="Share"
+            title={supportsNativeShare ? "Share via system share sheet" : "Native sharing not available on this browser"}
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" />
-              <polyline points="16 6 12 2 8 6" />
-              <line x1="12" y1="2" x2="12" y2="15" />
-            </svg>
-            Share
+            {shareStatus === "sharing" ? (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="animate-spin"
+              >
+                <circle cx="12" cy="12" r="10" opacity="0.25" />
+                <path d="M12 2a10 10 0 0 1 10 10" />
+              </svg>
+            ) : shareStatus === "success" ? (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+            ) : shareStatus === "error" ? (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <line x1="15" y1="9" x2="9" y2="15" />
+                <line x1="9" y1="9" x2="15" y2="15" />
+              </svg>
+            ) : (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" />
+                <polyline points="16 6 12 2 8 6" />
+                <line x1="12" y1="2" x2="12" y2="15" />
+              </svg>
+            )}
+            {shareStatus === "sharing"
+              ? "Sharing..."
+              : shareStatus === "success"
+              ? "Shared!"
+              : shareStatus === "error"
+              ? "Failed"
+              : "Share"}
           </button>
         </div>
       </div>
