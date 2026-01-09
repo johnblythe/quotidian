@@ -122,3 +122,18 @@ export interface PendingSync {
   type: SyncType;
   createdAt: Date;
 }
+
+/** Collection visibility options */
+export type CollectionVisibility = 'private' | 'public';
+
+/** A user-curated collection of quotes */
+export interface Collection {
+  id: string;
+  user_id: string;
+  title: string;
+  description: string | null;
+  quote_ids: string[];
+  visibility: CollectionVisibility;
+  created_at: string;
+  updated_at: string;
+}

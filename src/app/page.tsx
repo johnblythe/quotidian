@@ -34,6 +34,7 @@ const Confetti = dynamic(() => import("@/components/Confetti").then(mod => ({ de
 const PersonalizationUnlocked = dynamic(() => import("@/components/PersonalizationUnlocked").then(mod => ({ default: mod.PersonalizationUnlocked })), { ssr: false });
 const JourneyCompletion = dynamic(() => import("@/components/JourneyCompletion").then(mod => ({ default: mod.JourneyCompletion })), { ssr: false });
 const ShareModal = dynamic(() => import("@/components/ShareModal").then(mod => ({ default: mod.ShareModal })), { ssr: false });
+const AddToCollectionModal = dynamic(() => import("@/components/AddToCollectionModal").then(mod => ({ default: mod.AddToCollectionModal })), { ssr: false });
 
 type PageState = "loading" | "onboarding" | "quote";
 
@@ -402,6 +403,12 @@ export default function Home() {
         quote={currentQuote}
         isOpen={showShareModal}
         onClose={() => setShowShareModal(false)}
+      />
+      <AddToCollectionModal
+        quoteId={currentQuote.id}
+        isOpen={showAddToCollectionModal}
+        onClose={() => setShowAddToCollectionModal(false)}
+        onSuccess={() => showToast("Added to collection")}
       />
     </>
   );
