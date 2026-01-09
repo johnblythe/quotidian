@@ -167,3 +167,25 @@ export function getJourneyQuote(
 
   return available[Math.floor(Math.random() * available.length)];
 }
+
+/**
+ * Get a quote for a collection-based journey
+ * Returns the next quote from the collection's quote_ids that hasn't been shown yet
+ * Shows quotes in order (first unshown quote from the list)
+ */
+export function getCollectionQuote(
+  quoteIds: string[],
+  excludeIds: string[]
+): Quote | null {
+  // Find the first quote from the collection that hasn't been shown
+  for (const quoteId of quoteIds) {
+    if (!excludeIds.includes(quoteId)) {
+      const quote = getQuoteById(quoteId);
+      if (quote) {
+        return quote;
+      }
+    }
+  }
+  // All quotes shown - return null to signal journey completion
+  return null;
+}

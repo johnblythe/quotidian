@@ -1,0 +1,8 @@
+US-C05 is complete. Let me check if there are more stories with `passes: false` - there are (US-C06 through US-C20), so the work continues in the next iteration.
+
+**Summary of US-C05:**
+- Added "+ New Collection" button to the AddToCollectionModal
+- Created inline form with title (required), description (optional), and visibility toggle (Private/Public)
+- Form saves new collection to Supabase and auto-selects it
+- Both typecheck and build pass
+- Committed changes with message: `feat: US-C05 - Create 'New collection' form`

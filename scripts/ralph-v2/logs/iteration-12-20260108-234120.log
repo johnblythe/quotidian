@@ -1,0 +1,9 @@
+**US-C12 Complete**
+
+- Created `src/app/discover/page.tsx` with "Discover Collections" header
+- Added placeholders for "Popular" and "New" sections (for US-C13/US-C14)
+- Added compass icon navigation link between Collections and Journeys
+- Typecheck and build pass
+- Committed: `feat: US-C12 - Create Discover page`
+
+There are still stories with `passes: false` (US-C13 through US-C20).

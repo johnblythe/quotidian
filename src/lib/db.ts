@@ -61,6 +61,23 @@ class QuotidianDB extends Dexie {
       engagements: '++id, &date',
       pendingSyncs: '++id, type, createdAt', // Queue for offline sync operations
     });
+
+    // Version 6: Add type and collectionId to journeys for collection-based journeys
+    this.version(6).stores({
+      preferences: '++id',
+      journalEntries: '++id, quoteId, updatedAt',
+      favorites: '++id, quoteId, savedAt',
+      quoteHistory: '++id, quoteId, shownAt',
+      signals: '++id, quoteId, signal, timestamp',
+      journeys: '++id, journeyId, startedAt, completedAt, type, collectionId',
+      engagements: '++id, &date',
+      pendingSyncs: '++id, type, createdAt',
+    }).upgrade(tx => {
+      // Migrate existing journeys to have type='preset'
+      return tx.table('journeys').toCollection().modify(journey => {
+        journey.type = 'preset';
+      });
+    });
   }
 }
 

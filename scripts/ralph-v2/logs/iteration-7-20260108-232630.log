@@ -1,0 +1,12 @@
+**US-C07 Complete!**
+
+Implemented the Collection detail page at `src/app/collections/[id]/page.tsx` with:
+- Dynamic route using `useParams()` to get collection ID
+- Collection header with title, visibility icon (lock/globe), description, and quote count
+- Full quote list using the existing `Quote` component
+- Error state for not found / inaccessible collections  
+- Empty state for collections with no quotes
+- Loading skeleton while fetching
+- Back navigation link
+
+There are still 13 stories with `passes: false` remaining (US-C08 through US-C20), so another iteration will pick up the next story.

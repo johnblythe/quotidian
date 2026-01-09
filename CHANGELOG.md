@@ -2,6 +2,32 @@
 
 All notable changes to Quotidian will be documented in this file.
 
+## [2.0.0] - 2026-01-09
+
+### Added
+
+#### Collections
+- User-curated quote bundles
+- Create, edit, delete collections
+- Add/remove quotes from collections
+- Collection visibility (public/private)
+- My Collections page
+- Collection detail page with quote list
+
+#### Discovery
+- Discover page for public collections
+- Popular collections query
+- New collections query
+- Follow/unfollow collections
+- Followed collections in My Collections
+
+#### Collection Journeys
+- Extended Journey type to support collections
+- "Start Journey" button on collection detail
+- Collection-based journey flow
+
+---
+
 ## [1.5.0] - 2026-01-08
 
 ### Added

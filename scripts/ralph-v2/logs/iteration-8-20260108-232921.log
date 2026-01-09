@@ -1,0 +1,16 @@
+US-C08 is complete. There are still stories with `passes: false` (US-C09 through US-C20), so another iteration will pick up the next story.
+
+**Summary:**
+- Created `src/lib/collections.ts` with reusable functions:
+  - `addQuoteToCollection(collectionId, quoteId)` - adds quote to collection, prevents duplicates
+  - `removeQuoteFromCollection(collectionId, quoteId)` - for future US-C09
+  - `getCollection(collectionId)` - fetch single collection
+  - `getUserCollections(userId)` - fetch all user's collections
+- Updated `AddToCollectionModal.tsx` to use the extracted function
+- All acceptance criteria met:
+  - ✅ `addQuoteToCollection(collectionId, quoteId)` function created
+  - ✅ Updates quote_ids array in Supabase
+  - ✅ Prevents duplicates (both local and server-side check)
+  - ✅ Shows success toast (via existing onSuccess callback)
+  - ✅ `npm run typecheck` and `npm run build` pass
+- Committed with: `feat: US-C08 - Implement add quote to collection`

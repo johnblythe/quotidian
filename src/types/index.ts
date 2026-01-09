@@ -84,10 +84,15 @@ export interface ThemeAffinity {
   score: number;
 }
 
+/** Journey type: preset (JSON-defined) or collection-based */
+export type JourneyType = 'preset' | 'collection';
+
 /** User's active or completed journey */
 export interface UserJourney {
   id?: number;
-  journeyId: string; // References journey definition ID
+  journeyId: string; // References journey definition ID (preset) or collection ID (collection)
+  type: JourneyType; // Type of journey
+  collectionId?: string; // Collection ID for collection-based journeys
   startedAt: Date;
   completedAt?: Date; // Undefined until journey completes
   day: number; // Current day in the journey (1-indexed)
@@ -121,4 +126,19 @@ export interface PendingSync {
   id?: number;
   type: SyncType;
   createdAt: Date;
+}
+
+/** Collection visibility options */
+export type CollectionVisibility = 'private' | 'public';
+
+/** A user-curated collection of quotes */
+export interface Collection {
+  id: string;
+  user_id: string;
+  title: string;
+  description: string | null;
+  quote_ids: string[];
+  visibility: CollectionVisibility;
+  created_at: string;
+  updated_at: string;
 }

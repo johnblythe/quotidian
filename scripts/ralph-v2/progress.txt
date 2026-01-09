@@ -1,7 +1,404 @@
 # Ralph Progress Log - v2
-Started: (pending)
+Started: 2026-01-08
 
 ## Codebase Patterns
-(Inherited from previous phases)
+- Supabase migrations in `supabase/migrations/` numbered sequentially (001_, 002_, etc.)
+- RLS policies follow pattern: "Users can [action] own [table]" naming
+- Use TEXT[] for arrays (like quote_ids)
+- visibility TEXT with CHECK constraint for enum-like values
+- update_updated_at_column() trigger function exists - reuse it for new tables
+- All tables use UUID primary key with gen_random_uuid()
+- Foreign keys reference auth.users(id) with ON DELETE CASCADE
+- useAuth hook: `import { useAuth } from '@/hooks/useAuth'` provides `{ user, isLoading, isSupabaseConfigured, isSignedIn }`
+- ActionButtons component takes optional callbacks + boolean props to conditionally render buttons
+- Collections lib: `src/lib/collections.ts` has addQuoteToCollection, removeQuoteFromCollection, getCollection, getUserCollections, updateCollection, deleteCollection, getPopularCollections, getNewCollections
+- PopularCollection type in collections.ts includes follower_count field
+- NewCollection type in collections.ts includes quote_count field
+- Collections lib also has: followCollection, unfollowCollection, isFollowingCollection, getFollowerCount, getFollowedCollections
+- FollowedCollection type in collections.ts extends Collection with followed_at field
+- Journeys lib: `src/lib/journeys.ts` has startJourney, startCollectionJourney, getActiveJourney, isCollectionJourney
+- UserJourney.type: 'preset' | 'collection' distinguishes journey sources
+- Dexie DB version increments: increment version and add .upgrade() for data migrations
 
+---
+
+## 2026-01-08 - US-C01: Create collections table in Supabase
+- Created `supabase/migrations/002_collections.sql`
+- Collections table: id, user_id, title, description, quote_ids[], visibility, timestamps
+- RLS enabled with 5 policies:
+  - Users can view/insert/update/delete own collections
+  - Public collections readable by all authenticated users
+- Added indexes on user_id and visibility
+- Reused existing update_updated_at_column() trigger
+- **Learnings:**
+  - Existing migration 001_initial_schema.sql has update_updated_at_column() function
+  - Use TEXT with CHECK constraint for enum-like values (not Postgres ENUM)
+  - Pattern: CREATE TABLE -> CREATE INDEX -> ALTER TABLE ENABLE RLS -> CREATE POLICY -> CREATE TRIGGER
+---
+
+## 2026-01-08 - US-C02: Create collection_follows table in Supabase
+- Created `supabase/migrations/003_collection_follows.sql`
+- collection_follows table: user_id, collection_id, followed_at with composite primary key
+- RLS enabled with 4 policies:
+  - Users can view own follows
+  - Anyone can view follows on public collections (for follower counts)
+  - Users can follow collections (insert)
+  - Users can unfollow collections (delete)
+- Added indexes on collection_id and user_id for efficient lookups
+- No updated_at trigger needed (follows are immutable once created)
+- **Learnings:**
+  - Composite primary keys use: PRIMARY KEY (col1, col2) syntax
+  - For junction tables, index both foreign key columns separately
+  - RLS subqueries can reference other tables for complex policies
+---
+
+## 2026-01-08 - US-C03: Add 'Add to collection' button on quote display
+- Modified `src/components/ActionButtons.tsx`:
+  - Added `onAddToCollection` callback prop
+  - Added `isSignedIn` boolean prop
+  - Added "Collect" button with + icon (only visible when signed in)
+- Modified `src/app/page.tsx`:
+  - Added `useAuth` hook to get `isSignedIn` state
+  - Added `showAddToCollectionModal` state (for US-C04)
+  - Added `handleAddToCollection` handler that sets modal state
+  - Passed new props to ActionButtons component
+- **Learnings:**
+  - `useAuth` hook from `@/hooks/useAuth` provides `isSignedIn` boolean
+  - ActionButtons conditionally renders buttons based on props
+  - Button pattern: icon SVG + label text, flex-col, same styling as other action buttons
+---
+
+## 2026-01-08 - US-C04: Create 'Add to collection' modal
+- Created `src/components/AddToCollectionModal.tsx`:
+  - Modal lists user's collections fetched from Supabase
+  - Radio button selection (one collection at a time)
+  - Green check mark on collections that already contain the quote
+  - Disabled selection for already-added collections
+  - Confirm button updates quote_ids array in Supabase
+  - Shows success toast via onSuccess callback
+- Added `Collection` type to `src/types/index.ts`:
+  - id, user_id, title, description, quote_ids[], visibility, timestamps
+  - CollectionVisibility type: 'private' | 'public'
+- Integrated modal into `src/app/page.tsx`:
+  - Dynamic import for lazy loading
+  - Connected to showAddToCollectionModal state from US-C03
+  - onSuccess shows toast notification
+- **Learnings:**
+  - Use `aria-label` instead of `title` prop on SVG elements (TypeScript SVGProps)
+  - Modal pattern: fixed inset-0, bg-black/50, escape key handler, click-outside-to-close
+  - Supabase queries: `.from().select().eq().order()` with destructured { data, error }
+  - Dynamic imports: `dynamic(() => import().then(mod => ({ default: mod.Component })), { ssr: false })`
+---
+
+## 2026-01-08 - US-C05: Create 'New collection' form
+- Modified `src/components/AddToCollectionModal.tsx`:
+  - Added "+ New Collection" button with dashed border below collection list
+  - Clicking button shows inline form with:
+    - Title field (required) with placeholder
+    - Description textarea (optional)
+    - Visibility toggle buttons (Private/Public) with lock/globe icons
+    - Cancel/Create action buttons
+  - Create button inserts new collection to Supabase via `.insert().select().single()`
+  - New collection auto-added to list and auto-selected
+  - Form resets when cancelled or after successful creation
+- **Learnings:**
+  - Supabase insert + return data: `.insert({...}).select().single()` returns the created row
+  - Toggle button pattern: flex buttons with conditional border/bg classes
+  - Form inside modal: use separate state for form visibility (showNewForm) vs modal visibility (isOpen)
+  - Reset form state in useEffect when modal closes, not just on cancel
+---
+
+## 2026-01-08 - US-C06: Create My Collections page
+- Created `src/app/collections/page.tsx`:
+  - Lists user's collections with title, quote count, visibility icon
+  - Shows follower count for public collections with user icon
+  - Links to collection detail page at /collections/[id]
+  - Sign-in prompt for unauthenticated users
+  - Empty state with CTA to browse quotes
+  - Loading skeleton while fetching
+- Modified `src/components/Navigation.tsx`:
+  - Added Collections nav item between Favorites and Journeys
+  - Used collection/box icon for visual consistency
+- **Learnings:**
+  - Supabase aggregates: `.select('*, collection_follows(count)')` returns `{ count: number }[]`
+  - Need explicit type casting for aggregate responses: `(data as CollectionRow[])`
+  - Use `getSupabase()` not `createClient` - check for null before querying
+  - Follow FavoritesPage pattern for page structure: loading → empty → content states
+---
+
+## 2026-01-08 - US-C07: Create Collection detail page
+- Created `src/app/collections/[id]/page.tsx`:
+  - Dynamic route with useParams to get collection ID
+  - Fetches collection from Supabase (RLS handles access control)
+  - Shows collection title with visibility icon (lock/globe)
+  - Shows optional description and quote count
+  - Lists all quotes using Quote component from src/components/Quote.tsx
+  - Uses getQuoteById from src/lib/quotes.ts to resolve quote_ids to Quote objects
+  - Error state for not found / private collections
+  - Empty state for collections with no quotes
+  - Loading skeleton while fetching
+  - "Back to collections" link at bottom
+- **Learnings:**
+  - Dynamic routes: use `useParams()` from next/navigation, cast to string
+  - RLS automatically filters - if collection not found, could be private or deleted
+  - Supabase error code "PGRST116" = row not found in .single() query
+  - Track isOwner via `user?.id === collection.user_id` for conditional UI
+---
+
+## 2026-01-08 - US-C08: Implement add quote to collection
+- Created `src/lib/collections.ts`:
+  - `addQuoteToCollection(collectionId, quoteId)` - adds quote, prevents duplicates
+  - `removeQuoteFromCollection(collectionId, quoteId)` - removes quote from array
+  - `getCollection(collectionId)` - fetches single collection
+  - `getUserCollections(userId)` - fetches all user's collections
+- Updated `src/components/AddToCollectionModal.tsx`:
+  - Imported and uses `addQuoteToCollection` from lib
+  - Simplified `handleConfirm` to use the extracted function
+  - Success toast already shows via `onSuccess` callback
+- **Learnings:**
+  - Extract Supabase operations to `src/lib/` for reusability
+  - Return `{ success: boolean; error?: string }` pattern for async operations
+  - Keep local duplicate check for immediate feedback, lib does server-side check
+---
+
+## 2026-01-08 - US-C09: Implement remove quote from collection
+- Modified `src/app/collections/[id]/page.tsx`:
+  - Added remove button (X icon) on each quote in collection view
+  - Button only visible to collection owner (isOwner check)
+  - Added confirmation dialog with quote preview
+  - Integrated `removeQuoteFromCollection` from lib
+  - Updates local state after successful removal
+  - Shows success/error toast with auto-hide
+- Files changed: `src/app/collections/[id]/page.tsx`
+- **Learnings:**
+  - Reuse existing lib functions - removeQuoteFromCollection was already in collections.ts
+  - Confirmation dialog pattern: fixed inset-0 backdrop + centered modal, click-outside-to-close
+  - Local state update after successful API call for instant UI feedback
+  - Toast pattern: fixed bottom-4 center with auto-dismiss via setTimeout in useEffect
+---
+
+## 2026-01-08 - US-C10: Implement delete collection
+- Modified `src/lib/collections.ts`:
+  - Added `deleteCollection(collectionId)` function
+  - Uses Supabase `.delete().eq('id', collectionId)`
+  - RLS policy ensures only owner can delete
+  - Cascade delete handles associated collection_follows
+- Modified `src/app/collections/[id]/page.tsx`:
+  - Added delete button with trash icon below quote count
+  - Button only visible to collection owner (isOwner check)
+  - Confirmation dialog with warning message
+  - On success, redirects to /collections via router.push()
+  - Shows error toast on failure
+  - Added delete button to empty collection state too
+- Files changed: `src/lib/collections.ts`, `src/app/collections/[id]/page.tsx`
+- **Learnings:**
+  - Supabase cascade delete via foreign key ON DELETE CASCADE handles related records
+  - Use `useRouter` from next/navigation for programmatic navigation after async action
+  - Include delete option in both empty and non-empty collection states for consistency
+  - Warning text in confirmation dialogs helps prevent accidental deletion
+---
+
+## 2026-01-08 - US-C11: Implement edit collection
+- Modified `src/lib/collections.ts`:
+  - Added `updateCollection(collectionId, updates)` function
+  - Accepts partial updates for title, description, visibility
+  - Uses Supabase `.update(updates).eq('id', collectionId)`
+  - Returns `{ success, error? }` pattern
+- Modified `src/app/collections/[id]/page.tsx`:
+  - Added edit state: showEditForm, editTitle, editDescription, editVisibility, isSaving
+  - Added openEditForm() to populate form with current values
+  - Added handleSaveEdit() to call updateCollection and update local state
+  - Edit button with pencil icon next to delete button (owner only)
+  - Edit form modal with title input, description textarea, visibility toggle
+  - Success toast on save, error toast on failure
+  - Button placement consistent in both empty and non-empty collection states
+- Files changed: `src/lib/collections.ts`, `src/app/collections/[id]/page.tsx`
+- **Learnings:**
+  - Reuse toggle button UI pattern from AddToCollectionModal for visibility
+  - Update local state after successful API call for instant UI feedback
+  - Partial updates in Supabase: just pass the fields you want to change
+  - Form population: set edit state values from collection in openEditForm before showing
+---
+
+## 2026-01-08 - US-C12: Create Discover page
+- Created `src/app/discover/page.tsx`:
+  - PageTransition wrapper for consistent page transitions
+  - Header: "Discover Collections" using quote-text styling
+  - "Popular" section with placeholder (for US-C13)
+  - "New" section with placeholder (for US-C14)
+  - Follows same layout pattern as collections page
+- Modified `src/components/Navigation.tsx`:
+  - Added Discover nav item between Collections and Journeys
+  - Used compass icon (circle with diamond pointer) for visual consistency
+- Files changed: `src/app/discover/page.tsx` (new), `src/components/Navigation.tsx`
+- **Learnings:**
+  - Discover page is public-facing - no auth required, simple structure
+  - Compass icon from Lucide: circle + polygon points
+  - Placeholder pattern: bg-foreground/5 rounded-lg with centered text
+---
+
+## 2026-01-08 - US-C13: Implement popular collections query
+- Modified `src/lib/collections.ts`:
+  - Added `PopularCollection` interface with follower_count field
+  - Added `getPopularCollections(limit)` function
+  - Queries public collections with follower counts via aggregate
+  - Sorts by follower_count descending, returns top N
+- Modified `src/app/discover/page.tsx`:
+  - Added state for popularCollections and loadingPopular
+  - Fetches popular collections on mount via useEffect
+  - Replaces placeholder with actual collection cards
+  - Shows loading skeleton during fetch
+  - Shows empty state if no public collections
+  - Each card shows: title, follower count, public icon
+  - Links to collection detail page
+- Files changed: `src/lib/collections.ts`, `src/app/discover/page.tsx`
+- **Learnings:**
+  - Supabase doesn't support ORDER BY aggregate directly, need to sort in JS
+  - Reuse CollectionRow type pattern for aggregate responses
+  - Export both function and type from lib for consumer use
+---
+
+## 2026-01-08 - US-C14: Implement new collections query
+- Modified `src/lib/collections.ts`:
+  - Added `NewCollection` interface with quote_count field
+  - Added `getNewCollections(limit)` function
+  - Filters to public collections from last 30 days via `.gte("created_at", ...)`
+  - Orders by created_at descending with `.limit(limit)` at DB level
+  - Returns collections with quote_count derived from quote_ids.length
+- Modified `src/app/discover/page.tsx`:
+  - Added state for newCollections and loadingNew
+  - Fetches both popular and new collections in parallel via Promise.all
+  - Replaced placeholder with actual collection cards
+  - Each card shows: title, quote count (document icon), public icon
+  - Links to collection detail page
+  - Shows empty state for no new collections in last 30 days
+- Files changed: `src/lib/collections.ts`, `src/app/discover/page.tsx`
+- **Learnings:**
+  - Supabase `.gte("field", isoString)` for date range filtering
+  - Use Promise.all for parallel fetches in useEffect
+  - quote_count can be derived client-side from quote_ids.length - no DB aggregate needed
+---
+
+## 2026-01-08 - US-C15: Implement follow collection
+- Modified `src/lib/collections.ts`:
+  - Added `followCollection(collectionId, userId)` - inserts into collection_follows
+  - Added `isFollowingCollection(collectionId, userId)` - checks if user follows collection
+  - Added `getFollowerCount(collectionId)` - returns count of followers
+- Modified `src/app/collections/[id]/page.tsx`:
+  - Added isFollowing, followerCount, isFollowingAction state
+  - Loads follower count for public collections on mount
+  - Loads follow status when user/collection changes
+  - Added Follow button for public collections (not owned by user)
+  - Button shows "Follow" with + icon, changes to "Following" with checkmark after follow
+  - Updates follower count display in real-time
+  - Added follower count display to both empty and non-empty collection states
+- Files changed: `src/lib/collections.ts`, `src/app/collections/[id]/page.tsx`
+- **Learnings:**
+  - Use `{ count: "exact", head: true }` with Supabase for efficient count queries
+  - Error code "23505" is PostgreSQL unique constraint violation (already following)
+  - Error code "PGRST116" means no rows found in .single() - useful for "not following" state
+  - Separate useEffect for follow status so it updates when user changes without refetching collection
+---
+
+## 2026-01-08 - US-C16: Implement unfollow collection
+- Modified `src/lib/collections.ts`:
+  - Added `unfollowCollection(collectionId, userId)` - deletes from collection_follows
+  - Uses Supabase `.delete().eq().eq()` with both collection_id and user_id
+- Modified `src/app/collections/[id]/page.tsx`:
+  - Added showUnfollowConfirm, isUnfollowing state
+  - Made "Following" button clickable to show unfollow confirmation dialog
+  - Added handleUnfollow() to call unfollowCollection and update local state
+  - Updates isFollowing to false and decrements followerCount on success
+  - Added unfollow confirmation dialog with cancel/unfollow buttons
+  - Dialog and toast appear in both empty and non-empty collection states
+- Files changed: `src/lib/collections.ts`, `src/app/collections/[id]/page.tsx`
+- **Learnings:**
+  - Follow button splits into two buttons: one for "Following" (clickable to unfollow), one for "Follow"
+  - Use Math.max(0, prev - 1) when decrementing counts to prevent negative numbers
+  - Confirmation dialog for unfollow is lighter weight than delete (no red warning text needed)
+  - Reuse same dialog pattern as other confirmations for consistency
+---
+
+## 2026-01-09 - US-C17: Show followed collections in My Collections
+- Modified `src/lib/collections.ts`:
+  - Added `FollowedCollection` interface extending Collection with followed_at
+  - Added `getFollowedCollections(userId)` function
+  - Queries collection_follows with nested collections data
+  - Returns array of followed collections ordered by followed_at desc
+- Modified `src/app/collections/page.tsx`:
+  - Added followedCollections state
+  - Fetches followed collections on mount alongside owned collections
+  - Updated empty state check to include both owned AND followed collections
+  - Added "Following" section with bookmark icon header
+  - Followed collections have left border accent to distinguish from owned
+  - Clicking links to collection detail page
+- Files changed: `src/lib/collections.ts`, `src/app/collections/page.tsx`
+- **Learnings:**
+  - Supabase nested select returns single object for FK relations (not array)
+  - Use `as unknown as Type` when TypeScript types don't match Supabase response shape
+  - Conditional margin (mt-10) when both sections exist vs no margin when only Following
+  - Border-l-2 provides subtle visual distinction between owned vs followed
+---
+
+## 2026-01-09 - US-C18: Extend Journey type for collections
+- Modified `src/types/index.ts`:
+  - Added `JourneyType = 'preset' | 'collection'` type
+  - Added `type: JourneyType` field to UserJourney interface
+  - Added optional `collectionId?: string` field to UserJourney
+- Modified `src/lib/db.ts`:
+  - Added version 6 schema with new journey fields (type, collectionId)
+  - Added upgrade migration to set existing journeys to type='preset'
+- Modified `src/lib/journeys.ts`:
+  - Updated `startJourney()` to set type='preset' for preset journeys
+  - Added `startCollectionJourney(collectionId, duration)` for collection journeys
+  - Added `isCollectionJourney()` helper to check journey type
+  - Added `getActiveJourneyType()` to get current journey type
+- Files changed: `src/types/index.ts`, `src/lib/db.ts`, `src/lib/journeys.ts`
+- **Learnings:**
+  - Dexie migrations use `.upgrade(tx => ...)` to transform existing data
+  - Use `tx.table('name').toCollection().modify()` for bulk updates
+  - JourneyType discriminator allows handling preset vs collection journeys differently
+  - collectionId is optional because preset journeys don't need it
+---
+
+## 2026-01-09 - US-C19: Add 'Start Journey' button on collection
+- Modified `src/app/collections/[id]/page.tsx`:
+  - Imported `startCollectionJourney` and `hasActiveJourney` from journeys lib
+  - Added `hasExistingJourney` and `isStartingJourney` state
+  - Added useEffect to check for existing active journey on mount
+  - Added `handleStartJourney()` to create collection journey and redirect home
+  - Added `canStartJourney` computed value (3+ quotes && no active journey)
+  - Added "Start Journey" button with play icon in header (only when canStartJourney && user)
+  - Shows helpful message when user has existing journey and collection has 3+ quotes
+  - Button calls startCollectionJourney with collectionId and quotes.length as duration
+  - Redirects to homepage after journey starts
+- Files changed: `src/app/collections/[id]/page.tsx`
+- **Learnings:**
+  - hasActiveJourney() from journeys.ts checks for existing journey
+  - Use canStartJourney computed value to avoid duplicate condition checks
+  - Show informative message when blocked (existing journey) vs hiding button entirely
+  - Navigate to home after starting journey so user sees first quote
+---
+
+## 2026-01-09 - US-C20: Implement collection-based journey flow
+- Modified `src/lib/quotes.ts`:
+  - Added `getCollectionQuote(quoteIds, excludeIds)` function
+  - Returns quotes in order from collection's quote_ids (not random like preset journeys)
+  - Returns null when all quotes shown to trigger completion
+- Modified `src/app/page.tsx`:
+  - Imported `getCollectionQuote` and `getCollection` from libs
+  - Added `journeyCollection` state to store collection for collection journeys
+  - Updated checkOnboarding to detect collection-based journeys via `journey.type === 'collection'`
+  - Collection journeys: fetch collection from Supabase, get quote from quote_ids in order
+  - Handle deleted collections gracefully by ending the journey
+  - Added collection-specific JourneyHeader with 📚 emoji and collection title
+  - Added collection-specific JourneyCompletion dialog
+  - Updated exit confirmation dialog to show collection title when applicable
+  - Clear `journeyCollection` state in exit/completion handlers
+- Files changed: `src/lib/quotes.ts`, `src/app/page.tsx`
+- **Learnings:**
+  - Collection journeys show quotes in order (deterministic), preset journeys are random within filter
+  - Both journey types share same completion UI (JourneyCompletion) but with different emoji/title
+  - Handle "collection deleted while journey active" case by calling deleteActiveJourney()
+  - journeyDefinition and journeyCollection are mutually exclusive - one is null when other is set
 ---

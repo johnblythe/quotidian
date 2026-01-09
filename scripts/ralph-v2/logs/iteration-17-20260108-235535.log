@@ -1,0 +1,13 @@
+There are still stories with `passes: false`. The next iteration will pick up US-C18 (Extend Journey type for collections). 
+
+**US-C17 Summary:**
+- Added `getFollowedCollections(userId)` function to `src/lib/collections.ts`
+- Added `FollowedCollection` interface extending Collection with `followed_at` field
+- Updated `src/app/collections/page.tsx` to:
+  - Fetch and display followed collections in a "Following" section
+  - Show bookmark icon in section header
+  - Visually distinguish followed collections with left border accent
+  - Update empty state logic to check both owned AND followed collections
+  - Click on followed collection navigates to detail page
+- Typecheck and build pass
+- Committed as `feat: US-C17 - Show followed collections in My Collections`

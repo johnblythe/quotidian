@@ -1,0 +1,9 @@
+There are still 17 stories with `passes: false`. The iteration is complete for US-C03.
+
+**Summary: Completed US-C03 - Add 'Add to collection' button on quote display**
+
+- Added + icon "Collect" button to `ActionButtons.tsx`
+- Button only visible when user is signed in (via `isSignedIn` prop)
+- Clicking button sets `showAddToCollectionModal` state to true (modal will be implemented in US-C04)
+- Both `npm run typecheck` and `npm run build` pass
+- Committed: `feat: US-C03 - Add 'Add to collection' button on quote display`

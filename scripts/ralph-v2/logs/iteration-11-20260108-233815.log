@@ -1,0 +1,10 @@
+There are still 9 stories remaining with `passes: false`. The next iteration will pick up US-C12.
+
+**Summary: US-C11 - Implement edit collection** completed:
+- Added `updateCollection(collectionId, updates)` function to `src/lib/collections.ts`
+- Added edit button (pencil icon) next to delete button on collection detail page (owner only)
+- Added edit form modal with title, description, and visibility toggle
+- Updates save to Supabase and show success/error toast
+- Local state updates instantly for smooth UX
+- Both typecheck and build pass
+- Committed: `c66c03a feat: US-C11 - Implement edit collection`
