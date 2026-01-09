@@ -71,3 +71,40 @@ export async function getRecentEngagements(days: number) {
     .aboveOrEqual(cutoffStr)
     .toArray();
 }
+
+/**
+ * Calculate the optimal notification time based on user engagement patterns
+ * Averages the engagement times from the last 7 days
+ * @returns Formatted time string (HH:MM) or null if insufficient data
+ */
+export async function calculateOptimalTime(): Promise<string | null> {
+  const engagements = await getRecentEngagements(7);
+
+  // Filter to only engagements where the user actually engaged (favorited or reflected)
+  const engagementsWithActivity = engagements.filter(e => e.engagedAt);
+
+  // Require at least 3 days of engagement data for a meaningful average
+  if (engagementsWithActivity.length < 3) {
+    return null;
+  }
+
+  // Calculate average time of day in minutes from midnight
+  let totalMinutes = 0;
+  for (const engagement of engagementsWithActivity) {
+    const engagedAt = new Date(engagement.engagedAt!);
+    const minutesFromMidnight = engagedAt.getHours() * 60 + engagedAt.getMinutes();
+    totalMinutes += minutesFromMidnight;
+  }
+
+  const averageMinutes = Math.round(totalMinutes / engagementsWithActivity.length);
+
+  // Convert back to hours and minutes
+  const hours = Math.floor(averageMinutes / 60);
+  const minutes = averageMinutes % 60;
+
+  // Format as HH:MM
+  const hoursStr = hours.toString().padStart(2, '0');
+  const minutesStr = minutes.toString().padStart(2, '0');
+
+  return `${hoursStr}:${minutesStr}`;
+}
