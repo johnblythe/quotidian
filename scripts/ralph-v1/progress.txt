@@ -229,3 +229,39 @@ Started: 2026-01-08
   - deleteActiveJourney() already exists in lib/journeys.ts
   - After exiting journey, reset to getTodaysQuote() for normal flow
 ---
+
+## 2026-01-08 - US-V13: Add journey completion celebration
+- What was implemented:
+  - Created src/components/JourneyCompletion.tsx modal component
+  - Detects journey completion: when journey.day > journeyDefinition.duration
+  - Also handles early completion when getJourneyQuote() returns null (no more quotes)
+  - Shows celebration modal with journey emoji, congratulations message
+  - Two options: "Start Another Journey" (navigates to /journeys) or "Return to Daily Quotes"
+  - Calls completeActiveJourney() to set completedAt timestamp
+  - Advances journey day with advanceJourneyDay() after each daily quote
+- Files created:
+  - src/components/JourneyCompletion.tsx - journey completion celebration modal
+- Files changed:
+  - src/app/page.tsx - added completion detection, modal state, handlers, and render
+- **Learnings for future iterations:**
+  - Journey completion detected on app open, not immediately after viewing final quote
+  - advanceJourneyDay() called after showing each journey quote (day increments for next visit)
+  - completeActiveJourney() sets completedAt but doesn't delete record (for archive in US-V14)
+  - Modal follows PersonalizationUnlocked pattern but without auto-dismiss (user must choose action)
+---
+
+## 2026-01-08 - US-V14: Track completed journeys in archive
+- What was implemented:
+  - Added "Completed Journeys" section to the Journeys page
+  - Lists completed journeys with completion date and quote count
+  - Expandable cards show all quotes from each journey with day numbers
+  - Quotes show truncated text (80 chars) with author attribution
+  - Sorted by completion date (most recent first)
+- Files changed:
+  - src/app/journeys/page.tsx - added CompletedJourneyWithQuotes interface, state for completed journeys and expanded state, formatDate helper, toggleExpanded handler, and Completed Journeys UI section
+- **Learnings for future iterations:**
+  - getCompletedJourneys() already exists in lib/journeys.ts
+  - getQuoteById() is synchronous (returns Quote | undefined)
+  - Expansion pattern: store single expanded ID in state, toggle on click
+  - Journey quotes accessible via UserJourney.quotesShown array
+---

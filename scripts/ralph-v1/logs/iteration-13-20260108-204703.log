@@ -1,0 +1,18 @@
+US-V13 is complete. Let me check if all stories are done or if there are more with `passes: false`:
+
+There are still stories with `passes: false` (US-V14 through US-V19), so another iteration will pick up the next story.
+
+**Summary of US-V13: Add journey completion celebration**
+
+Implemented:
+- Created `JourneyCompletion.tsx` modal component with celebration UI showing journey emoji and congratulations
+- Detection logic in homepage: journey.day > duration triggers completion
+- Also handles early completion when all quotes exhausted (getJourneyQuote returns null)
+- Calls `completeActiveJourney()` to set `completedAt` timestamp for archive tracking
+- Added `advanceJourneyDay()` after each daily quote view
+- Two action buttons: "Start Another Journey" (→ /journeys) or "Return to Daily Quotes"
+- Modal is user-dismissible (no auto-timeout like personalization celebration)
+
+Files:
+- Created: `src/components/JourneyCompletion.tsx`
+- Modified: `src/app/page.tsx` (imports, state, handlers, render)
