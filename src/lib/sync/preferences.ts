@@ -161,3 +161,92 @@ export async function syncPreferences(): Promise<{ success: boolean; error?: str
   const pushResult = await pushPreferences();
   return pushResult;
 }
+
+/**
+ * Get digest_enabled setting from Supabase
+ * Returns null if not configured, not signed in, or no preferences exist
+ */
+export async function getDigestEnabled(): Promise<boolean | null> {
+  const supabase = getSupabase();
+  if (!supabase) {
+    return null;
+  }
+
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) {
+    return null;
+  }
+
+  const { data, error } = await supabase
+    .from('preferences')
+    .select('digest_enabled')
+    .eq('user_id', user.id)
+    .single();
+
+  if (error || !data) {
+    return null;
+  }
+
+  return data.digest_enabled;
+}
+
+/**
+ * Set digest_enabled setting in Supabase
+ * Creates preferences row if it doesn't exist
+ */
+export async function setDigestEnabled(enabled: boolean): Promise<{ success: boolean; error?: string }> {
+  const supabase = getSupabase();
+  if (!supabase) {
+    return { success: false, error: 'Supabase not configured' };
+  }
+
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) {
+    return { success: false, error: 'Not signed in' };
+  }
+
+  // Check if preferences row exists
+  const { data: existing } = await supabase
+    .from('preferences')
+    .select('id')
+    .eq('user_id', user.id)
+    .single();
+
+  if (existing) {
+    // Update existing row
+    const { error } = await supabase
+      .from('preferences')
+      .update({ digest_enabled: enabled })
+      .eq('user_id', user.id);
+
+    if (error) {
+      return { success: false, error: error.message };
+    }
+  } else {
+    // Create new preferences row with digest setting
+    // Need to get local preferences for other fields
+    const localPrefs = await db.preferences.toCollection().first();
+    if (!localPrefs) {
+      return { success: false, error: 'No local preferences - complete onboarding first' };
+    }
+
+    const { error } = await supabase
+      .from('preferences')
+      .insert({
+        user_id: user.id,
+        name: localPrefs.name,
+        notification_time: localPrefs.notificationTime,
+        onboarded_at: localPrefs.onboardedAt.toISOString(),
+        algorithm_enabled_at: localPrefs.algorithmEnabledAt?.toISOString() ?? null,
+        personalization_celebrated: localPrefs.personalizationCelebrated ?? false,
+        last_timing_calculation_date: localPrefs.lastTimingCalculationDate ?? null,
+        digest_enabled: enabled,
+      });
+
+    if (error) {
+      return { success: false, error: error.message };
+    }
+  }
+
+  return { success: true };
+}

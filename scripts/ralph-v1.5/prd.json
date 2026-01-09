@@ -307,8 +307,8 @@
         "npm run typecheck passes"
       ],
       "priority": 20,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Edge Function at supabase/functions/weekly-digest/index.ts. Queries preferences for digest_enabled users, fetches week's data (favorites, journal, history), builds personalized digest, sends via Resend API. Cron setup via pg_cron documented in README. API routes /api/quotes and /api/quotes/[id] added for quote data access."
     },
     {
       "id": "US-S21",
@@ -322,8 +322,8 @@
         "npm run typecheck passes"
       ],
       "priority": 21,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Toggle added to settings page. Shows only when signed in with Supabase. Displays user email. Uses getDigestEnabled/setDigestEnabled functions in sync/preferences.ts. Sign-in prompt shown when not authenticated."
     },
     {
       "id": "US-S22",

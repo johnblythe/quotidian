@@ -1,0 +1,17 @@
+There are still 2 stories with `passes: false` (US-S21 and US-S22). Another iteration will pick them up.
+
+## Summary
+
+**US-S20: Create Supabase Edge Function for weekly send** - COMPLETE
+
+Implemented:
+- Supabase Edge Function at `supabase/functions/weekly-digest/index.ts`
+- API routes at `/api/quotes` and `/api/quotes/[id]` for quote data
+- Cron setup documentation in README (pg_cron for Sunday 8am UTC)
+- Excluded `supabase/functions` from tsconfig to avoid Deno type conflicts
+
+The Edge Function:
+1. Queries users with `digest_enabled = true`
+2. Fetches their week's data (favorites, journal entries, history)
+3. Builds personalized digest emails
+4. Sends via Resend API

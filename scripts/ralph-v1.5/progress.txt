@@ -325,3 +325,44 @@ Started: 2026-01-08
   - Plain text version essential for spam filters and accessibility
   - Template strings work well for HTML emails (no React Email needed for simple templates)
 ---
+
+## 2026-01-08 - US-S20: Create Supabase Edge Function for weekly send
+- Created supabase/functions/weekly-digest/index.ts Edge Function:
+  - Deno-based TypeScript function for Supabase Edge Functions
+  - POST handler that processes all users with digest_enabled = true
+  - Fetches week's data in parallel (favorites, journal entries, history)
+  - Builds personalized DigestData with quote of week, reflection highlight, stats
+  - Sends email via Resend API with both HTML and plain text versions
+  - Returns summary of processed/sent/failed counts
+- Created API routes for quote data access:
+  - GET /api/quotes - returns all quotes
+  - GET /api/quotes/[id] - returns single quote by ID
+- Updated tsconfig.json to exclude supabase/functions (Deno types conflict)
+- Added README with deployment and cron setup instructions
+- Cron setup: pg_cron schedule for Sunday 8am UTC (documented in README)
+- **Learnings:**
+  - Supabase Edge Functions use Deno runtime, not Node.js
+  - Import from esm.sh URLs for Deno package resolution
+  - tsconfig must exclude supabase/functions to avoid Deno type errors in Next.js
+  - Service role key needed to bypass RLS for querying all users
+  - auth.admin.listUsers() returns all auth users for email lookup
+  - pg_cron extension used for scheduling, setup documented in README
+  - API routes needed for Edge Function to fetch quote data dynamically
+---
+
+## 2026-01-08 - US-S21: Add digest settings toggle
+- Added weekly digest toggle to settings page (src/app/settings/page.tsx):
+  - Toggle switch with iOS-style design using Tailwind
+  - Shows only when Supabase configured AND user signed in
+  - Displays user's email address that will receive digest
+  - Loading state while saving to prevent double-clicks
+- Created helper functions in src/lib/sync/preferences.ts:
+  - getDigestEnabled(): fetches digest_enabled from Supabase preferences
+  - setDigestEnabled(enabled): updates/creates preferences row with digest setting
+- Sign-in prompt shown when Supabase configured but not signed in
+  - Links to /account for authentication
+- **Learnings:**
+  - Toggle switch needs role="switch" and aria-checked for accessibility
+  - Create preferences row if it doesn't exist when toggling digest (user may sign in before syncing)
+  - Show user email in settings so they know where digest will be sent
+---

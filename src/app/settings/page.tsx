@@ -6,6 +6,8 @@ import { getPreferences, savePreferences, saveTimingCalculationDate, getLastTimi
 import { PageTransition } from '@/components/PageTransition';
 import { useToast } from '@/components/Toast';
 import { calculateOptimalTime, shouldRecalculateTiming, isSignificantTimeDifference } from '@/lib/engagement';
+import { useAuth } from '@/hooks/useAuth';
+import { getDigestEnabled, setDigestEnabled } from '@/lib/sync/preferences';
 
 export default function SettingsPage() {
   const [name, setName] = useState('');
@@ -15,7 +17,10 @@ export default function SettingsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [showSaved, setShowSaved] = useState(false);
+  const [digestEnabled, setDigestEnabledState] = useState(false);
+  const [digestLoading, setDigestLoading] = useState(false);
   const { showToast } = useToast();
+  const { user, isSignedIn, isSupabaseConfigured } = useAuth();
 
   useEffect(() => {
     async function loadPreferences() {
@@ -52,6 +57,21 @@ export default function SettingsPage() {
     loadPreferences();
   }, []);
 
+  // Load digest setting when signed in
+  useEffect(() => {
+    async function loadDigestSetting() {
+      if (!isSignedIn) {
+        setDigestEnabledState(false);
+        return;
+      }
+      const enabled = await getDigestEnabled();
+      if (enabled !== null) {
+        setDigestEnabledState(enabled);
+      }
+    }
+    loadDigestSetting();
+  }, [isSignedIn]);
+
   // Format HH:MM to user-friendly display (e.g., "8:30 AM")
   const formatTimeDisplay = (time: string): string => {
     const [hours, minutes] = time.split(':').map(Number);
@@ -74,6 +94,20 @@ export default function SettingsPage() {
     setShowSaved(true);
     showToast("Settings saved");
     setTimeout(() => setShowSaved(false), 2000);
+  };
+
+  const handleDigestToggle = async () => {
+    if (!isSignedIn) return;
+    setDigestLoading(true);
+    const newValue = !digestEnabled;
+    const result = await setDigestEnabled(newValue);
+    if (result.success) {
+      setDigestEnabledState(newValue);
+      showToast(newValue ? 'Weekly digest enabled' : 'Weekly digest disabled');
+    } else {
+      showToast(result.error || 'Failed to update setting');
+    }
+    setDigestLoading(false);
   };
 
   if (isLoading) {
@@ -191,6 +225,55 @@ export default function SettingsPage() {
               Saved!
             </div>
           </div>
+
+          {/* Weekly digest toggle - only shows when signed in */}
+          {isSupabaseConfigured && isSignedIn && user && (
+            <div className="pt-4 border-t border-foreground/10">
+              <div className="flex items-center justify-between py-3">
+                <div className="flex-1">
+                  <p className="body-text text-foreground/90">Weekly digest</p>
+                  <p className="body-text text-xs text-foreground/60 mt-1">
+                    Receive a weekly email with your favorite quote and reflection highlights
+                  </p>
+                  <p className="body-text text-xs text-foreground/50 mt-1">
+                    Sent to: {user.email}
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={handleDigestToggle}
+                  disabled={digestLoading}
+                  className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-foreground/20 focus:ring-offset-2 disabled:opacity-50 ${
+                    digestEnabled ? 'bg-foreground' : 'bg-foreground/20'
+                  }`}
+                  role="switch"
+                  aria-checked={digestEnabled}
+                  aria-label="Toggle weekly digest"
+                >
+                  <span
+                    className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-background shadow ring-0 transition duration-200 ease-in-out ${
+                      digestEnabled ? 'translate-x-5' : 'translate-x-0'
+                    }`}
+                  />
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Sign-in prompt for digest (when Supabase configured but not signed in) */}
+          {isSupabaseConfigured && !isSignedIn && (
+            <div className="pt-4 border-t border-foreground/10">
+              <div className="py-3">
+                <p className="body-text text-foreground/70">Weekly digest</p>
+                <p className="body-text text-xs text-foreground/50 mt-1">
+                  <Link href="/account" className="underline hover:text-foreground/70">
+                    Sign in
+                  </Link>{' '}
+                  to receive weekly email summaries of your reflections
+                </p>
+              </div>
+            </div>
+          )}
 
           {/* Account link */}
           <div className="pt-4 border-t border-foreground/10">
