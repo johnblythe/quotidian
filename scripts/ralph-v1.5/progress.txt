@@ -292,3 +292,36 @@ Started: 2026-01-08
   - sendEmail returns {success, id?, error?} for clean error handling
   - Default from address uses onboarding@resend.dev (Resend's sandbox domain)
 ---
+
+## 2026-01-08 - US-S19: Create digest email template
+- Created src/lib/email/digestTemplate.ts with:
+  - DigestData interface for template input data
+  - generateDigestHtml(data): returns full HTML email with all sections
+  - generateDigestText(data): returns plain text fallback
+  - generateDigestEmail(data): convenience function returning {html, text, subject}
+- Template sections:
+  - Header with Quotidian branding
+  - Personalized greeting (uses userName if provided)
+  - Quote of the Week section with styled blockquote
+  - Reflection Highlight section with excerpt
+  - Week Stats (quotes viewed, reflections written, favorites saved)
+  - CTA button ("Continue Your Journey")
+  - Footer with unsubscribe link
+- Design matches app aesthetic:
+  - Georgia serif for headers and quotes
+  - Warm #fafaf8 background
+  - #1a1a1a text color
+  - Rounded corners and subtle shadows
+- Email client compatibility:
+  - MSO conditionals for Outlook
+  - Inline styles (no external CSS)
+  - Table-based layout for consistent rendering
+  - Mobile-responsive with @media queries
+  - Preheader text for email previews
+- **Learnings:**
+  - HTML email templates use tables not divs - email clients strip CSS layouts
+  - Inline styles required - many email clients strip <style> blocks
+  - MSO conditionals (<!--[if mso]>) handle Outlook's Word rendering engine
+  - Plain text version essential for spam filters and accessibility
+  - Template strings work well for HTML emails (no React Email needed for simple templates)
+---
