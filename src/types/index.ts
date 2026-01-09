@@ -84,10 +84,15 @@ export interface ThemeAffinity {
   score: number;
 }
 
+/** Journey type: preset (JSON-defined) or collection-based */
+export type JourneyType = 'preset' | 'collection';
+
 /** User's active or completed journey */
 export interface UserJourney {
   id?: number;
-  journeyId: string; // References journey definition ID
+  journeyId: string; // References journey definition ID (preset) or collection ID (collection)
+  type: JourneyType; // Type of journey
+  collectionId?: string; // Collection ID for collection-based journeys
   startedAt: Date;
   completedAt?: Date; // Undefined until journey completes
   day: number; // Current day in the journey (1-indexed)

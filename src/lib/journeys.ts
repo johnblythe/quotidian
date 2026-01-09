@@ -1,5 +1,5 @@
 import { db } from './db';
-import type { UserJourney } from '@/types';
+import type { UserJourney, JourneyType } from '@/types';
 
 /**
  * Get the currently active journey (if any)
@@ -18,16 +18,48 @@ export async function hasActiveJourney(): Promise<boolean> {
 }
 
 /**
- * Start a new journey
+ * Start a new preset journey (from journeys.json)
  * Creates a journey record with day = 1 and empty quotesShown
  */
 export async function startJourney(journeyId: string): Promise<void> {
   await db.journeys.add({
     journeyId,
+    type: 'preset',
     startedAt: new Date(),
     day: 1,
     quotesShown: [],
   });
+}
+
+/**
+ * Start a new collection-based journey
+ * Creates a journey record with type='collection' and linked collectionId
+ */
+export async function startCollectionJourney(collectionId: string, duration: number): Promise<void> {
+  await db.journeys.add({
+    journeyId: `collection-${collectionId}`,
+    type: 'collection',
+    collectionId,
+    startedAt: new Date(),
+    day: 1,
+    quotesShown: [],
+  });
+}
+
+/**
+ * Check if the active journey is a collection-based journey
+ */
+export async function isCollectionJourney(): Promise<boolean> {
+  const active = await getActiveJourney();
+  return active?.type === 'collection';
+}
+
+/**
+ * Get the type of the active journey
+ */
+export async function getActiveJourneyType(): Promise<JourneyType | undefined> {
+  const active = await getActiveJourney();
+  return active?.type;
 }
 
 /**
