@@ -447,3 +447,87 @@ export async function unfollowCollection(
 
   return { success: true };
 }
+
+/** Followed collection with owner info */
+export interface FollowedCollection extends Collection {
+  followed_at: string;
+}
+
+/**
+ * Get collections that a user follows (not owns)
+ * @returns Array of collections the user follows
+ */
+export async function getFollowedCollections(
+  userId: string
+): Promise<FollowedCollection[]> {
+  const supabase = getSupabase();
+  if (!supabase) {
+    return [];
+  }
+
+  // Fetch collection_follows for this user with the collection data
+  const { data, error } = await supabase
+    .from("collection_follows")
+    .select(`
+      followed_at,
+      collections (
+        id,
+        user_id,
+        title,
+        description,
+        quote_ids,
+        visibility,
+        created_at,
+        updated_at
+      )
+    `)
+    .eq("user_id", userId)
+    .order("followed_at", { ascending: false });
+
+  if (error) {
+    console.error("Failed to fetch followed collections:", error);
+    return [];
+  }
+
+  // Transform the joined data into FollowedCollection array
+  // Supabase returns the related table as a single object (not array) for foreign key relations
+  type CollectionData = {
+    id: string;
+    user_id: string;
+    title: string;
+    description: string | null;
+    quote_ids: string[];
+    visibility: "private" | "public";
+    created_at: string;
+    updated_at: string;
+  };
+
+  type FollowRow = {
+    followed_at: string;
+    collections: CollectionData | CollectionData[] | null;
+  };
+
+  const followedCollections = ((data || []) as unknown as FollowRow[])
+    .filter((row) => row.collections !== null)
+    .map((row) => {
+      // Handle both single object and array cases (Supabase returns single object for FK)
+      const collection = Array.isArray(row.collections)
+        ? row.collections[0]
+        : row.collections;
+      if (!collection) return null;
+      return {
+        id: collection.id,
+        user_id: collection.user_id,
+        title: collection.title,
+        description: collection.description,
+        quote_ids: collection.quote_ids,
+        visibility: collection.visibility,
+        created_at: collection.created_at,
+        updated_at: collection.updated_at,
+        followed_at: row.followed_at,
+      };
+    })
+    .filter((c): c is FollowedCollection => c !== null);
+
+  return followedCollections;
+}

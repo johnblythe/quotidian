@@ -14,7 +14,8 @@ Started: 2026-01-08
 - Collections lib: `src/lib/collections.ts` has addQuoteToCollection, removeQuoteFromCollection, getCollection, getUserCollections, updateCollection, deleteCollection, getPopularCollections, getNewCollections
 - PopularCollection type in collections.ts includes follower_count field
 - NewCollection type in collections.ts includes quote_count field
-- Collections lib also has: followCollection, isFollowingCollection, getFollowerCount
+- Collections lib also has: followCollection, unfollowCollection, isFollowingCollection, getFollowerCount, getFollowedCollections
+- FollowedCollection type in collections.ts extends Collection with followed_at field
 
 ---
 
@@ -294,4 +295,44 @@ Started: 2026-01-08
   - Error code "23505" is PostgreSQL unique constraint violation (already following)
   - Error code "PGRST116" means no rows found in .single() - useful for "not following" state
   - Separate useEffect for follow status so it updates when user changes without refetching collection
+---
+
+## 2026-01-08 - US-C16: Implement unfollow collection
+- Modified `src/lib/collections.ts`:
+  - Added `unfollowCollection(collectionId, userId)` - deletes from collection_follows
+  - Uses Supabase `.delete().eq().eq()` with both collection_id and user_id
+- Modified `src/app/collections/[id]/page.tsx`:
+  - Added showUnfollowConfirm, isUnfollowing state
+  - Made "Following" button clickable to show unfollow confirmation dialog
+  - Added handleUnfollow() to call unfollowCollection and update local state
+  - Updates isFollowing to false and decrements followerCount on success
+  - Added unfollow confirmation dialog with cancel/unfollow buttons
+  - Dialog and toast appear in both empty and non-empty collection states
+- Files changed: `src/lib/collections.ts`, `src/app/collections/[id]/page.tsx`
+- **Learnings:**
+  - Follow button splits into two buttons: one for "Following" (clickable to unfollow), one for "Follow"
+  - Use Math.max(0, prev - 1) when decrementing counts to prevent negative numbers
+  - Confirmation dialog for unfollow is lighter weight than delete (no red warning text needed)
+  - Reuse same dialog pattern as other confirmations for consistency
+---
+
+## 2026-01-09 - US-C17: Show followed collections in My Collections
+- Modified `src/lib/collections.ts`:
+  - Added `FollowedCollection` interface extending Collection with followed_at
+  - Added `getFollowedCollections(userId)` function
+  - Queries collection_follows with nested collections data
+  - Returns array of followed collections ordered by followed_at desc
+- Modified `src/app/collections/page.tsx`:
+  - Added followedCollections state
+  - Fetches followed collections on mount alongside owned collections
+  - Updated empty state check to include both owned AND followed collections
+  - Added "Following" section with bookmark icon header
+  - Followed collections have left border accent to distinguish from owned
+  - Clicking links to collection detail page
+- Files changed: `src/lib/collections.ts`, `src/app/collections/page.tsx`
+- **Learnings:**
+  - Supabase nested select returns single object for FK relations (not array)
+  - Use `as unknown as Type` when TypeScript types don't match Supabase response shape
+  - Conditional margin (mt-10) when both sections exist vs no margin when only Following
+  - Border-l-2 provides subtle visual distinction between owned vs followed
 ---
