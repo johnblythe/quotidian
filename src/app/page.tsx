@@ -14,7 +14,8 @@ import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
 import { getTodaysQuote, getRandomQuote, getRandomAuthor, getTodaysQuoteByAuthor, getRandomQuoteByAuthor } from "@/lib/quotes";
 import { useKonamiCode } from "@/hooks/useKonamiCode";
 import { hasShownFirstFavoriteConfetti, markFirstFavoriteConfettiShown } from "@/components/Confetti";
-import { getPreferences } from "@/lib/preferences";
+import { getPreferences, markPersonalizationCelebrated, hasPersonalizationCelebrated } from "@/lib/preferences";
+import { checkAlgorithmStatus } from "@/lib/signals";
 import { isFavorite, addFavorite, removeFavorite, getFavorites } from "@/lib/favorites";
 import { getFreshPullsToday, incrementFreshPulls, recordQuoteShown } from "@/lib/history";
 import type { Quote as QuoteType } from "@/types";
@@ -23,6 +24,7 @@ import type { Quote as QuoteType } from "@/types";
 const KeyboardShortcutsHelp = dynamic(() => import("@/components/KeyboardShortcutsHelp").then(mod => ({ default: mod.KeyboardShortcutsHelp })), { ssr: false });
 const PhilosopherModeActivated = dynamic(() => import("@/components/PhilosopherMode").then(mod => ({ default: mod.PhilosopherModeActivated })), { ssr: false });
 const Confetti = dynamic(() => import("@/components/Confetti").then(mod => ({ default: mod.Confetti })), { ssr: false });
+const PersonalizationUnlocked = dynamic(() => import("@/components/PersonalizationUnlocked").then(mod => ({ default: mod.PersonalizationUnlocked })), { ssr: false });
 
 type PageState = "loading" | "onboarding" | "quote";
 
@@ -37,6 +39,7 @@ export default function Home() {
   const [philosopherMode, setPhilosopherMode] = useState<string | null>(null);
   const [showPhilosopherActivated, setShowPhilosopherActivated] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
+  const [showPersonalizationUnlocked, setShowPersonalizationUnlocked] = useState(false);
   const { showToast } = useToast();
 
   // Konami code easter egg
@@ -111,6 +114,16 @@ export default function Home() {
         setRemainingPulls(Math.max(0, 3 - pullsUsed));
         // Record today's quote being shown
         await recordQuoteShown(getTodaysQuote().id, false);
+
+        // Check if personalization was just enabled and hasn't been celebrated
+        const alreadyCelebrated = await hasPersonalizationCelebrated();
+        if (!alreadyCelebrated) {
+          const { wasJustEnabled } = await checkAlgorithmStatus();
+          if (wasJustEnabled) {
+            setShowPersonalizationUnlocked(true);
+            await markPersonalizationCelebrated();
+          }
+        }
       } else {
         setPageState("onboarding");
       }
@@ -232,6 +245,11 @@ export default function Home() {
         isActive={showConfetti}
         onComplete={() => setShowConfetti(false)}
       />
+      {showPersonalizationUnlocked && (
+        <PersonalizationUnlocked
+          onDismiss={() => setShowPersonalizationUnlocked(false)}
+        />
+      )}
     </>
   );
 }

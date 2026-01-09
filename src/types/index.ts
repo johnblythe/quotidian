@@ -41,6 +41,7 @@ export interface UserPreferences {
   notificationTime: string; // HH:MM format
   onboardedAt: Date;
   algorithmEnabledAt?: Date; // Date when personalization algorithm was enabled
+  personalizationCelebrated?: boolean; // True after showing "personalization unlocked" message
 }
 
 /** A quote saved to favorites */
