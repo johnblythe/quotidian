@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useAuth } from "@/hooks/useAuth";
 
 interface NavItem {
   href: string;
@@ -112,6 +113,28 @@ const navItems: NavItem[] = [
   },
 ];
 
+/**
+ * Sync indicator component - shows when user is signed in
+ */
+function SyncIndicator() {
+  const { isSignedIn, isLoading, isSupabaseConfigured } = useAuth();
+
+  // Don't show anything while loading or if Supabase isn't configured
+  if (isLoading || !isSupabaseConfigured || !isSignedIn) {
+    return null;
+  }
+
+  return (
+    <div className="absolute -top-1 -right-1 lg:top-0 lg:right-0">
+      <div
+        className="w-2 h-2 bg-green-500 rounded-full"
+        title="Synced"
+        aria-label="Signed in and syncing"
+      />
+    </div>
+  );
+}
+
 export function Navigation() {
   const pathname = usePathname();
 
@@ -121,11 +144,12 @@ export function Navigation() {
         <ul className="flex items-center justify-around lg:justify-center lg:gap-12 py-2 lg:py-3">
           {navItems.map((item) => {
             const isActive = pathname === item.href;
+            const isSettings = item.href === "/settings";
             return (
               <li key={item.href}>
                 <Link
                   href={item.href}
-                  className={`btn-nav flex flex-col items-center gap-1 px-3 py-1 ${
+                  className={`btn-nav flex flex-col items-center gap-1 px-3 py-1 relative ${
                     isActive
                       ? "text-foreground"
                       : "text-foreground/50 hover:text-foreground/80"
@@ -134,6 +158,7 @@ export function Navigation() {
                 >
                   {item.icon}
                   <span className="text-xs body-text">{item.label}</span>
+                  {isSettings && <SyncIndicator />}
                 </Link>
               </li>
             );

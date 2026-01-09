@@ -1,45 +1,12 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { PageTransition } from '@/components/PageTransition';
-import { getSupabase, isSupabaseConfigured } from '@/lib/supabase';
-import type { User } from '@supabase/supabase-js';
+import { getSupabase } from '@/lib/supabase';
+import { useAuth } from '@/hooks/useAuth';
 
 export default function AccountPage() {
-  const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isSupabaseReady, setIsSupabaseReady] = useState(false);
-
-  useEffect(() => {
-    async function checkAuth() {
-      const configured = isSupabaseConfigured();
-      setIsSupabaseReady(configured);
-
-      if (!configured) {
-        setIsLoading(false);
-        return;
-      }
-
-      const supabase = getSupabase();
-      if (!supabase) {
-        setIsLoading(false);
-        return;
-      }
-
-      const { data: { user } } = await supabase.auth.getUser();
-      setUser(user);
-      setIsLoading(false);
-
-      // Listen for auth changes
-      const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-        setUser(session?.user ?? null);
-      });
-
-      return () => subscription.unsubscribe();
-    }
-
-    checkAuth();
-  }, []);
+  const { user, isLoading, isSupabaseConfigured } = useAuth();
 
   if (isLoading) {
     return (
@@ -50,7 +17,7 @@ export default function AccountPage() {
   }
 
   // Supabase not configured
-  if (!isSupabaseReady) {
+  if (!isSupabaseConfigured) {
     return (
       <PageTransition>
         <main className="min-h-screen px-6 py-12 max-w-md mx-auto">
