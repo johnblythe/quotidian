@@ -1,0 +1,11 @@
+There are still 6 stories with `passes: false` (US-C15 through US-C20), so another iteration will pick up the next story.
+
+**Summary of US-C14 implementation:**
+- Added `NewCollection` interface with `quote_count` field to `src/lib/collections.ts`
+- Added `getNewCollections(limit)` function that queries public collections from the last 30 days, ordered by `created_at` desc
+- Updated `src/app/discover/page.tsx` to:
+  - Fetch both popular and new collections in parallel
+  - Display "New" section with collection cards showing title, quote count, and public icon
+  - Loading skeleton and empty state for when no new collections exist
+- All quality checks pass (typecheck + build)
+- Commit: `feat: US-C14 - Implement new collections query`

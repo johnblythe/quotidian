@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useAuth } from "@/hooks/useAuth";
 import { getSupabase } from "@/lib/supabase";
 import { getQuoteById } from "@/lib/quotes";
-import { removeQuoteFromCollection, deleteCollection, updateCollection } from "@/lib/collections";
+import { removeQuoteFromCollection, deleteCollection, updateCollection, followCollection, isFollowingCollection, getFollowerCount } from "@/lib/collections";
 import { useRouter } from "next/navigation";
 import { Quote } from "@/components/Quote";
 import { PageTransition } from "@/components/PageTransition";
@@ -32,6 +32,9 @@ export default function CollectionDetailPage() {
   const [editDescription, setEditDescription] = useState("");
   const [editVisibility, setEditVisibility] = useState<"private" | "public">("private");
   const [isSaving, setIsSaving] = useState(false);
+  const [isFollowing, setIsFollowing] = useState(false);
+  const [followerCount, setFollowerCount] = useState(0);
+  const [isFollowingAction, setIsFollowingAction] = useState(false);
 
   useEffect(() => {
     const loadCollection = async () => {
@@ -67,6 +70,13 @@ export default function CollectionDetailPage() {
         getQuoteById(id)
       );
       setQuotes(quoteDetails);
+
+      // Load follower count for public collections
+      if (data.visibility === "public") {
+        const count = await getFollowerCount(collectionId);
+        setFollowerCount(count);
+      }
+
       setLoading(false);
     };
 
@@ -74,6 +84,27 @@ export default function CollectionDetailPage() {
       loadCollection();
     }
   }, [collectionId, authLoading]);
+
+  // Load follow status when user changes or collection loads
+  useEffect(() => {
+    const loadFollowStatus = async () => {
+      if (!user || !collection || collection.visibility !== "public") {
+        setIsFollowing(false);
+        return;
+      }
+
+      // Don't check follow status for own collection
+      if (user.id === collection.user_id) {
+        setIsFollowing(false);
+        return;
+      }
+
+      const following = await isFollowingCollection(collectionId, user.id);
+      setIsFollowing(following);
+    };
+
+    loadFollowStatus();
+  }, [user, collection, collectionId]);
 
   // Auto-hide toast
   useEffect(() => {
@@ -163,6 +194,23 @@ export default function CollectionDetailPage() {
       setToast("Collection updated");
     } else {
       setToast(result.error || "Failed to update collection");
+    }
+  };
+
+  // Handle follow collection
+  const handleFollow = async () => {
+    if (!user || !collection || isFollowingAction) return;
+
+    setIsFollowingAction(true);
+    const result = await followCollection(collectionId, user.id);
+    setIsFollowingAction(false);
+
+    if (result.success) {
+      setIsFollowing(true);
+      setFollowerCount((prev) => prev + 1);
+      setToast("Now following this collection");
+    } else {
+      setToast(result.error || "Failed to follow collection");
     }
   };
 
@@ -298,6 +346,59 @@ export default function CollectionDetailPage() {
                 <p className="body-text text-foreground/60 text-sm">
                   {collection.description}
                 </p>
+              )}
+              {collection.visibility === "public" && (
+                <p className="body-text text-foreground/40 text-xs mt-2">
+                  {followerCount} follower{followerCount !== 1 ? "s" : ""}
+                </p>
+              )}
+              {/* Follow button for public collections (not owned by user) */}
+              {collection.visibility === "public" && !isOwner && user && (
+                <div className="mt-4">
+                  <button
+                    onClick={handleFollow}
+                    disabled={isFollowing || isFollowingAction}
+                    className={`inline-flex items-center gap-2 px-4 py-2 rounded-md body-text text-sm transition-colors ${
+                      isFollowing
+                        ? "bg-foreground/10 text-foreground/60 cursor-default"
+                        : "bg-foreground text-background hover:bg-foreground/90"
+                    }`}
+                  >
+                    {isFollowing ? (
+                      <>
+                        <svg
+                          className="w-4 h-4"
+                          fill="currentColor"
+                          viewBox="0 0 24 24"
+                          aria-hidden="true"
+                        >
+                          <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                        </svg>
+                        Following
+                      </>
+                    ) : isFollowingAction ? (
+                      "Following..."
+                    ) : (
+                      <>
+                        <svg
+                          className="w-4 h-4"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                          aria-hidden="true"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M12 4v16m8-8H4"
+                          />
+                        </svg>
+                        Follow
+                      </>
+                    )}
+                  </button>
+                </div>
               )}
             </div>
 
@@ -475,7 +576,60 @@ export default function CollectionDetailPage() {
             )}
             <p className="body-text text-foreground/40 text-xs">
               {quotes.length} quote{quotes.length !== 1 ? "s" : ""}
+              {collection.visibility === "public" && (
+                <span className="ml-2">
+                  · {followerCount} follower{followerCount !== 1 ? "s" : ""}
+                </span>
+              )}
             </p>
+            {/* Follow button for public collections (not owned by user) */}
+            {collection.visibility === "public" && !isOwner && user && (
+              <div className="mt-4">
+                <button
+                  onClick={handleFollow}
+                  disabled={isFollowing || isFollowingAction}
+                  className={`inline-flex items-center gap-2 px-4 py-2 rounded-md body-text text-sm transition-colors ${
+                    isFollowing
+                      ? "bg-foreground/10 text-foreground/60 cursor-default"
+                      : "bg-foreground text-background hover:bg-foreground/90"
+                  }`}
+                >
+                  {isFollowing ? (
+                    <>
+                      <svg
+                        className="w-4 h-4"
+                        fill="currentColor"
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                      >
+                        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                      </svg>
+                      Following
+                    </>
+                  ) : isFollowingAction ? (
+                    "Following..."
+                  ) : (
+                    <>
+                      <svg
+                        className="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M12 4v16m8-8H4"
+                        />
+                      </svg>
+                      Follow
+                    </>
+                  )}
+                </button>
+              </div>
+            )}
             {isOwner && (
               <div className="mt-4 flex items-center justify-center gap-4">
                 <button

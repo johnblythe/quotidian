@@ -1,0 +1,10 @@
+US-C13 is complete. There are still stories with `passes: false` in the PRD (US-C14 through US-C20), so another iteration will pick up the next story.
+
+**Summary of US-C13 completion:**
+- Added `getPopularCollections()` function to `src/lib/collections.ts` that queries public collections with follower counts and sorts by popularity
+- Updated `src/app/discover/page.tsx` to display the "Popular" section with real data
+- Shows top 10 public collections ordered by follower count
+- Displays title, follower count, and public icon for each collection
+- Includes loading skeleton and empty state
+- Both `npm run typecheck` and `npm run build` pass
+- Committed as `feat: US-C13 - Implement popular collections query`

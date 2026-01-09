@@ -334,3 +334,88 @@ export async function getNewCollections(
 
   return collectionsWithCounts;
 }
+
+/**
+ * Follow a collection
+ * Inserts a record into collection_follows
+ * @returns Object with success boolean and optional error message
+ */
+export async function followCollection(
+  collectionId: string,
+  userId: string
+): Promise<{ success: boolean; error?: string }> {
+  const supabase = getSupabase();
+  if (!supabase) {
+    return { success: false, error: "Supabase not configured" };
+  }
+
+  const { error } = await supabase.from("collection_follows").insert({
+    collection_id: collectionId,
+    user_id: userId,
+  });
+
+  if (error) {
+    // Check if already following (unique constraint violation)
+    if (error.code === "23505") {
+      return { success: false, error: "Already following this collection" };
+    }
+    console.error("Failed to follow collection:", error);
+    return { success: false, error: "Failed to follow collection" };
+  }
+
+  return { success: true };
+}
+
+/**
+ * Check if a user is following a collection
+ * @returns Boolean indicating follow status
+ */
+export async function isFollowingCollection(
+  collectionId: string,
+  userId: string
+): Promise<boolean> {
+  const supabase = getSupabase();
+  if (!supabase) {
+    return false;
+  }
+
+  const { data, error } = await supabase
+    .from("collection_follows")
+    .select("collection_id")
+    .eq("collection_id", collectionId)
+    .eq("user_id", userId)
+    .single();
+
+  if (error) {
+    // PGRST116 means no rows found - not an error, just not following
+    if (error.code !== "PGRST116") {
+      console.error("Failed to check follow status:", error);
+    }
+    return false;
+  }
+
+  return !!data;
+}
+
+/**
+ * Get the follower count for a collection
+ * @returns Number of followers
+ */
+export async function getFollowerCount(collectionId: string): Promise<number> {
+  const supabase = getSupabase();
+  if (!supabase) {
+    return 0;
+  }
+
+  const { count, error } = await supabase
+    .from("collection_follows")
+    .select("*", { count: "exact", head: true })
+    .eq("collection_id", collectionId);
+
+  if (error) {
+    console.error("Failed to get follower count:", error);
+    return 0;
+  }
+
+  return count || 0;
+}
