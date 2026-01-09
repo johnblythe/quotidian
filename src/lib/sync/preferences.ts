@@ -7,6 +7,7 @@ import { db } from '@/lib/db';
 import { getSupabase } from '@/lib/supabase';
 import type { UserPreferences } from '@/types';
 import type { SupabasePreferences, SupabasePreferencesInsert } from '@/types/supabase';
+import { resolveConflict } from './conflicts';
 
 /** Convert local preferences to Supabase format */
 function toSupabaseFormat(local: UserPreferences, userId: string): SupabasePreferencesInsert {
@@ -116,20 +117,19 @@ export async function pullPreferences(): Promise<{ success: boolean; error?: str
   // Get local preferences
   const localPrefs = await db.preferences.toCollection().first();
 
-  // Determine if we should update local based on timestamps
-  let shouldUpdateLocal = true;
+  // Determine if we should update local based on timestamps using conflict resolution
+  const remoteUpdatedAt = new Date(remotePrefs.updated_at);
 
-  if (localPrefs) {
-    // Compare timestamps - Supabase has updated_at, local uses onboardedAt as proxy
-    // For preferences, we use simple last-write-wins with remote timestamp
-    const remoteUpdatedAt = new Date(remotePrefs.updated_at);
+  // Use conflict resolution module with logging
+  const winner = resolveConflict({
+    type: 'preferences',
+    key: user.id,
+    // Use onboardedAt as proxy for local update time (preferences don't have updatedAt locally)
+    localUpdatedAt: localPrefs?.onboardedAt ?? null,
+    remoteUpdatedAt,
+  });
 
-    // If local was modified more recently (onboardedAt is later), keep local
-    // This is a simple heuristic - in practice, we might want a dedicated updatedAt field locally
-    if (localPrefs.onboardedAt > remoteUpdatedAt) {
-      shouldUpdateLocal = false;
-    }
-  }
+  const shouldUpdateLocal = winner === 'remote';
 
   if (shouldUpdateLocal) {
     const localData = toLocalFormat(remotePrefs);

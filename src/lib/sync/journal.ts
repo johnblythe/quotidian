@@ -7,6 +7,7 @@ import { db } from '@/lib/db';
 import { getSupabase } from '@/lib/supabase';
 import type { JournalEntry } from '@/types';
 import type { SupabaseJournalEntry, SupabaseJournalEntryInsert } from '@/types/supabase';
+import { resolveConflict } from './conflicts';
 
 /** Convert local journal entry to Supabase format */
 function toSupabaseFormat(local: JournalEntry, userId: string): SupabaseJournalEntryInsert {
@@ -70,9 +71,16 @@ export async function pushJournalEntries(): Promise<{ success: boolean; error?: 
     const supabaseData = toSupabaseFormat(local, user.id);
 
     if (remote) {
-      // Compare timestamps - only push if local is newer
+      // Use conflict resolution module to determine if local is newer
       const remoteUpdatedAt = new Date(remote.updated_at);
-      if (local.updatedAt > remoteUpdatedAt) {
+      const winner = resolveConflict({
+        type: 'journal',
+        key: local.quoteId,
+        localUpdatedAt: local.updatedAt,
+        remoteUpdatedAt,
+      });
+
+      if (winner === 'local') {
         const { error } = await supabase
           .from('journal_entries')
           .update({
@@ -145,8 +153,15 @@ export async function pullJournalEntries(): Promise<{ success: boolean; error?: 
     const remoteUpdatedAt = new Date(remote.updated_at);
 
     if (local) {
-      // Compare timestamps - only update local if remote is newer
-      if (remoteUpdatedAt > local.updatedAt) {
+      // Use conflict resolution module to determine if remote is newer
+      const winner = resolveConflict({
+        type: 'journal',
+        key: remote.quote_id,
+        localUpdatedAt: local.updatedAt,
+        remoteUpdatedAt,
+      });
+
+      if (winner === 'remote') {
         await db.journalEntries.update(local.id!, {
           content: remote.content,
           updatedAt: remoteUpdatedAt,
