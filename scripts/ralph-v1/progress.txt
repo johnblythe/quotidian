@@ -79,3 +79,153 @@ Started: 2026-01-08
   - selectNextQuote() exported for use in quote selection flow
   - Cold start logic (US-V05) will wrap this function
 ---
+
+## 2026-01-08 - US-V05: Add cold start logic for new users
+- What was implemented:
+  - Added algorithmEnabledAt optional field to UserPreferences type
+  - Created getFirstSignalDate() helper to find earliest signal timestamp
+  - Created shouldEnableAlgorithm() - checks if 14 days since first signal
+  - Created checkAlgorithmStatus() - returns { isEnabled, wasJustEnabled }
+  - Created markAlgorithmEnabled() - updates preferences with algorithmEnabledAt
+  - Refactored selectNextQuote() to return { quote, algorithmJustEnabled }
+  - Created selectWeightedQuote() internal function for weighted algorithm
+  - Cold start uses pure random selection (still filters 30-day history)
+- Files changed:
+  - src/types/index.ts - added algorithmEnabledAt to UserPreferences
+  - src/lib/signals.ts - added cold start functions, refactored selectNextQuote
+- **Learnings for future iterations:**
+  - selectNextQuote() now returns { quote, algorithmJustEnabled } for US-V06 celebration
+  - Dexie doesn't need schema update for optional fields on existing tables
+  - checkAlgorithmStatus() is idempotent and marks algorithm enabled on first call
+---
+
+## 2026-01-08 - US-V06: Show 'Personalization unlocked' message on day 15
+- What was implemented:
+  - Added personalizationCelebrated boolean flag to UserPreferences type
+  - Created PersonalizationUnlocked modal component (follows PhilosopherModeActivated pattern)
+  - Added markPersonalizationCelebrated() and hasPersonalizationCelebrated() to preferences
+  - Integrated celebration in homepage checkOnboarding effect
+  - Checks if algorithm wasJustEnabled AND hasn't been celebrated yet
+  - Marks celebrated immediately to ensure one-time display
+- Files created:
+  - src/components/PersonalizationUnlocked.tsx - celebration modal
+- Files changed:
+  - src/types/index.ts - added personalizationCelebrated to UserPreferences
+  - src/lib/preferences.ts - added celebration tracking functions
+  - src/app/page.tsx - integrated celebration modal, imports, and detection logic
+- **Learnings for future iterations:**
+  - Modal components follow pattern: useState for visibility, useEffect for auto-dismiss
+  - Dynamic imports with lazy loading: `const X = dynamic(() => import(...), { ssr: false })`
+  - One-time celebrations: check flag → show modal → mark flag (before unmount)
+---
+
+## 2026-01-08 - US-V07: Create journeys table in IndexedDB
+- What was implemented:
+  - Added UserJourney interface to src/types/index.ts
+  - Fields: id (auto), journeyId (string ref), startedAt, completedAt (optional), day (number), quotesShown (string[])
+  - Added journeys table to Dexie schema (version 3)
+  - Indexed on: id (auto), journeyId, startedAt, completedAt
+- Files changed:
+  - src/types/index.ts - added UserJourney interface
+  - src/lib/db.ts - added journeys table, bumped to version 3
+- **Learnings for future iterations:**
+  - UserJourney.journeyId references journey definitions (to be created in US-V08)
+  - quotesShown array not indexed (used for tracking shown quotes during journey)
+  - completedAt is optional, set when journey finishes
+---
+
+## 2026-01-08 - US-V08: Seed journey definitions
+- What was implemented:
+  - Created src/data/journeys.json with 7 curated journeys
+  - Added JourneyDefinition type to src/types/index.ts
+  - Journeys support three filter types: 'author' (single), 'authors' (array), 'theme' (single)
+- Journey definitions:
+  - 7 Days with Seneca (author: Seneca, 7 days)
+  - Week of Stillness (author: Alan Watts, 7 days)
+  - Stoic Fundamentals (authors: Marcus Aurelius, Epictetus, Seneca, 7 days)
+  - Facing Mortality (theme: death, 5 days)
+  - Building Discipline (theme: discipline, 7 days)
+  - Finding Joy (theme: joy, 5 days)
+  - Naval on Wealth & Happiness (author: Naval Ravikant, 7 days)
+- Files created:
+  - src/data/journeys.json - 7 journey definitions
+- Files changed:
+  - src/types/index.ts - added JourneyDefinition interface
+- **Learnings for future iterations:**
+  - Import journeys.json for journey data (similar to quotes.json pattern)
+  - JourneyDefinition.filterType determines how to filter quotes: 'author' = single author, 'authors' = array of authors, 'theme' = theme filter
+  - Verified authors against quotes.json: Seneca, Alan Watts, Marcus Aurelius, Epictetus, Naval Ravikant
+---
+
+## 2026-01-08 - US-V09: Create Journeys page in settings
+- What was implemented:
+  - Created src/app/journeys/page.tsx listing all available journeys
+  - Displays journey emoji, title, description, and duration for each journey
+  - Added Journeys nav item in Navigation.tsx between Favorites and Settings
+  - Uses PageTransition wrapper for consistent navigation feel
+  - Imports journeys.json and casts to JourneyDefinition[] for type safety
+- Files created:
+  - src/app/journeys/page.tsx - journeys listing page
+- Files changed:
+  - src/components/Navigation.tsx - added Journeys nav item with layers icon
+- **Learnings for future iterations:**
+  - Navigation items are in navItems array in Navigation.tsx (add new item to array)
+  - PageTransition wrapper provides consistent page entrance animation
+  - journey.json import pattern: `import data from '@/data/journeys.json'` then cast
+  - UI should show Start button (US-V10) which will be added separately
+---
+
+## 2026-01-08 - US-V10: Implement start journey flow
+- What was implemented:
+  - Created src/lib/journeys.ts with journey management functions
+  - Functions: getActiveJourney, hasActiveJourney, startJourney, deleteActiveJourney, completeActiveJourney, advanceJourneyDay, addQuoteToJourney, getCompletedJourneys
+  - Updated journeys page with Start button on each journey card
+  - Shows "Day X of Y" for active journey instead of Start button
+  - Implemented warning modal when starting new journey while one is active
+  - Redirects to home after starting journey using next/navigation router
+- Files created:
+  - src/lib/journeys.ts - journey CRUD operations
+- Files changed:
+  - src/app/journeys/page.tsx - added state management, Start button, warning modal
+- **Learnings for future iterations:**
+  - Journey lib exports functions for: getting active, starting, deleting, completing, advancing day, adding quote
+  - Use `useRouter` from 'next/navigation' for programmatic navigation
+  - Active journey detection: filter where completedAt is undefined/null
+  - Dexie add() returns number | undefined, use Promise<void> if ID not needed
+---
+
+## 2026-01-08 - US-V11: Update homepage for active journey display
+- What was implemented:
+  - Added getJourneyQuote() function to src/lib/quotes.ts for journey-filtered quotes
+  - Added helper functions: getQuotesByAuthors(), getQuotesByTheme()
+  - Created src/components/JourneyHeader.tsx displaying "Day X of Y: Journey Name"
+  - Updated homepage to detect active journey on load
+  - If journey active: shows JourneyHeader, selects journey-filtered quote, tracks in quotesShown
+  - If no journey: shows normal Greeting and today's quote
+- Files created:
+  - src/components/JourneyHeader.tsx - journey progress header component
+- Files changed:
+  - src/lib/quotes.ts - added journey quote selection functions
+  - src/app/page.tsx - integrated journey detection and JourneyHeader display
+- **Learnings for future iterations:**
+  - getJourneyQuote() returns null when all quotes exhausted (signals journey completion)
+  - JourneyHeader replaces Greeting conditionally using ternary operator
+  - addQuoteToJourney() called immediately after selecting journey quote to track
+---
+
+## 2026-01-08 - US-V12: Implement exit journey flow with confirmation
+- What was implemented:
+  - Added optional onExit prop to JourneyHeader component
+  - "Exit Journey" button appears below journey title when onExit provided
+  - Added showExitConfirmation state and handlers to homepage
+  - Confirmation modal follows existing modal pattern (from journeys page)
+  - On confirm: deletes journey via deleteActiveJourney(), clears state, shows today's quote
+  - Toast notification confirms exit
+- Files changed:
+  - src/components/JourneyHeader.tsx - added onExit prop and Exit button
+  - src/app/page.tsx - added exit confirmation dialog and handlers
+- **Learnings for future iterations:**
+  - Modal pattern: fixed inset-0, bg-black/50, flex items-center justify-center, z-50
+  - deleteActiveJourney() already exists in lib/journeys.ts
+  - After exiting journey, reset to getTodaysQuote() for normal flow
+---

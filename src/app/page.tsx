@@ -19,7 +19,7 @@ import { getPreferences, markPersonalizationCelebrated, hasPersonalizationCelebr
 import { checkAlgorithmStatus } from "@/lib/signals";
 import { isFavorite, addFavorite, removeFavorite, getFavorites } from "@/lib/favorites";
 import { getFreshPullsToday, incrementFreshPulls, recordQuoteShown } from "@/lib/history";
-import { getActiveJourney, addQuoteToJourney } from "@/lib/journeys";
+import { getActiveJourney, addQuoteToJourney, deleteActiveJourney } from "@/lib/journeys";
 import journeysData from "@/data/journeys.json";
 import type { Quote as QuoteType, JourneyDefinition, UserJourney } from "@/types";
 
@@ -47,6 +47,7 @@ export default function Home() {
   const [showPersonalizationUnlocked, setShowPersonalizationUnlocked] = useState(false);
   const [activeJourney, setActiveJourney] = useState<UserJourney | null>(null);
   const [journeyDefinition, setJourneyDefinition] = useState<JourneyDefinition | null>(null);
+  const [showExitConfirmation, setShowExitConfirmation] = useState(false);
   const { showToast } = useToast();
 
   // Konami code easter egg
@@ -215,6 +216,26 @@ export default function Home() {
     setRemainingPulls((prev) => Math.max(0, prev - 1));
   };
 
+  const handleExitJourney = () => {
+    setShowExitConfirmation(true);
+  };
+
+  const handleConfirmExit = async () => {
+    await deleteActiveJourney();
+    setActiveJourney(null);
+    setJourneyDefinition(null);
+    setShowExitConfirmation(false);
+    // Set a new random quote for normal mode
+    const newQuote = getTodaysQuote();
+    setCurrentQuote(newQuote);
+    await recordQuoteShown(newQuote.id, false);
+    showToast("Journey exited");
+  };
+
+  const handleCancelExit = () => {
+    setShowExitConfirmation(false);
+  };
+
   if (pageState === "loading") {
     return (
       <div className="flex min-h-screen items-center justify-center">
@@ -250,6 +271,7 @@ export default function Home() {
                 title={journeyDefinition.title}
                 currentDay={activeJourney.day}
                 totalDays={journeyDefinition.duration}
+                onExit={handleExitJourney}
               />
             ) : (
               userName && <Greeting name={userName} />
@@ -288,6 +310,30 @@ export default function Home() {
         <PersonalizationUnlocked
           onDismiss={() => setShowPersonalizationUnlocked(false)}
         />
+      )}
+      {showExitConfirmation && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-6">
+          <div className="bg-background rounded-lg p-6 max-w-sm w-full shadow-xl">
+            <h3 className="font-serif text-lg mb-3">Exit Journey?</h3>
+            <p className="body-text text-sm text-foreground/70 mb-4">
+              Are you sure you want to exit &quot;{journeyDefinition?.title}&quot;? Your progress will not be saved.
+            </p>
+            <div className="flex gap-3 justify-end">
+              <button
+                onClick={handleCancelExit}
+                className="btn-nav px-4 py-2 text-sm border border-foreground/20 rounded-md hover:bg-foreground/5 transition-colors"
+              >
+                Continue Journey
+              </button>
+              <button
+                onClick={handleConfirmExit}
+                className="btn-nav px-4 py-2 text-sm bg-foreground text-background rounded-md hover:bg-foreground/90 transition-colors"
+              >
+                Exit
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </>
   );
