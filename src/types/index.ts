@@ -103,3 +103,11 @@ export interface JourneyDefinition {
   filterType: 'author' | 'authors' | 'theme';
   filterValue: string | string[]; // Author name(s) or theme
 }
+
+/** Daily engagement record for smart timing */
+export interface Engagement {
+  id?: number;
+  date: string; // YYYY-MM-DD format
+  openedAt: Date; // First time app was opened this day
+  engagedAt?: Date; // When user favorited or reflected (if they did)
+}

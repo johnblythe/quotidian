@@ -1,0 +1,10 @@
+There are still 5 stories with `passes: false` (US-V15 through US-V19). Another iteration will pick up the next story.
+
+**Completed: US-V14 - Track completed journeys in archive**
+
+Summary of changes:
+- Added "Completed Journeys" section to the Journeys page (`src/app/journeys/page.tsx`)
+- Lists completed journeys with emoji, title, completion date, and quote count
+- Expandable cards show all quotes from each journey with day numbers and truncated text
+- Sorted by most recent completion first
+- All quality checks pass (typecheck and build)
