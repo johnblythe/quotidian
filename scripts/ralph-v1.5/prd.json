@@ -217,8 +217,8 @@
         "npm run typecheck passes"
       ],
       "priority": 14,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Share button added to ActionButtons component. ShareModal component shows preview of generated share card. Buttons for copy/download/share are placeholder (implemented in US-S15, US-S16, US-S17)."
     },
     {
       "id": "US-S15",
@@ -232,8 +232,8 @@
         "npm run typecheck passes"
       ],
       "priority": 15,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Copy button in ShareModal uses ClipboardItem API for PNG blob. Falls back to text copy if image clipboard not supported. Toast shows success/error status with auto-dismiss."
     },
     {
       "id": "US-S16",

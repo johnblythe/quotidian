@@ -1,0 +1,10 @@
+There are still stories with `passes: false`. US-S14 is complete, and another iteration will pick up the next story (US-S15 - Implement copy to clipboard).
+
+**Summary of US-S14 implementation:**
+
+- **Added share button to ActionButtons** - New `onShare` optional prop that renders a share icon button
+- **Created ShareModal component** - Modal that generates and displays a preview of the share card when opened
+- **Integrated with home page** - Share button opens modal, lazy-loaded via dynamic import
+- **All quality checks pass** - `npm run typecheck` and `npm run build` both succeed
+
+The Share modal currently shows the generated image preview with placeholder buttons for Copy, Download, and Share - which will be implemented in the next stories (US-S15, US-S16, US-S17).

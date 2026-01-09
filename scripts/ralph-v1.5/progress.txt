@@ -205,3 +205,40 @@ Started: 2026-01-08
   - Georgia is safe web font that renders on all platforms
   - lineHeight = fontSize * 1.4 gives good readability for quotes
 ---
+
+## 2026-01-08 - US-S14: Add share button to quote display
+- Added onShare prop to ActionButtons component (optional, renders when provided)
+- Created ShareModal component at src/components/ShareModal.tsx:
+  - Shows preview of generated share card on open
+  - Uses generateShareCardDataUrl() for image preview
+  - Placeholder buttons for Copy/Download/Share (implemented in US-S15/S16/S17)
+  - Cleanup: revokes object URL when modal closes
+  - Escape key closes modal
+- Integrated ShareModal into home page (src/app/page.tsx):
+  - Added showShareModal state
+  - handleShare() opens modal
+  - ShareModal lazy-loaded via dynamic import
+- Share icon uses upload/arrow-up design (standard share icon)
+- **Learnings:**
+  - URL.createObjectURL needs cleanup via URL.revokeObjectURL() to prevent memory leaks
+  - Dynamic imports keep bundle small - ShareModal loaded only when needed
+  - Share button is optional in ActionButtons (renders conditionally) for reuse on other pages
+---
+
+## 2026-01-08 - US-S15: Implement copy to clipboard
+- Added copy functionality to ShareModal component
+- Uses ClipboardItem API with image/png blob type for modern browsers
+- Detects browser support: navigator.clipboard.write exists
+- Fallback: copies quote text if image clipboard not supported or fails
+- Toast notification shows:
+  - "Image copied to clipboard!" on success
+  - Fallback message if text was copied instead
+  - Error message if both image and text copy fail
+- Button states: idle (copy icon), copying (spinner), success (checkmark)
+- Auto-dismiss toast after 2-3 seconds
+- **Learnings:**
+  - ClipboardItem API requires fresh blob - can't reuse object URL
+  - navigator.clipboard.write exists in modern browsers but may still fail (permissions, etc.)
+  - Always have text fallback - image clipboard has quirky cross-browser support
+  - Safari requires user gesture and may need different handling in some contexts
+---

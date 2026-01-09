@@ -20,6 +20,7 @@ export function ShareModal({ quote, isOpen, onClose }: ShareModalProps) {
   const [error, setError] = useState<string | null>(null);
   const [copyStatus, setCopyStatus] = useState<"idle" | "copying" | "success" | "error">("idle");
   const [copyError, setCopyError] = useState<string | null>(null);
+  const [downloadStatus, setDownloadStatus] = useState<"idle" | "downloading" | "success" | "error">("idle");
 
   // Check if browser supports image clipboard
   const supportsClipboardImage = typeof navigator !== "undefined" &&
@@ -73,6 +74,37 @@ export function ShareModal({ quote, isOpen, onClose }: ShareModalProps) {
         setCopyStatus("idle");
         setCopyError(null);
       }, 3000);
+    }
+  };
+
+  // Download image as PNG
+  const handleDownload = async () => {
+    setDownloadStatus("downloading");
+
+    try {
+      // Generate a fresh blob for download
+      const blob = await generateShareCard(quote);
+
+      // Create object URL for the blob
+      const url = URL.createObjectURL(blob);
+
+      // Create invisible link and trigger download
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `quotidian-${quote.id}.png`;
+      document.body.appendChild(link);
+      link.click();
+
+      // Cleanup
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+
+      setDownloadStatus("success");
+      setTimeout(() => setDownloadStatus("idle"), 2000);
+    } catch (err) {
+      console.error("Failed to download image:", err);
+      setDownloadStatus("error");
+      setTimeout(() => setDownloadStatus("idle"), 3000);
     }
   };
 
@@ -252,27 +284,81 @@ export function ShareModal({ quote, isOpen, onClose }: ShareModalProps) {
               : "Copy"}
           </button>
           <button
-            disabled={!imageUrl}
+            onClick={handleDownload}
+            disabled={!imageUrl || downloadStatus === "downloading"}
             className="btn-nav px-4 py-2 text-sm border border-foreground/20 rounded-md hover:bg-foreground/5 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
-            aria-label="Download image (coming soon)"
-            title="Coming soon"
+            aria-label="Download image"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-              <polyline points="7 10 12 15 17 10" />
-              <line x1="12" y1="15" x2="12" y2="3" />
-            </svg>
-            Download
+            {downloadStatus === "downloading" ? (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="animate-spin"
+              >
+                <circle cx="12" cy="12" r="10" opacity="0.25" />
+                <path d="M12 2a10 10 0 0 1 10 10" />
+              </svg>
+            ) : downloadStatus === "success" ? (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+            ) : downloadStatus === "error" ? (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <line x1="15" y1="9" x2="9" y2="15" />
+                <line x1="9" y1="9" x2="15" y2="15" />
+              </svg>
+            ) : (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="7 10 12 15 17 10" />
+                <line x1="12" y1="15" x2="12" y2="3" />
+              </svg>
+            )}
+            {downloadStatus === "downloading"
+              ? "Downloading..."
+              : downloadStatus === "success"
+              ? "Downloaded!"
+              : downloadStatus === "error"
+              ? "Failed"
+              : "Download"}
           </button>
           <button
             disabled={!imageUrl}
