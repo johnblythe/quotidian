@@ -21,6 +21,7 @@ import { isFavorite, addFavorite, removeFavorite, getFavorites } from "@/lib/fav
 import { getFreshPullsToday, incrementFreshPulls, recordQuoteShown } from "@/lib/history";
 import { getActiveJourney, addQuoteToJourney, deleteActiveJourney, completeActiveJourney, advanceJourneyDay } from "@/lib/journeys";
 import { recordAppOpen } from "@/lib/engagement";
+import { useAuth } from "@/hooks/useAuth";
 import journeysData from "@/data/journeys.json";
 import type { Quote as QuoteType, JourneyDefinition, UserJourney } from "@/types";
 
@@ -53,7 +54,9 @@ export default function Home() {
   const [showExitConfirmation, setShowExitConfirmation] = useState(false);
   const [showJourneyCompletion, setShowJourneyCompletion] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
+  const [showAddToCollectionModal, setShowAddToCollectionModal] = useState(false);
   const { showToast } = useToast();
+  const { isSignedIn } = useAuth();
 
   // Konami code easter egg
   const handleKonamiCode = useCallback(() => {
@@ -231,6 +234,10 @@ export default function Home() {
     setShowShareModal(true);
   };
 
+  const handleAddToCollection = () => {
+    setShowAddToCollectionModal(true);
+  };
+
   const handleAnother = async () => {
     if (remainingPulls <= 0) return;
 
@@ -327,9 +334,11 @@ export default function Home() {
               onReflect={handleReflect}
               onAnother={handleAnother}
               onShare={handleShare}
+              onAddToCollection={handleAddToCollection}
               isSaved={isSaved}
               isReflecting={showReflection}
               remainingPulls={remainingPulls}
+              isSignedIn={isSignedIn}
             />
             {showReflection && (
               <ReflectionEditor quoteId={currentQuote.id} />

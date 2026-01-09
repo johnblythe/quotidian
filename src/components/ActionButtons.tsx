@@ -7,9 +7,11 @@ interface ActionButtonsProps {
   onReflect: () => void;
   onAnother: () => void;
   onShare?: () => void;
+  onAddToCollection?: () => void;
   isSaved?: boolean;
   isReflecting?: boolean;
   remainingPulls?: number;
+  isSignedIn?: boolean;
 }
 
 export function ActionButtons({
@@ -17,9 +19,11 @@ export function ActionButtons({
   onReflect,
   onAnother,
   onShare,
+  onAddToCollection,
   isSaved = false,
   isReflecting = false,
   remainingPulls,
+  isSignedIn = false,
 }: ActionButtonsProps) {
   const isAnotherDisabled = remainingPulls !== undefined && remainingPulls <= 0;
   const prevSavedRef = useRef<boolean | null>(null);
@@ -119,6 +123,31 @@ export function ActionButtons({
             <line x1="12" y1="2" x2="12" y2="15" />
           </svg>
           <span className="text-xs body-text">Share</span>
+        </button>
+      )}
+
+      {/* Add to collection button - only visible when signed in */}
+      {isSignedIn && onAddToCollection && (
+        <button
+          onClick={onAddToCollection}
+          className="btn-icon flex flex-col items-center gap-1 text-foreground/60 hover:text-foreground"
+          aria-label="Add to collection"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M12 5v14" />
+            <path d="M5 12h14" />
+          </svg>
+          <span className="text-xs body-text">Collect</span>
         </button>
       )}
 
