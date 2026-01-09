@@ -12,7 +12,8 @@ import { PageTransition } from "@/components/PageTransition";
 import { QuoteSkeleton } from "@/components/Skeleton";
 import { useToast } from "@/components/Toast";
 import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
-import { getTodaysQuote, getRandomQuote, getRandomAuthor, getTodaysQuoteByAuthor, getRandomQuoteByAuthor, getJourneyQuote } from "@/lib/quotes";
+import { getTodaysQuote, getRandomQuote, getRandomAuthor, getTodaysQuoteByAuthor, getRandomQuoteByAuthor, getJourneyQuote, getCollectionQuote } from "@/lib/quotes";
+import { getCollection } from "@/lib/collections";
 import { useKonamiCode } from "@/hooks/useKonamiCode";
 import { hasShownFirstFavoriteConfetti, markFirstFavoriteConfettiShown } from "@/components/Confetti";
 import { getPreferences, markPersonalizationCelebrated, hasPersonalizationCelebrated } from "@/lib/preferences";
@@ -23,7 +24,7 @@ import { getActiveJourney, addQuoteToJourney, deleteActiveJourney, completeActiv
 import { recordAppOpen } from "@/lib/engagement";
 import { useAuth } from "@/hooks/useAuth";
 import journeysData from "@/data/journeys.json";
-import type { Quote as QuoteType, JourneyDefinition, UserJourney } from "@/types";
+import type { Quote as QuoteType, JourneyDefinition, UserJourney, Collection } from "@/types";
 
 const journeyDefinitions = journeysData as JourneyDefinition[];
 
@@ -52,6 +53,7 @@ export default function Home() {
   const [showPersonalizationUnlocked, setShowPersonalizationUnlocked] = useState(false);
   const [activeJourney, setActiveJourney] = useState<UserJourney | null>(null);
   const [journeyDefinition, setJourneyDefinition] = useState<JourneyDefinition | null>(null);
+  const [journeyCollection, setJourneyCollection] = useState<Collection | null>(null);
   const [showExitConfirmation, setShowExitConfirmation] = useState(false);
   const [showJourneyCompletion, setShowJourneyCompletion] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
@@ -137,40 +139,86 @@ export default function Home() {
         // Check for active journey
         const journey = await getActiveJourney();
         if (journey) {
-          const journeyDef = journeyDefinitions.find(j => j.id === journey.journeyId);
-          if (journeyDef) {
-            // Check if journey is complete (day exceeds duration)
-            if (journey.day > journeyDef.duration) {
-              // Journey is complete - show celebration
-              setActiveJourney(journey);
-              setJourneyDefinition(journeyDef);
-              setShowJourneyCompletion(true);
-              // Mark as completed
-              await completeActiveJourney();
-              // Show today's regular quote
-              await recordQuoteShown(getTodaysQuote().id, false);
-            } else {
-              // Journey is still in progress
-              setActiveJourney(journey);
-              setJourneyDefinition(journeyDef);
-              // Get a journey-specific quote
-              const journeyQuote = getJourneyQuote(
-                journeyDef.filterType,
-                journeyDef.filterValue,
-                journey.quotesShown
-              );
-              if (journeyQuote) {
-                setCurrentQuote(journeyQuote);
-                // Track this quote in the journey
-                await addQuoteToJourney(journeyQuote.id);
-                await recordQuoteShown(journeyQuote.id, false);
-                // Advance to next day for tomorrow
-                await advanceJourneyDay();
-              } else {
-                // No more quotes available for this journey - complete early
+          // Handle collection-based journeys
+          if (journey.type === 'collection' && journey.collectionId) {
+            const collection = await getCollection(journey.collectionId);
+            if (collection) {
+              const duration = collection.quote_ids.length;
+              // Check if journey is complete (day exceeds duration)
+              if (journey.day > duration) {
+                // Journey is complete - show celebration
+                setActiveJourney(journey);
+                setJourneyCollection(collection);
                 setShowJourneyCompletion(true);
+                // Mark as completed
                 await completeActiveJourney();
+                // Show today's regular quote
                 await recordQuoteShown(getTodaysQuote().id, false);
+              } else {
+                // Journey is still in progress
+                setActiveJourney(journey);
+                setJourneyCollection(collection);
+                // Get the next quote from the collection
+                const collectionQuote = getCollectionQuote(
+                  collection.quote_ids,
+                  journey.quotesShown
+                );
+                if (collectionQuote) {
+                  setCurrentQuote(collectionQuote);
+                  // Track this quote in the journey
+                  await addQuoteToJourney(collectionQuote.id);
+                  await recordQuoteShown(collectionQuote.id, false);
+                  // Advance to next day for tomorrow
+                  await advanceJourneyDay();
+                } else {
+                  // No more quotes available - complete early
+                  setShowJourneyCompletion(true);
+                  await completeActiveJourney();
+                  await recordQuoteShown(getTodaysQuote().id, false);
+                }
+              }
+            } else {
+              // Collection not found (may have been deleted) - end journey
+              await deleteActiveJourney();
+              await recordQuoteShown(getTodaysQuote().id, false);
+            }
+          } else {
+            // Handle preset journeys
+            const journeyDef = journeyDefinitions.find(j => j.id === journey.journeyId);
+            if (journeyDef) {
+              // Check if journey is complete (day exceeds duration)
+              if (journey.day > journeyDef.duration) {
+                // Journey is complete - show celebration
+                setActiveJourney(journey);
+                setJourneyDefinition(journeyDef);
+                setShowJourneyCompletion(true);
+                // Mark as completed
+                await completeActiveJourney();
+                // Show today's regular quote
+                await recordQuoteShown(getTodaysQuote().id, false);
+              } else {
+                // Journey is still in progress
+                setActiveJourney(journey);
+                setJourneyDefinition(journeyDef);
+                // Get a journey-specific quote
+                const journeyQuote = getJourneyQuote(
+                  journeyDef.filterType,
+                  journeyDef.filterValue,
+                  journey.quotesShown
+                );
+                if (journeyQuote) {
+                  setCurrentQuote(journeyQuote);
+                  // Track this quote in the journey
+                  await addQuoteToJourney(journeyQuote.id);
+                  await recordQuoteShown(journeyQuote.id, false);
+                  // Advance to next day for tomorrow
+                  await advanceJourneyDay();
+                } else {
+                  // No more quotes available for this journey - complete early
+                  setShowJourneyCompletion(true);
+                  await completeActiveJourney();
+                  await recordQuoteShown(getTodaysQuote().id, false);
+                }
               }
             }
           }
@@ -265,6 +313,7 @@ export default function Home() {
     await deleteActiveJourney();
     setActiveJourney(null);
     setJourneyDefinition(null);
+    setJourneyCollection(null);
     setShowExitConfirmation(false);
     // Set a new random quote for normal mode
     const newQuote = getTodaysQuote();
@@ -281,12 +330,14 @@ export default function Home() {
     setShowJourneyCompletion(false);
     setActiveJourney(null);
     setJourneyDefinition(null);
+    setJourneyCollection(null);
   };
 
   const handleStartAnotherJourney = () => {
     setShowJourneyCompletion(false);
     setActiveJourney(null);
     setJourneyDefinition(null);
+    setJourneyCollection(null);
   };
 
   if (pageState === "loading") {
@@ -324,6 +375,14 @@ export default function Home() {
                 title={journeyDefinition.title}
                 currentDay={activeJourney.day}
                 totalDays={journeyDefinition.duration}
+                onExit={handleExitJourney}
+              />
+            ) : activeJourney && journeyCollection ? (
+              <JourneyHeader
+                emoji="📚"
+                title={journeyCollection.title}
+                currentDay={activeJourney.day}
+                totalDays={journeyCollection.quote_ids.length}
                 onExit={handleExitJourney}
               />
             ) : (
@@ -372,7 +431,7 @@ export default function Home() {
           <div className="bg-background rounded-lg p-6 max-w-sm w-full shadow-xl">
             <h3 className="font-serif text-lg mb-3">Exit Journey?</h3>
             <p className="body-text text-sm text-foreground/70 mb-4">
-              Are you sure you want to exit &quot;{journeyDefinition?.title}&quot;? Your progress will not be saved.
+              Are you sure you want to exit &quot;{journeyDefinition?.title || journeyCollection?.title}&quot;? Your progress will not be saved.
             </p>
             <div className="flex gap-3 justify-end">
               <button
@@ -395,6 +454,14 @@ export default function Home() {
         <JourneyCompletion
           journeyTitle={journeyDefinition.title}
           journeyEmoji={journeyDefinition.emoji}
+          onDismiss={handleJourneyCompletionDismiss}
+          onStartAnother={handleStartAnotherJourney}
+        />
+      )}
+      {showJourneyCompletion && journeyCollection && (
+        <JourneyCompletion
+          journeyTitle={journeyCollection.title}
+          journeyEmoji="📚"
           onDismiss={handleJourneyCompletionDismiss}
           onStartAnother={handleStartAnotherJourney}
         />

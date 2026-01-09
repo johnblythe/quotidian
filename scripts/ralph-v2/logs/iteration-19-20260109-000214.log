@@ -1,0 +1,13 @@
+There's one more story remaining: US-C20. This is the final story that makes collection-based journeys actually work on the homepage. Since the instructions say to work on ONE story per iteration and end normally if there are still stories to complete, I'll stop here.
+
+**US-C19: Add 'Start Journey' button on collection - COMPLETE**
+
+Summary of changes:
+- Added "Start Journey" button to collection detail page
+- Button only shows for collections with 3+ quotes when user is signed in and has no active journey
+- Clicking creates a journey with `type='collection'` and `collectionId` set
+- Duration set to number of quotes in collection
+- Redirects to homepage after journey starts
+- Shows informative message when user has existing active journey
+
+There is **1 remaining story** (US-C20) with `passes: false`.
