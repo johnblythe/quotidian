@@ -42,6 +42,7 @@ export interface UserPreferences {
   onboardedAt: Date;
   algorithmEnabledAt?: Date; // Date when personalization algorithm was enabled
   personalizationCelebrated?: boolean; // True after showing "personalization unlocked" message
+  lastTimingCalculationDate?: string; // YYYY-MM-DD of last weekly timing recalculation
 }
 
 /** A quote saved to favorites */

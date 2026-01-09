@@ -108,3 +108,44 @@ export async function calculateOptimalTime(): Promise<string | null> {
 
   return `${hoursStr}:${minutesStr}`;
 }
+
+/**
+ * Check if today is Sunday (day for weekly recalculation)
+ */
+export function isSunday(): boolean {
+  return new Date().getDay() === 0;
+}
+
+/**
+ * Check if recalculation is due (it's Sunday and hasn't been calculated this week)
+ * @param lastCalculationDate - YYYY-MM-DD of last calculation
+ */
+export function shouldRecalculateTiming(lastCalculationDate: string | undefined): boolean {
+  if (!isSunday()) return false;
+
+  const today = getTodayDateString();
+
+  // If never calculated or last calculation was before today, recalculate
+  return !lastCalculationDate || lastCalculationDate < today;
+}
+
+/**
+ * Calculate the difference in minutes between two HH:MM time strings
+ * @returns Absolute difference in minutes
+ */
+export function getTimeDifferenceMinutes(time1: string, time2: string): number {
+  const [h1, m1] = time1.split(':').map(Number);
+  const [h2, m2] = time2.split(':').map(Number);
+
+  const minutes1 = h1 * 60 + m1;
+  const minutes2 = h2 * 60 + m2;
+
+  return Math.abs(minutes1 - minutes2);
+}
+
+/**
+ * Check if the suggested time differs significantly from current time (> 30 min)
+ */
+export function isSignificantTimeDifference(suggestedTime: string, currentTime: string): boolean {
+  return getTimeDifferenceMinutes(suggestedTime, currentTime) > 30;
+}
