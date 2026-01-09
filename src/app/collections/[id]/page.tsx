@@ -7,6 +7,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { getSupabase } from "@/lib/supabase";
 import { getQuoteById } from "@/lib/quotes";
 import { removeQuoteFromCollection, deleteCollection, updateCollection, followCollection, unfollowCollection, isFollowingCollection, getFollowerCount } from "@/lib/collections";
+import { startCollectionJourney, hasActiveJourney } from "@/lib/journeys";
 import { useRouter } from "next/navigation";
 import { Quote } from "@/components/Quote";
 import { PageTransition } from "@/components/PageTransition";
@@ -37,6 +38,8 @@ export default function CollectionDetailPage() {
   const [isFollowingAction, setIsFollowingAction] = useState(false);
   const [showUnfollowConfirm, setShowUnfollowConfirm] = useState(false);
   const [isUnfollowing, setIsUnfollowing] = useState(false);
+  const [hasExistingJourney, setHasExistingJourney] = useState(false);
+  const [isStartingJourney, setIsStartingJourney] = useState(false);
 
   useEffect(() => {
     const loadCollection = async () => {
@@ -115,6 +118,15 @@ export default function CollectionDetailPage() {
       return () => clearTimeout(timer);
     }
   }, [toast]);
+
+  // Check for existing journey
+  useEffect(() => {
+    const checkJourney = async () => {
+      const active = await hasActiveJourney();
+      setHasExistingJourney(active);
+    };
+    checkJourney();
+  }, []);
 
   // Handle remove quote from collection
   const handleRemoveQuote = async () => {
@@ -233,6 +245,28 @@ export default function CollectionDetailPage() {
       setToast(result.error || "Failed to unfollow collection");
     }
   };
+
+  // Handle start collection journey
+  const handleStartJourney = async () => {
+    if (!collection || isStartingJourney || hasExistingJourney) return;
+
+    setIsStartingJourney(true);
+    try {
+      // Duration = number of quotes in collection
+      await startCollectionJourney(collectionId, quotes.length);
+      setHasExistingJourney(true);
+      setToast("Journey started!");
+      // Navigate to home to begin the journey
+      router.push("/");
+    } catch (error) {
+      console.error("Error starting journey:", error);
+      setToast("Failed to start journey");
+    }
+    setIsStartingJourney(false);
+  };
+
+  // Check if collection has enough quotes for a journey (3+)
+  const canStartJourney = quotes.length >= 3 && !hasExistingJourney;
 
   // Loading state
   if (loading || authLoading) {
@@ -738,6 +772,49 @@ export default function CollectionDetailPage() {
                   Delete
                 </button>
               </div>
+            )}
+            {/* Start Journey button - only for collections with 3+ quotes */}
+            {canStartJourney && user && (
+              <div className="mt-6">
+                <button
+                  onClick={handleStartJourney}
+                  disabled={isStartingJourney}
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-md body-text text-sm transition-colors bg-foreground text-background hover:bg-foreground/90 disabled:opacity-50"
+                >
+                  {isStartingJourney ? (
+                    "Starting..."
+                  ) : (
+                    <>
+                      <svg
+                        className="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
+                        />
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                        />
+                      </svg>
+                      Start Journey
+                    </>
+                  )}
+                </button>
+              </div>
+            )}
+            {hasExistingJourney && user && quotes.length >= 3 && (
+              <p className="mt-4 body-text text-foreground/40 text-xs">
+                Complete your current journey before starting a new one
+              </p>
             )}
           </div>
 

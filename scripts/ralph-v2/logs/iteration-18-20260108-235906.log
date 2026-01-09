@@ -1,0 +1,10 @@
+**US-C18: Extend Journey type for collections** has been completed successfully.
+
+**Summary:**
+- Added `JourneyType = 'preset' | 'collection'` type to `src/types/index.ts`
+- Added `type: JourneyType` and optional `collectionId?: string` to `UserJourney` interface
+- Updated Dexie DB to version 6 with migration to set existing journeys to `type='preset'`
+- Added `startCollectionJourney()`, `isCollectionJourney()`, and `getActiveJourneyType()` functions to `src/lib/journeys.ts`
+- Both `npm run typecheck` and `npm run build` pass
+
+**Remaining stories:** US-C19 and US-C20 still have `passes: false`.

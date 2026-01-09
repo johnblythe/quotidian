@@ -1,0 +1,13 @@
+There are still 4 stories with `passes: false` (US-C17, US-C18, US-C19, US-C20). The iteration is complete for US-C16.
+
+**Summary of US-C16: Implement unfollow collection**
+
+Completed:
+- Added `unfollowCollection(collectionId, userId)` to `src/lib/collections.ts`
+- Updated `src/app/collections/[id]/page.tsx`:
+  - "Following" button now clickable to show unfollow confirmation
+  - Confirmation dialog with cancel/unfollow buttons
+  - Updates button state and follower count on success
+  - Toast notification on success/error
+- All quality checks pass (`npm run typecheck`, `npm run build`)
+- Changes committed and PRD updated

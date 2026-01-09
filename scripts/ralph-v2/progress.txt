@@ -16,6 +16,9 @@ Started: 2026-01-08
 - NewCollection type in collections.ts includes quote_count field
 - Collections lib also has: followCollection, unfollowCollection, isFollowingCollection, getFollowerCount, getFollowedCollections
 - FollowedCollection type in collections.ts extends Collection with followed_at field
+- Journeys lib: `src/lib/journeys.ts` has startJourney, startCollectionJourney, getActiveJourney, isCollectionJourney
+- UserJourney.type: 'preset' | 'collection' distinguishes journey sources
+- Dexie DB version increments: increment version and add .upgrade() for data migrations
 
 ---
 
@@ -335,4 +338,44 @@ Started: 2026-01-08
   - Use `as unknown as Type` when TypeScript types don't match Supabase response shape
   - Conditional margin (mt-10) when both sections exist vs no margin when only Following
   - Border-l-2 provides subtle visual distinction between owned vs followed
+---
+
+## 2026-01-09 - US-C18: Extend Journey type for collections
+- Modified `src/types/index.ts`:
+  - Added `JourneyType = 'preset' | 'collection'` type
+  - Added `type: JourneyType` field to UserJourney interface
+  - Added optional `collectionId?: string` field to UserJourney
+- Modified `src/lib/db.ts`:
+  - Added version 6 schema with new journey fields (type, collectionId)
+  - Added upgrade migration to set existing journeys to type='preset'
+- Modified `src/lib/journeys.ts`:
+  - Updated `startJourney()` to set type='preset' for preset journeys
+  - Added `startCollectionJourney(collectionId, duration)` for collection journeys
+  - Added `isCollectionJourney()` helper to check journey type
+  - Added `getActiveJourneyType()` to get current journey type
+- Files changed: `src/types/index.ts`, `src/lib/db.ts`, `src/lib/journeys.ts`
+- **Learnings:**
+  - Dexie migrations use `.upgrade(tx => ...)` to transform existing data
+  - Use `tx.table('name').toCollection().modify()` for bulk updates
+  - JourneyType discriminator allows handling preset vs collection journeys differently
+  - collectionId is optional because preset journeys don't need it
+---
+
+## 2026-01-09 - US-C19: Add 'Start Journey' button on collection
+- Modified `src/app/collections/[id]/page.tsx`:
+  - Imported `startCollectionJourney` and `hasActiveJourney` from journeys lib
+  - Added `hasExistingJourney` and `isStartingJourney` state
+  - Added useEffect to check for existing active journey on mount
+  - Added `handleStartJourney()` to create collection journey and redirect home
+  - Added `canStartJourney` computed value (3+ quotes && no active journey)
+  - Added "Start Journey" button with play icon in header (only when canStartJourney && user)
+  - Shows helpful message when user has existing journey and collection has 3+ quotes
+  - Button calls startCollectionJourney with collectionId and quotes.length as duration
+  - Redirects to homepage after journey starts
+- Files changed: `src/app/collections/[id]/page.tsx`
+- **Learnings:**
+  - hasActiveJourney() from journeys.ts checks for existing journey
+  - Use canStartJourney computed value to avoid duplicate condition checks
+  - Show informative message when blocked (existing journey) vs hiding button entirely
+  - Navigate to home after starting journey so user sees first quote
 ---
