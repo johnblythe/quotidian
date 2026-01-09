@@ -20,6 +20,7 @@ import { checkAlgorithmStatus } from "@/lib/signals";
 import { isFavorite, addFavorite, removeFavorite, getFavorites } from "@/lib/favorites";
 import { getFreshPullsToday, incrementFreshPulls, recordQuoteShown } from "@/lib/history";
 import { getActiveJourney, addQuoteToJourney, deleteActiveJourney, completeActiveJourney, advanceJourneyDay } from "@/lib/journeys";
+import { recordAppOpen } from "@/lib/engagement";
 import journeysData from "@/data/journeys.json";
 import type { Quote as QuoteType, JourneyDefinition, UserJourney } from "@/types";
 
@@ -119,6 +120,10 @@ export default function Home() {
       if (prefs) {
         setUserName(prefs.name);
         setPageState("quote");
+
+        // Record app open for engagement tracking
+        await recordAppOpen();
+
         // Check remaining pulls for today
         const pullsUsed = await getFreshPullsToday();
         setRemainingPulls(Math.max(0, 3 - pullsUsed));

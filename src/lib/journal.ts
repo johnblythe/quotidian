@@ -1,5 +1,6 @@
 import { db } from './db';
 import { recordSignal } from '@/lib/signals';
+import { recordEngagement } from '@/lib/engagement';
 import type { JournalEntry } from '@/types';
 
 /**
@@ -28,6 +29,9 @@ export async function saveJournalEntry(quoteId: string, content: string): Promis
     // Record reflection signal for algorithm (only on new entries)
     const signalType = content.length > 500 ? 'reflected_long' : 'reflected';
     await recordSignal(quoteId, signalType);
+
+    // Record engagement for smart timing
+    await recordEngagement();
 
     return true;
   }

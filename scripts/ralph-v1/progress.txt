@@ -265,3 +265,37 @@ Started: 2026-01-08
   - Expansion pattern: store single expanded ID in state, toggle on click
   - Journey quotes accessible via UserJourney.quotesShown array
 ---
+
+## 2026-01-08 - US-V15: Create engagement table in IndexedDB
+- What was implemented:
+  - Added Engagement interface to src/types/index.ts
+  - Fields: id (auto), date (string YYYY-MM-DD, unique), openedAt (Date), engagedAt (optional Date)
+  - Added engagements table to Dexie schema (version 4)
+  - Indexed on: id (auto), date (unique index with &)
+- Files changed:
+  - src/types/index.ts - added Engagement interface
+  - src/lib/db.ts - added engagements table, bumped to version 4
+- **Learnings for future iterations:**
+  - Use &date for unique index in Dexie (one record per day)
+  - engagedAt is optional - only set when user favorites or reflects
+  - date field is string format YYYY-MM-DD for easy querying
+---
+
+## 2026-01-08 - US-V16: Record engagement times on app open
+- What was implemented:
+  - Created src/lib/engagement.ts with recordAppOpen() and recordEngagement() functions
+  - recordAppOpen() called in homepage checkOnboarding effect when prefs exist
+  - recordEngagement() called in addFavorite() and saveJournalEntry() (new entries only)
+  - One record per day (upsert by date) - openedAt captures first open, engagedAt captures first engagement
+  - Added helper functions: getTodayDateString(), getAllEngagements(), getRecentEngagements(days)
+- Files created:
+  - src/lib/engagement.ts - engagement recording module
+- Files changed:
+  - src/app/page.tsx - added import and recordAppOpen() call
+  - src/lib/favorites.ts - added recordEngagement() call in addFavorite()
+  - src/lib/journal.ts - added recordEngagement() call in saveJournalEntry()
+- **Learnings for future iterations:**
+  - engagement.ts exports getRecentEngagements(days) for US-V17 optimal time calculation
+  - recordEngagement only updates if engagedAt not already set (captures first engagement)
+  - Date string format YYYY-MM-DD used for day-based upsert pattern
+---

@@ -1,5 +1,6 @@
 import { db } from '@/lib/db';
 import { recordSignal } from '@/lib/signals';
+import { recordEngagement } from '@/lib/engagement';
 import type { FavoriteQuote } from '@/types';
 
 /**
@@ -18,6 +19,9 @@ export async function addFavorite(quoteId: string): Promise<void> {
 
   // Record favorite signal for algorithm
   await recordSignal(quoteId, 'favorite');
+
+  // Record engagement for smart timing
+  await recordEngagement();
 }
 
 /**
