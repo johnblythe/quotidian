@@ -56,3 +56,21 @@ export interface QuoteHistory {
   shownAt: Date;
   freshPull: boolean; // true if user requested "another quote"
 }
+
+/** Signal types for tracking user behavior */
+export type SignalType =
+  | 'favorite'
+  | 'reflected'
+  | 'reflected_long'
+  | 'viewed'
+  | 'another'
+  | 'unfavorited';
+
+/** User behavior signal for algorithm learning */
+export interface Signal {
+  id?: number;
+  quoteId: string;
+  signal: SignalType;
+  timestamp: Date;
+  themes: Theme[];
+}
