@@ -261,8 +261,8 @@
         "npm run typecheck passes"
       ],
       "priority": 17,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Share button in ShareModal uses Web Share API with navigator.canShare() feature detection. Shares image + text when supported, falls back to text-only sharing, and displays error message directing to Copy/Download on unsupported browsers. User cancellation handled gracefully (no error shown)."
     },
     {
       "id": "US-S18",
@@ -276,8 +276,8 @@
         "npm run typecheck passes"
       ],
       "priority": 18,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Resend installed. src/lib/email.ts has sendEmail(), sendTestEmail(), isResendConfigured(). Uses lazy init pattern. RESEND_API_KEY added to .env.local.example."
     },
     {
       "id": "US-S19",

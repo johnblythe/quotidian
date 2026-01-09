@@ -257,3 +257,38 @@ Started: 2026-01-08
   - Append link to body, click, then remove for reliable downloads
   - URL.revokeObjectURL cleanup prevents memory leaks
 ---
+
+## 2026-01-08 - US-S17: Implement native share (Web Share API)
+- Added handleShare function to ShareModal component
+- Uses Web Share API with feature detection:
+  - Checks navigator.share and navigator.canShare exist
+  - Creates File object from PNG blob for image sharing
+  - Tests canShare(shareData) before attempting share
+- Share hierarchy:
+  1. Try sharing image + text (full support)
+  2. Fallback to text-only sharing if image not supported
+  3. Show error message directing to Copy/Download if API unavailable
+- Handles user cancellation gracefully (AbortError doesn't show as failure)
+- Status states: idle, sharing (spinner), success (checkmark), error (X)
+- Toast shows success message or fallback notification
+- **Learnings:**
+  - Web Share API file sharing requires File object, not just Blob
+  - navigator.canShare() must test with actual shareData to detect file support
+  - AbortError is thrown when user cancels share - not a real error
+  - Safari/iOS has good Web Share support; Chrome desktop varies by OS
+---
+
+## 2026-01-08 - US-S18: Set up Resend integration
+- Installed resend package via npm
+- Created src/lib/email.ts with:
+  - isResendConfigured(): checks if RESEND_API_KEY is set
+  - getResend(): lazy initialization of Resend client
+  - sendEmail(options): generic email sending with full error handling
+  - sendTestEmail(to): convenience function to test configuration
+- Updated .env.local.example with RESEND_API_KEY placeholder
+- Uses same lazy init pattern as Supabase (returns null if not configured)
+- **Learnings:**
+  - Resend SDK uses camelCase (replyTo not reply_to) unlike some API docs
+  - sendEmail returns {success, id?, error?} for clean error handling
+  - Default from address uses onboarding@resend.dev (Resend's sandbox domain)
+---
