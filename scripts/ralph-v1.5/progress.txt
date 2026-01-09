@@ -121,3 +121,16 @@ Started: 2026-01-08
   - Need to loop through all entries and compare timestamps individually
   - Timestamps from Supabase are ISO strings, convert to Date for comparison
 ---
+
+## 2026-01-08 - US-S09: Create sync service for favorites
+- Created src/lib/sync/favorites.ts with:
+  - pushFavorites(): adds local-only favorites to Supabase, removes unfavorited from remote
+  - pullFavorites(): adds remote-only favorites to local, removes deleted from local
+  - syncFavorites(): pulls then pushes for bidirectional sync
+- Favorites are simpler than journal entries - just (user_id, quote_id) with saved_at timestamp
+- No conflict resolution needed since favorites are binary (either favorited or not)
+- **Learnings:**
+  - Favorites don't have updated_at - just saved_at for when initially favorited
+  - Unlike journal entries, favorites use set difference logic (add missing, remove absent)
+  - Push removes remote favorites when local unfavorites; pull removes local when remote deleted
+---

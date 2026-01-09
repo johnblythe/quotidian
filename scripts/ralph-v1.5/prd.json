@@ -140,8 +140,8 @@
         "npm run typecheck passes"
       ],
       "priority": 9,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Sync service at src/lib/sync/favorites.ts. Push adds missing to remote, removes unfavorited. Pull adds missing to local, removes deleted remotely. syncFavorites() does pull-then-push for bidirectional sync."
     },
     {
       "id": "US-S10",
