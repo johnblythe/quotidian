@@ -1,6 +1,6 @@
 import { db } from './db';
-import { getQuoteById } from './quotes';
-import type { SignalType, Theme, ThemeAffinity } from '@/types';
+import { getQuoteById, getAllQuotes } from './quotes';
+import type { SignalType, Theme, ThemeAffinity, Quote } from '@/types';
 
 /**
  * Signal weights for algorithm scoring
@@ -90,4 +90,131 @@ export async function getThemeAffinities(): Promise<ThemeAffinity[]> {
   affinities.sort((a, b) => b.score - a.score);
 
   return affinities;
+}
+
+/**
+ * Get quote IDs shown within a date range
+ * @param days - Number of days to look back
+ * @returns Set of quote IDs shown in that period
+ */
+async function getQuoteIdsShownInDays(days: number): Promise<Set<string>> {
+  const cutoff = new Date();
+  cutoff.setDate(cutoff.getDate() - days);
+
+  const history = await db.quoteHistory
+    .where('shownAt')
+    .aboveOrEqual(cutoff)
+    .toArray();
+
+  return new Set(history.map(h => h.quoteId));
+}
+
+/**
+ * Get authors that user has favorited quotes from
+ * @returns Set of author names
+ */
+async function getFavoritedAuthors(): Promise<Set<string>> {
+  const favorites = await db.favorites.toArray();
+  const authors = new Set<string>();
+
+  for (const fav of favorites) {
+    const quote = getQuoteById(fav.quoteId);
+    if (quote) {
+      authors.add(quote.author);
+    }
+  }
+
+  return authors;
+}
+
+/**
+ * Get set of high-affinity themes (positive score)
+ * @returns Set of themes with positive affinity scores
+ */
+async function getHighAffinityThemes(): Promise<Set<Theme>> {
+  const affinities = await getThemeAffinities();
+  return new Set(
+    affinities
+      .filter(a => a.score > 0)
+      .map(a => a.theme)
+  );
+}
+
+/**
+ * Score a quote for weighted selection
+ * @param quote - Quote to score
+ * @param highAffinityThemes - Themes user prefers
+ * @param favoritedAuthors - Authors user has favorited
+ * @param shown60Days - Quote IDs shown in last 60 days
+ */
+function scoreQuote(
+  quote: Quote,
+  highAffinityThemes: Set<Theme>,
+  favoritedAuthors: Set<string>,
+  shown60Days: Set<string>
+): number {
+  // Base random score (0 to 1)
+  let score = Math.random();
+
+  // Theme bonus: +0.5 for each matching high-affinity theme
+  const quoteThemes = quote.themes ?? [];
+  for (const theme of quoteThemes) {
+    if (highAffinityThemes.has(theme)) {
+      score += 0.5;
+    }
+  }
+
+  // Author bonus: +0.3 if user favorited quotes from same author
+  if (favoritedAuthors.has(quote.author)) {
+    score += 0.3;
+  }
+
+  // Recency penalty: -0.2 if shown in last 60 days
+  if (shown60Days.has(quote.id)) {
+    score -= 0.2;
+  }
+
+  return score;
+}
+
+/**
+ * Select next quote using weighted algorithm
+ * - Filters out quotes shown in last 30 days
+ * - Scores remaining quotes with theme/author bonuses and recency penalty
+ * - Returns highest scoring quote
+ * @returns Selected quote, or random quote if no valid candidates
+ */
+export async function selectNextQuote(): Promise<Quote> {
+  const allQuotes = getAllQuotes();
+
+  // Get filtering and scoring data
+  const [shown30Days, shown60Days, highAffinityThemes, favoritedAuthors] = await Promise.all([
+    getQuoteIdsShownInDays(30),
+    getQuoteIdsShownInDays(60),
+    getHighAffinityThemes(),
+    getFavoritedAuthors(),
+  ]);
+
+  // Filter out quotes shown in last 30 days
+  const candidates = allQuotes.filter(q => !shown30Days.has(q.id));
+
+  // If no candidates (all shown recently), fall back to all quotes
+  if (candidates.length === 0) {
+    const index = Math.floor(Math.random() * allQuotes.length);
+    return allQuotes[index];
+  }
+
+  // Score each candidate
+  let bestQuote = candidates[0];
+  let bestScore = -Infinity;
+
+  for (const quote of candidates) {
+    const score = scoreQuote(quote, highAffinityThemes, favoritedAuthors, shown60Days);
+    if (score > bestScore) {
+      bestScore = score;
+      bestQuote = quote;
+    }
+  }
+
+  return bestQuote;
 }
