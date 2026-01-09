@@ -1,0 +1,11 @@
+US-S08 is complete. There are still stories with `passes: false` (US-S09 through US-S22), so the work continues.
+
+**Summary of US-S08:**
+- Created `src/lib/sync/journal.ts` with:
+  - `pushJournalEntries()`: uploads local IndexedDB journal entries to Supabase
+  - `pullJournalEntries()`: downloads from Supabase and merges to local
+  - `syncJournalEntries()`: convenience function for two-way sync
+- Implements last-write-wins conflict resolution based on `updated_at` timestamp
+- Uses `quote_id` as the unique key per user (each user has one reflection per quote)
+- All quality checks passed (typecheck + build)
+- Committed: `3f7a4ed feat: US-S08 - Create sync service for journal entries`

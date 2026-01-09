@@ -112,3 +112,13 @@ export interface Engagement {
   openedAt: Date; // First time app was opened this day
   engagedAt?: Date; // When user favorited or reflected (if they did)
 }
+
+/** Sync operation types for offline queue */
+export type SyncType = 'preferences' | 'journal' | 'favorites' | 'history';
+
+/** Pending sync operation queued while offline */
+export interface PendingSync {
+  id?: number;
+  type: SyncType;
+  createdAt: Date;
+}

@@ -1,0 +1,15 @@
+I've completed **US-S06: Create Supabase schema (tables, RLS)**.
+
+**Summary:**
+- Created `supabase/migrations/001_initial_schema.sql` with 5 tables:
+  - `preferences` - user settings with digest_enabled field
+  - `journal_entries` - reflections with timestamps
+  - `favorites` - saved quotes with unique constraint
+  - `quote_history` - shown quotes with fresh_pull flag
+  - `signals` - behavior signals with themes array
+- All tables have Row Level Security (RLS) enabled with user-scoped policies
+- Created TypeScript types in `src/types/supabase.ts`
+- Both `npm run typecheck` and `npm run build` pass
+- Committed as: `feat: US-S06 - Create Supabase schema (tables, RLS)`
+
+There are still stories with `passes: false` remaining (US-S07 through US-S22), so another iteration will continue with US-S07.

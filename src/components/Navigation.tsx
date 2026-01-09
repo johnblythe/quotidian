@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
+import { useSyncStatus } from "@/hooks/useSyncStatus";
 
 interface NavItem {
   href: string;
@@ -114,22 +115,41 @@ const navItems: NavItem[] = [
 ];
 
 /**
- * Sync indicator component - shows when user is signed in
+ * Sync indicator component - shows sync status when user is signed in
+ * Green dot = synced, Yellow dot = pending syncs, Pulsing = syncing
  */
 function SyncIndicator() {
   const { isSignedIn, isLoading, isSupabaseConfigured } = useAuth();
+  const { online, pendingCount, syncing } = useSyncStatus();
 
   // Don't show anything while loading or if Supabase isn't configured
   if (isLoading || !isSupabaseConfigured || !isSignedIn) {
     return null;
   }
 
+  // Determine indicator color and status
+  const hasPending = pendingCount > 0;
+  const isOffline = !online;
+
+  let bgColor = "bg-green-500"; // Synced
+  let title = "Synced";
+
+  if (syncing) {
+    bgColor = "bg-blue-500 animate-pulse";
+    title = "Syncing...";
+  } else if (isOffline || hasPending) {
+    bgColor = "bg-yellow-500";
+    title = isOffline
+      ? `Offline (${pendingCount} pending)`
+      : `${pendingCount} pending sync${pendingCount === 1 ? "" : "s"}`;
+  }
+
   return (
     <div className="absolute -top-1 -right-1 lg:top-0 lg:right-0">
       <div
-        className="w-2 h-2 bg-green-500 rounded-full"
-        title="Synced"
-        aria-label="Signed in and syncing"
+        className={`w-2 h-2 ${bgColor} rounded-full`}
+        title={title}
+        aria-label={title}
       />
     </div>
   );
