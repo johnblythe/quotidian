@@ -1,0 +1,10 @@
+**US-C02 Complete.** 
+
+Created `collection_follows` table migration with:
+- Composite primary key (user_id, collection_id)
+- Foreign keys to auth.users and collections with CASCADE delete
+- RLS policies for users to manage their own follows
+- Additional policy for viewing follows on public collections (needed for follower counts)
+- Indexes on both columns for query performance
+
+There are still stories with `passes: false` (US-C03 through US-C20 remain).

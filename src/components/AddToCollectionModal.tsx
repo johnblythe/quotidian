@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { getSupabase } from "@/lib/supabase";
 import { useAuth } from "@/hooks/useAuth";
-import type { Collection } from "@/types";
+import type { Collection, CollectionVisibility } from "@/types";
 
 interface AddToCollectionModalProps {
   quoteId: string;
@@ -15,6 +15,7 @@ interface AddToCollectionModalProps {
 /**
  * Modal for adding a quote to a collection
  * Lists user's collections with radio selection, shows check marks for already-added
+ * Includes form for creating new collections
  */
 export function AddToCollectionModal({
   quoteId,
@@ -28,6 +29,13 @@ export function AddToCollectionModal({
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // New collection form state
+  const [showNewForm, setShowNewForm] = useState(false);
+  const [newTitle, setNewTitle] = useState("");
+  const [newDescription, setNewDescription] = useState("");
+  const [newVisibility, setNewVisibility] = useState<CollectionVisibility>("private");
+  const [isCreating, setIsCreating] = useState(false);
 
   // Fetch user's collections when modal opens
   useEffect(() => {
@@ -77,13 +85,62 @@ export function AddToCollectionModal({
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [isOpen, onClose]);
 
-  // Reset selection when modal closes
+  // Reset state when modal closes
   useEffect(() => {
     if (!isOpen) {
       setSelectedId(null);
       setError(null);
+      setShowNewForm(false);
+      setNewTitle("");
+      setNewDescription("");
+      setNewVisibility("private");
     }
   }, [isOpen]);
+
+  // Handle creating a new collection
+  const handleCreateCollection = async () => {
+    if (!newTitle.trim() || !user) return;
+
+    setIsCreating(true);
+    setError(null);
+
+    const supabase = getSupabase();
+    if (!supabase) {
+      setError("Supabase not configured");
+      setIsCreating(false);
+      return;
+    }
+
+    const { data, error: createError } = await supabase
+      .from("collections")
+      .insert({
+        user_id: user.id,
+        title: newTitle.trim(),
+        description: newDescription.trim() || null,
+        quote_ids: [],
+        visibility: newVisibility,
+      })
+      .select()
+      .single();
+
+    if (createError) {
+      console.error("Failed to create collection:", createError);
+      setError("Failed to create collection");
+      setIsCreating(false);
+      return;
+    }
+
+    // Add new collection to list and auto-select it
+    setCollections((prev) => [data, ...prev]);
+    setSelectedId(data.id);
+
+    // Reset form and close it
+    setShowNewForm(false);
+    setNewTitle("");
+    setNewDescription("");
+    setNewVisibility("private");
+    setIsCreating(false);
+  };
 
   const handleConfirm = async () => {
     if (!selectedId || !user) return;
@@ -269,6 +326,171 @@ export function AddToCollectionModal({
             </div>
           )}
         </div>
+
+        {/* New Collection Form */}
+        {showNewForm ? (
+          <div className="px-4 pb-4 border-t border-foreground/10 pt-4">
+            <div className="space-y-3">
+              {/* Title field */}
+              <div>
+                <label className="block text-xs text-foreground/60 body-text mb-1">
+                  Title <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  value={newTitle}
+                  onChange={(e) => setNewTitle(e.target.value)}
+                  placeholder="My Collection"
+                  className="w-full px-3 py-2 text-sm rounded-md border border-foreground/20 bg-transparent focus:border-foreground/40 focus:outline-none transition-colors"
+                  autoFocus
+                />
+              </div>
+
+              {/* Description field */}
+              <div>
+                <label className="block text-xs text-foreground/60 body-text mb-1">
+                  Description (optional)
+                </label>
+                <textarea
+                  value={newDescription}
+                  onChange={(e) => setNewDescription(e.target.value)}
+                  placeholder="A brief description..."
+                  rows={2}
+                  className="w-full px-3 py-2 text-sm rounded-md border border-foreground/20 bg-transparent focus:border-foreground/40 focus:outline-none transition-colors resize-none"
+                />
+              </div>
+
+              {/* Visibility toggle */}
+              <div>
+                <label className="block text-xs text-foreground/60 body-text mb-2">
+                  Visibility
+                </label>
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setNewVisibility("private")}
+                    className={`flex-1 flex items-center justify-center gap-2 px-3 py-2 text-sm rounded-md border transition-colors ${
+                      newVisibility === "private"
+                        ? "border-foreground bg-foreground/5"
+                        : "border-foreground/20 hover:border-foreground/40"
+                    }`}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                      <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                    </svg>
+                    Private
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setNewVisibility("public")}
+                    className={`flex-1 flex items-center justify-center gap-2 px-3 py-2 text-sm rounded-md border transition-colors ${
+                      newVisibility === "public"
+                        ? "border-foreground bg-foreground/5"
+                        : "border-foreground/20 hover:border-foreground/40"
+                    }`}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <circle cx="12" cy="12" r="10" />
+                      <line x1="2" y1="12" x2="22" y2="12" />
+                      <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                    </svg>
+                    Public
+                  </button>
+                </div>
+              </div>
+
+              {/* Form actions */}
+              <div className="flex gap-2 pt-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowNewForm(false);
+                    setNewTitle("");
+                    setNewDescription("");
+                    setNewVisibility("private");
+                  }}
+                  className="flex-1 px-3 py-2 text-sm border border-foreground/20 rounded-md hover:bg-foreground/5 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={handleCreateCollection}
+                  disabled={!newTitle.trim() || isCreating}
+                  className="flex-1 px-3 py-2 text-sm bg-foreground text-background rounded-md hover:bg-foreground/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                >
+                  {isCreating ? (
+                    <>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="14"
+                        height="14"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="animate-spin"
+                      >
+                        <circle cx="12" cy="12" r="10" opacity="0.25" />
+                        <path d="M12 2a10 10 0 0 1 10 10" />
+                      </svg>
+                      Creating...
+                    </>
+                  ) : (
+                    "Create"
+                  )}
+                </button>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="px-4 pb-2">
+            <button
+              type="button"
+              onClick={() => setShowNewForm(true)}
+              className="w-full flex items-center justify-center gap-2 px-3 py-2 text-sm border border-dashed border-foreground/20 rounded-md hover:border-foreground/40 hover:bg-foreground/5 transition-colors text-foreground/60 hover:text-foreground"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+              </svg>
+              New Collection
+            </button>
+          </div>
+        )}
 
         {/* Error message */}
         {error && collections.length > 0 && (

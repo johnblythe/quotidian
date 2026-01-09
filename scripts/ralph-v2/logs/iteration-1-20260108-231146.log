@@ -1,0 +1,10 @@
+**US-C01 completed.** 
+
+Summary:
+- Created `supabase/migrations/002_collections.sql` with collections table
+- Table has: id, user_id, title, description, quote_ids[], visibility, timestamps
+- Enabled RLS with policies for owners and public collections
+- Typecheck and build pass
+- Committed: `feat: US-C01 - Create collections table in Supabase`
+
+There are still 19 stories with `passes: false` remaining (US-C02 through US-C20). The next iteration will pick up US-C02: Create collection_follows table.

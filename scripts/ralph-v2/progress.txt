@@ -1,7 +1,83 @@
 # Ralph Progress Log - v2
-Started: (pending)
+Started: 2026-01-08
 
 ## Codebase Patterns
-(Inherited from previous phases)
+- Supabase migrations in `supabase/migrations/` numbered sequentially (001_, 002_, etc.)
+- RLS policies follow pattern: "Users can [action] own [table]" naming
+- Use TEXT[] for arrays (like quote_ids)
+- visibility TEXT with CHECK constraint for enum-like values
+- update_updated_at_column() trigger function exists - reuse it for new tables
+- All tables use UUID primary key with gen_random_uuid()
+- Foreign keys reference auth.users(id) with ON DELETE CASCADE
+- useAuth hook: `import { useAuth } from '@/hooks/useAuth'` provides `{ user, isLoading, isSupabaseConfigured, isSignedIn }`
+- ActionButtons component takes optional callbacks + boolean props to conditionally render buttons
 
+---
+
+## 2026-01-08 - US-C01: Create collections table in Supabase
+- Created `supabase/migrations/002_collections.sql`
+- Collections table: id, user_id, title, description, quote_ids[], visibility, timestamps
+- RLS enabled with 5 policies:
+  - Users can view/insert/update/delete own collections
+  - Public collections readable by all authenticated users
+- Added indexes on user_id and visibility
+- Reused existing update_updated_at_column() trigger
+- **Learnings:**
+  - Existing migration 001_initial_schema.sql has update_updated_at_column() function
+  - Use TEXT with CHECK constraint for enum-like values (not Postgres ENUM)
+  - Pattern: CREATE TABLE -> CREATE INDEX -> ALTER TABLE ENABLE RLS -> CREATE POLICY -> CREATE TRIGGER
+---
+
+## 2026-01-08 - US-C02: Create collection_follows table in Supabase
+- Created `supabase/migrations/003_collection_follows.sql`
+- collection_follows table: user_id, collection_id, followed_at with composite primary key
+- RLS enabled with 4 policies:
+  - Users can view own follows
+  - Anyone can view follows on public collections (for follower counts)
+  - Users can follow collections (insert)
+  - Users can unfollow collections (delete)
+- Added indexes on collection_id and user_id for efficient lookups
+- No updated_at trigger needed (follows are immutable once created)
+- **Learnings:**
+  - Composite primary keys use: PRIMARY KEY (col1, col2) syntax
+  - For junction tables, index both foreign key columns separately
+  - RLS subqueries can reference other tables for complex policies
+---
+
+## 2026-01-08 - US-C03: Add 'Add to collection' button on quote display
+- Modified `src/components/ActionButtons.tsx`:
+  - Added `onAddToCollection` callback prop
+  - Added `isSignedIn` boolean prop
+  - Added "Collect" button with + icon (only visible when signed in)
+- Modified `src/app/page.tsx`:
+  - Added `useAuth` hook to get `isSignedIn` state
+  - Added `showAddToCollectionModal` state (for US-C04)
+  - Added `handleAddToCollection` handler that sets modal state
+  - Passed new props to ActionButtons component
+- **Learnings:**
+  - `useAuth` hook from `@/hooks/useAuth` provides `isSignedIn` boolean
+  - ActionButtons conditionally renders buttons based on props
+  - Button pattern: icon SVG + label text, flex-col, same styling as other action buttons
+---
+
+## 2026-01-08 - US-C04: Create 'Add to collection' modal
+- Created `src/components/AddToCollectionModal.tsx`:
+  - Modal lists user's collections fetched from Supabase
+  - Radio button selection (one collection at a time)
+  - Green check mark on collections that already contain the quote
+  - Disabled selection for already-added collections
+  - Confirm button updates quote_ids array in Supabase
+  - Shows success toast via onSuccess callback
+- Added `Collection` type to `src/types/index.ts`:
+  - id, user_id, title, description, quote_ids[], visibility, timestamps
+  - CollectionVisibility type: 'private' | 'public'
+- Integrated modal into `src/app/page.tsx`:
+  - Dynamic import for lazy loading
+  - Connected to showAddToCollectionModal state from US-C03
+  - onSuccess shows toast notification
+- **Learnings:**
+  - Use `aria-label` instead of `title` prop on SVG elements (TypeScript SVGProps)
+  - Modal pattern: fixed inset-0, bg-black/50, escape key handler, click-outside-to-close
+  - Supabase queries: `.from().select().eq().order()` with destructured { data, error }
+  - Dynamic imports: `dynamic(() => import().then(mod => ({ default: mod.Component })), { ssr: false })`
 ---

@@ -1,0 +1,21 @@
+Story US-C04 is complete. There are still stories with `passes: false` (US-C05 through US-C20), so another iteration will pick up the next story.
+
+**Summary of US-C04 implementation:**
+
+- Created `AddToCollectionModal` component in `src/components/AddToCollectionModal.tsx`
+  - Lists user's collections fetched from Supabase
+  - Radio button selection with disabled state for already-added collections
+  - Green check mark indicator for collections already containing the quote
+  - Confirm button adds quote to selected collection by updating quote_ids array
+  - Success toast on completion
+
+- Added `Collection` and `CollectionVisibility` types to `src/types/index.ts`
+
+- Integrated modal into `src/app/page.tsx` with dynamic import
+
+- All acceptance criteria met:
+  - Modal lists user's existing collections ✓
+  - Radio button selection ✓
+  - Shows check mark on already-added collections ✓
+  - Confirm button adds quote to selected collection ✓
+  - npm run typecheck passes ✓
