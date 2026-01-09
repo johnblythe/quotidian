@@ -1,0 +1,65 @@
+[
+  {
+    "id": "seneca-7-days",
+    "title": "7 Days with Seneca",
+    "description": "Explore the timeless wisdom of Rome's most practical Stoic philosopher",
+    "emoji": "🏛️",
+    "duration": 7,
+    "filterType": "author",
+    "filterValue": "Seneca"
+  },
+  {
+    "id": "alan-watts-stillness",
+    "title": "Week of Stillness",
+    "description": "Find peace and presence with Alan Watts' contemplative insights",
+    "emoji": "🌊",
+    "duration": 7,
+    "filterType": "author",
+    "filterValue": "Alan Watts"
+  },
+  {
+    "id": "stoic-fundamentals",
+    "title": "Stoic Fundamentals",
+    "description": "Learn from the three pillars of Stoicism: Marcus, Epictetus, and Seneca",
+    "emoji": "⚖️",
+    "duration": 7,
+    "filterType": "authors",
+    "filterValue": ["Marcus Aurelius", "Epictetus", "Seneca"]
+  },
+  {
+    "id": "facing-mortality",
+    "title": "Facing Mortality",
+    "description": "Meditations on death to enrich your appreciation of life",
+    "emoji": "🕯️",
+    "duration": 5,
+    "filterType": "theme",
+    "filterValue": "death"
+  },
+  {
+    "id": "building-discipline",
+    "title": "Building Discipline",
+    "description": "Strengthen your resolve with wisdom on self-mastery",
+    "emoji": "🔨",
+    "duration": 7,
+    "filterType": "theme",
+    "filterValue": "discipline"
+  },
+  {
+    "id": "finding-joy",
+    "title": "Finding Joy",
+    "description": "Discover contentment and happiness through philosophical insight",
+    "emoji": "☀️",
+    "duration": 5,
+    "filterType": "theme",
+    "filterValue": "joy"
+  },
+  {
+    "id": "naval-wealth-happiness",
+    "title": "Naval on Wealth & Happiness",
+    "description": "Modern wisdom on building wealth and finding lasting happiness",
+    "emoji": "💎",
+    "duration": 7,
+    "filterType": "author",
+    "filterValue": "Naval Ravikant"
+  }
+]

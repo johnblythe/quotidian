@@ -38,3 +38,45 @@ export async function isOnboarded(): Promise<boolean> {
   const prefs = await getPreferences();
   return prefs !== null;
 }
+
+/**
+ * Mark personalization celebration as shown
+ * Called after displaying the "Personalization Unlocked" message
+ */
+export async function markPersonalizationCelebrated(): Promise<void> {
+  const existing = await db.preferences.toCollection().first();
+  if (existing) {
+    await db.preferences.update(existing.id!, {
+      personalizationCelebrated: true,
+    });
+  }
+}
+
+/**
+ * Check if personalization celebration has been shown
+ */
+export async function hasPersonalizationCelebrated(): Promise<boolean> {
+  const prefs = await getPreferences();
+  return prefs?.personalizationCelebrated ?? false;
+}
+
+/**
+ * Save the last timing calculation date
+ * Called after weekly recalculation on Sunday
+ */
+export async function saveTimingCalculationDate(date: string): Promise<void> {
+  const existing = await db.preferences.toCollection().first();
+  if (existing) {
+    await db.preferences.update(existing.id!, {
+      lastTimingCalculationDate: date,
+    });
+  }
+}
+
+/**
+ * Get the last timing calculation date
+ */
+export async function getLastTimingCalculationDate(): Promise<string | undefined> {
+  const prefs = await getPreferences();
+  return prefs?.lastTimingCalculationDate;
+}

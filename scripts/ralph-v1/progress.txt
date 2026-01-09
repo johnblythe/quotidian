@@ -1,7 +1,355 @@
 # Ralph Progress Log - v1
-Started: (pending)
+Started: 2026-01-08
 
 ## Codebase Patterns
-(Inherited from previous phases)
+- Dexie DB in src/lib/db.ts - bump version() when adding tables
+- Types in src/types/index.ts - export interfaces for DB tables
+- Theme type already exists for quote categorization
 
+---
+
+## 2026-01-08 - US-V01: Create signals table in IndexedDB
+- What was implemented:
+  - Added SignalType union type ('favorite', 'reflected', 'reflected_long', 'viewed', 'another', 'unfavorited')
+  - Added Signal interface with fields: id, quoteId, signal, timestamp, themes
+  - Added signals table to Dexie schema (version 2)
+  - Indexed on: id (auto), quoteId, signal, timestamp
+- Files changed:
+  - src/types/index.ts - added SignalType and Signal exports
+  - src/lib/db.ts - added signals table, bumped to version 2
+- **Learnings for future iterations:**
+  - When adding new tables, create version(N+1) with all tables listed (Dexie migration requirement)
+  - Signal themes array stores Theme[] from the quote at signal time
+---
+
+## 2026-01-08 - US-V02: Record signals on user actions
+- What was implemented:
+  - Created src/lib/signals.ts with recordSignal() function and SIGNAL_WEIGHTS constant
+  - Integrated 'favorite' signal (weight: +3) in addFavorite()
+  - Integrated 'unfavorited' signal (weight: -2) in removeFavorite()
+  - Integrated 'reflected' (weight: +2) and 'reflected_long' (weight: +3 when > 500 chars) in saveJournalEntry()
+  - Integrated 'another' signal (weight: -1) in incrementFreshPulls() for rejected quote
+  - Integrated 'viewed' signal (weight: 0) in recordQuoteShown() for non-fresh pulls
+  - Updated page.tsx handleAnother() to pass rejectedQuoteId
+- Files created:
+  - src/lib/signals.ts - signal recording module with weights
+- Files changed:
+  - src/lib/favorites.ts - added recordSignal calls
+  - src/lib/history.ts - added recordSignal calls, modified incrementFreshPulls signature
+  - src/lib/journal.ts - added recordSignal call for new reflections
+  - src/app/page.tsx - updated handleAnother to capture rejected quote ID
+- **Learnings for future iterations:**
+  - Signal for 'another' should capture the rejected quote, not the new one
+  - 'viewed' signal only recorded for non-fresh pulls to avoid double-recording
+  - Signals module exports SIGNAL_WEIGHTS for future algorithm use
+---
+
+## 2026-01-08 - US-V03: Calculate theme affinity scores from signals
+- What was implemented:
+  - Created getThemeAffinities() function in src/lib/signals.ts
+  - Aggregates signal weights by theme using SIGNAL_WEIGHTS constant
+  - Returns sorted array of ThemeAffinity[] (highest score first)
+  - Handles empty signals case (returns empty array)
+  - Added ThemeAffinity interface to src/types/index.ts
+- Files changed:
+  - src/lib/signals.ts - added getThemeAffinities() function
+  - src/types/index.ts - added ThemeAffinity interface export
+- **Learnings for future iterations:**
+  - ThemeAffinity type exported from types for use in algorithm functions
+  - Uses Map<Theme, number> for efficient score aggregation
+  - getAllSignals() already exists for fetching all signal data
+---
+
+## 2026-01-08 - US-V04: Implement weighted quote selection algorithm
+- What was implemented:
+  - Created selectNextQuote() function in src/lib/signals.ts
+  - Helper: getQuoteIdsShownInDays(days) - returns Set of quote IDs from history
+  - Helper: getFavoritedAuthors() - returns Set of authors from user's favorites
+  - Helper: getHighAffinityThemes() - returns Set of themes with positive affinity scores
+  - Helper: scoreQuote() - calculates score with base random + bonuses - penalties
+  - Filters out quotes shown in last 30 days
+  - Theme bonus: +0.5 per matching high-affinity theme
+  - Author bonus: +0.3 if user favorited quotes from same author
+  - Recency penalty: -0.2 if shown in last 60 days
+  - Falls back to random if all quotes shown recently
+- Files changed:
+  - src/lib/signals.ts - added selectNextQuote() and helper functions
+- **Learnings for future iterations:**
+  - Uses Promise.all for parallel data fetching
+  - selectNextQuote() exported for use in quote selection flow
+  - Cold start logic (US-V05) will wrap this function
+---
+
+## 2026-01-08 - US-V05: Add cold start logic for new users
+- What was implemented:
+  - Added algorithmEnabledAt optional field to UserPreferences type
+  - Created getFirstSignalDate() helper to find earliest signal timestamp
+  - Created shouldEnableAlgorithm() - checks if 14 days since first signal
+  - Created checkAlgorithmStatus() - returns { isEnabled, wasJustEnabled }
+  - Created markAlgorithmEnabled() - updates preferences with algorithmEnabledAt
+  - Refactored selectNextQuote() to return { quote, algorithmJustEnabled }
+  - Created selectWeightedQuote() internal function for weighted algorithm
+  - Cold start uses pure random selection (still filters 30-day history)
+- Files changed:
+  - src/types/index.ts - added algorithmEnabledAt to UserPreferences
+  - src/lib/signals.ts - added cold start functions, refactored selectNextQuote
+- **Learnings for future iterations:**
+  - selectNextQuote() now returns { quote, algorithmJustEnabled } for US-V06 celebration
+  - Dexie doesn't need schema update for optional fields on existing tables
+  - checkAlgorithmStatus() is idempotent and marks algorithm enabled on first call
+---
+
+## 2026-01-08 - US-V06: Show 'Personalization unlocked' message on day 15
+- What was implemented:
+  - Added personalizationCelebrated boolean flag to UserPreferences type
+  - Created PersonalizationUnlocked modal component (follows PhilosopherModeActivated pattern)
+  - Added markPersonalizationCelebrated() and hasPersonalizationCelebrated() to preferences
+  - Integrated celebration in homepage checkOnboarding effect
+  - Checks if algorithm wasJustEnabled AND hasn't been celebrated yet
+  - Marks celebrated immediately to ensure one-time display
+- Files created:
+  - src/components/PersonalizationUnlocked.tsx - celebration modal
+- Files changed:
+  - src/types/index.ts - added personalizationCelebrated to UserPreferences
+  - src/lib/preferences.ts - added celebration tracking functions
+  - src/app/page.tsx - integrated celebration modal, imports, and detection logic
+- **Learnings for future iterations:**
+  - Modal components follow pattern: useState for visibility, useEffect for auto-dismiss
+  - Dynamic imports with lazy loading: `const X = dynamic(() => import(...), { ssr: false })`
+  - One-time celebrations: check flag → show modal → mark flag (before unmount)
+---
+
+## 2026-01-08 - US-V07: Create journeys table in IndexedDB
+- What was implemented:
+  - Added UserJourney interface to src/types/index.ts
+  - Fields: id (auto), journeyId (string ref), startedAt, completedAt (optional), day (number), quotesShown (string[])
+  - Added journeys table to Dexie schema (version 3)
+  - Indexed on: id (auto), journeyId, startedAt, completedAt
+- Files changed:
+  - src/types/index.ts - added UserJourney interface
+  - src/lib/db.ts - added journeys table, bumped to version 3
+- **Learnings for future iterations:**
+  - UserJourney.journeyId references journey definitions (to be created in US-V08)
+  - quotesShown array not indexed (used for tracking shown quotes during journey)
+  - completedAt is optional, set when journey finishes
+---
+
+## 2026-01-08 - US-V08: Seed journey definitions
+- What was implemented:
+  - Created src/data/journeys.json with 7 curated journeys
+  - Added JourneyDefinition type to src/types/index.ts
+  - Journeys support three filter types: 'author' (single), 'authors' (array), 'theme' (single)
+- Journey definitions:
+  - 7 Days with Seneca (author: Seneca, 7 days)
+  - Week of Stillness (author: Alan Watts, 7 days)
+  - Stoic Fundamentals (authors: Marcus Aurelius, Epictetus, Seneca, 7 days)
+  - Facing Mortality (theme: death, 5 days)
+  - Building Discipline (theme: discipline, 7 days)
+  - Finding Joy (theme: joy, 5 days)
+  - Naval on Wealth & Happiness (author: Naval Ravikant, 7 days)
+- Files created:
+  - src/data/journeys.json - 7 journey definitions
+- Files changed:
+  - src/types/index.ts - added JourneyDefinition interface
+- **Learnings for future iterations:**
+  - Import journeys.json for journey data (similar to quotes.json pattern)
+  - JourneyDefinition.filterType determines how to filter quotes: 'author' = single author, 'authors' = array of authors, 'theme' = theme filter
+  - Verified authors against quotes.json: Seneca, Alan Watts, Marcus Aurelius, Epictetus, Naval Ravikant
+---
+
+## 2026-01-08 - US-V09: Create Journeys page in settings
+- What was implemented:
+  - Created src/app/journeys/page.tsx listing all available journeys
+  - Displays journey emoji, title, description, and duration for each journey
+  - Added Journeys nav item in Navigation.tsx between Favorites and Settings
+  - Uses PageTransition wrapper for consistent navigation feel
+  - Imports journeys.json and casts to JourneyDefinition[] for type safety
+- Files created:
+  - src/app/journeys/page.tsx - journeys listing page
+- Files changed:
+  - src/components/Navigation.tsx - added Journeys nav item with layers icon
+- **Learnings for future iterations:**
+  - Navigation items are in navItems array in Navigation.tsx (add new item to array)
+  - PageTransition wrapper provides consistent page entrance animation
+  - journey.json import pattern: `import data from '@/data/journeys.json'` then cast
+  - UI should show Start button (US-V10) which will be added separately
+---
+
+## 2026-01-08 - US-V10: Implement start journey flow
+- What was implemented:
+  - Created src/lib/journeys.ts with journey management functions
+  - Functions: getActiveJourney, hasActiveJourney, startJourney, deleteActiveJourney, completeActiveJourney, advanceJourneyDay, addQuoteToJourney, getCompletedJourneys
+  - Updated journeys page with Start button on each journey card
+  - Shows "Day X of Y" for active journey instead of Start button
+  - Implemented warning modal when starting new journey while one is active
+  - Redirects to home after starting journey using next/navigation router
+- Files created:
+  - src/lib/journeys.ts - journey CRUD operations
+- Files changed:
+  - src/app/journeys/page.tsx - added state management, Start button, warning modal
+- **Learnings for future iterations:**
+  - Journey lib exports functions for: getting active, starting, deleting, completing, advancing day, adding quote
+  - Use `useRouter` from 'next/navigation' for programmatic navigation
+  - Active journey detection: filter where completedAt is undefined/null
+  - Dexie add() returns number | undefined, use Promise<void> if ID not needed
+---
+
+## 2026-01-08 - US-V11: Update homepage for active journey display
+- What was implemented:
+  - Added getJourneyQuote() function to src/lib/quotes.ts for journey-filtered quotes
+  - Added helper functions: getQuotesByAuthors(), getQuotesByTheme()
+  - Created src/components/JourneyHeader.tsx displaying "Day X of Y: Journey Name"
+  - Updated homepage to detect active journey on load
+  - If journey active: shows JourneyHeader, selects journey-filtered quote, tracks in quotesShown
+  - If no journey: shows normal Greeting and today's quote
+- Files created:
+  - src/components/JourneyHeader.tsx - journey progress header component
+- Files changed:
+  - src/lib/quotes.ts - added journey quote selection functions
+  - src/app/page.tsx - integrated journey detection and JourneyHeader display
+- **Learnings for future iterations:**
+  - getJourneyQuote() returns null when all quotes exhausted (signals journey completion)
+  - JourneyHeader replaces Greeting conditionally using ternary operator
+  - addQuoteToJourney() called immediately after selecting journey quote to track
+---
+
+## 2026-01-08 - US-V12: Implement exit journey flow with confirmation
+- What was implemented:
+  - Added optional onExit prop to JourneyHeader component
+  - "Exit Journey" button appears below journey title when onExit provided
+  - Added showExitConfirmation state and handlers to homepage
+  - Confirmation modal follows existing modal pattern (from journeys page)
+  - On confirm: deletes journey via deleteActiveJourney(), clears state, shows today's quote
+  - Toast notification confirms exit
+- Files changed:
+  - src/components/JourneyHeader.tsx - added onExit prop and Exit button
+  - src/app/page.tsx - added exit confirmation dialog and handlers
+- **Learnings for future iterations:**
+  - Modal pattern: fixed inset-0, bg-black/50, flex items-center justify-center, z-50
+  - deleteActiveJourney() already exists in lib/journeys.ts
+  - After exiting journey, reset to getTodaysQuote() for normal flow
+---
+
+## 2026-01-08 - US-V13: Add journey completion celebration
+- What was implemented:
+  - Created src/components/JourneyCompletion.tsx modal component
+  - Detects journey completion: when journey.day > journeyDefinition.duration
+  - Also handles early completion when getJourneyQuote() returns null (no more quotes)
+  - Shows celebration modal with journey emoji, congratulations message
+  - Two options: "Start Another Journey" (navigates to /journeys) or "Return to Daily Quotes"
+  - Calls completeActiveJourney() to set completedAt timestamp
+  - Advances journey day with advanceJourneyDay() after each daily quote
+- Files created:
+  - src/components/JourneyCompletion.tsx - journey completion celebration modal
+- Files changed:
+  - src/app/page.tsx - added completion detection, modal state, handlers, and render
+- **Learnings for future iterations:**
+  - Journey completion detected on app open, not immediately after viewing final quote
+  - advanceJourneyDay() called after showing each journey quote (day increments for next visit)
+  - completeActiveJourney() sets completedAt but doesn't delete record (for archive in US-V14)
+  - Modal follows PersonalizationUnlocked pattern but without auto-dismiss (user must choose action)
+---
+
+## 2026-01-08 - US-V14: Track completed journeys in archive
+- What was implemented:
+  - Added "Completed Journeys" section to the Journeys page
+  - Lists completed journeys with completion date and quote count
+  - Expandable cards show all quotes from each journey with day numbers
+  - Quotes show truncated text (80 chars) with author attribution
+  - Sorted by completion date (most recent first)
+- Files changed:
+  - src/app/journeys/page.tsx - added CompletedJourneyWithQuotes interface, state for completed journeys and expanded state, formatDate helper, toggleExpanded handler, and Completed Journeys UI section
+- **Learnings for future iterations:**
+  - getCompletedJourneys() already exists in lib/journeys.ts
+  - getQuoteById() is synchronous (returns Quote | undefined)
+  - Expansion pattern: store single expanded ID in state, toggle on click
+  - Journey quotes accessible via UserJourney.quotesShown array
+---
+
+## 2026-01-08 - US-V15: Create engagement table in IndexedDB
+- What was implemented:
+  - Added Engagement interface to src/types/index.ts
+  - Fields: id (auto), date (string YYYY-MM-DD, unique), openedAt (Date), engagedAt (optional Date)
+  - Added engagements table to Dexie schema (version 4)
+  - Indexed on: id (auto), date (unique index with &)
+- Files changed:
+  - src/types/index.ts - added Engagement interface
+  - src/lib/db.ts - added engagements table, bumped to version 4
+- **Learnings for future iterations:**
+  - Use &date for unique index in Dexie (one record per day)
+  - engagedAt is optional - only set when user favorites or reflects
+  - date field is string format YYYY-MM-DD for easy querying
+---
+
+## 2026-01-08 - US-V16: Record engagement times on app open
+- What was implemented:
+  - Created src/lib/engagement.ts with recordAppOpen() and recordEngagement() functions
+  - recordAppOpen() called in homepage checkOnboarding effect when prefs exist
+  - recordEngagement() called in addFavorite() and saveJournalEntry() (new entries only)
+  - One record per day (upsert by date) - openedAt captures first open, engagedAt captures first engagement
+  - Added helper functions: getTodayDateString(), getAllEngagements(), getRecentEngagements(days)
+- Files created:
+  - src/lib/engagement.ts - engagement recording module
+- Files changed:
+  - src/app/page.tsx - added import and recordAppOpen() call
+  - src/lib/favorites.ts - added recordEngagement() call in addFavorite()
+  - src/lib/journal.ts - added recordEngagement() call in saveJournalEntry()
+- **Learnings for future iterations:**
+  - engagement.ts exports getRecentEngagements(days) for US-V17 optimal time calculation
+  - recordEngagement only updates if engagedAt not already set (captures first engagement)
+  - Date string format YYYY-MM-DD used for day-based upsert pattern
+---
+
+## 2026-01-08 - US-V17: Calculate suggested notification time
+- What was implemented:
+  - Created calculateOptimalTime() function in src/lib/engagement.ts
+  - Gets engagement records from last 7 days via getRecentEngagements(7)
+  - Filters to only engagements where user actually engaged (has engagedAt)
+  - Requires at least 3 days of data for meaningful average (returns null otherwise)
+  - Averages engagement times by converting to minutes from midnight
+  - Returns formatted HH:MM string
+- Files changed:
+  - src/lib/engagement.ts - added calculateOptimalTime() function
+- **Learnings for future iterations:**
+  - calculateOptimalTime() returns null when insufficient data (< 3 days of engagement)
+  - Time averaging uses minutes from midnight for accurate calculation
+  - Function is async, returns Promise<string | null>
+---
+
+## 2026-01-08 - US-V18: Show timing suggestion in settings
+- What was implemented:
+  - Added suggestedTime state to settings page
+  - Load calculateOptimalTime() on page load (alongside user preferences)
+  - Display "Suggested: X:XX AM based on your habits" only when suggestion available
+  - Added formatTimeDisplay() helper to convert HH:MM to user-friendly format (e.g., "8:30 AM")
+  - Added "Use suggested time" button that updates notificationTime state
+  - Toast notification confirms when suggested time is applied
+- Files changed:
+  - src/app/settings/page.tsx - added import, state, helper functions, and UI for timing suggestion
+- **Learnings for future iterations:**
+  - suggestedTime is only shown when calculateOptimalTime() returns non-null (3+ days engagement data)
+  - Clicking "Use suggested time" only updates state; user must still click "Save" to persist
+  - formatTimeDisplay helper handles 12-hour format with AM/PM conversion
+---
+
+## 2026-01-08 - US-V19: Implement weekly timing recalculation
+- What was implemented:
+  - Added lastTimingCalculationDate field to UserPreferences type
+  - Created isSunday() helper to check if recalculation is due
+  - Created shouldRecalculateTiming() to check if calculation hasn't been done this week
+  - Created getTimeDifferenceMinutes() and isSignificantTimeDifference() for time comparison
+  - Added saveTimingCalculationDate() and getLastTimingCalculationDate() to preferences lib
+  - Updated settings page to check for weekly recalculation on load
+  - Shows notification banner when suggestion differs from current by > 30 min
+  - Saves calculation date to prevent repeat notifications during same week
+- Files changed:
+  - src/types/index.ts - added lastTimingCalculationDate to UserPreferences
+  - src/lib/engagement.ts - added isSunday, shouldRecalculateTiming, getTimeDifferenceMinutes, isSignificantTimeDifference functions
+  - src/lib/preferences.ts - added saveTimingCalculationDate and getLastTimingCalculationDate functions
+  - src/app/settings/page.tsx - added weekly recalculation check and notification banner UI
+- **Learnings for future iterations:**
+  - Weekly recalculation triggers only on Sunday (day 0 in JS Date.getDay())
+  - lastTimingCalculationDate stored as YYYY-MM-DD string for simple date comparison
+  - Notification only shows if difference > 30 minutes (uses isSignificantTimeDifference)
+  - Amber/yellow styling used for notification banner to indicate suggestion without alarm
 ---

@@ -1,0 +1,10 @@
+There are still 13 stories with `passes: false`. US-V06 has been completed successfully.
+
+**Summary of US-V06 implementation:**
+
+- **Added** `personalizationCelebrated` flag to `UserPreferences` type
+- **Created** `PersonalizationUnlocked` modal component with auto-dismiss after 6 seconds
+- **Added** `markPersonalizationCelebrated()` and `hasPersonalizationCelebrated()` to preferences module
+- **Integrated** celebration detection in homepage's `checkOnboarding` effect
+- **Build passes** - both typecheck and build succeeded
+- **Committed** with message: `feat: US-V06 - Show 'Personalization unlocked' message on day 15`

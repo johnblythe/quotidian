@@ -1,8 +1,10 @@
 import { db } from '@/lib/db';
+import { recordSignal } from '@/lib/signals';
 import type { QuoteHistory } from '@/types';
 
 /**
  * Record a quote being shown to the user
+ * Records 'viewed' signal (weight: 0) for algorithm tracking
  */
 export async function recordQuoteShown(quoteId: string, freshPull: boolean = false): Promise<void> {
   await db.quoteHistory.add({
@@ -10,6 +12,11 @@ export async function recordQuoteShown(quoteId: string, freshPull: boolean = fal
     shownAt: new Date(),
     freshPull,
   });
+
+  // Record viewed signal for algorithm (only for non-fresh pulls to avoid duplicates)
+  if (!freshPull) {
+    await recordSignal(quoteId, 'viewed');
+  }
 }
 
 /**
@@ -44,9 +51,17 @@ export async function getFreshPullsToday(): Promise<number> {
 
 /**
  * Record a fresh pull (when user requests "another quote")
+ * Records 'another' signal for the rejected quote (weight: -1)
+ * @param newQuoteId - The new quote being shown
+ * @param rejectedQuoteId - The quote user rejected (optional, for signal recording)
  */
-export async function incrementFreshPulls(quoteId: string): Promise<void> {
-  await recordQuoteShown(quoteId, true);
+export async function incrementFreshPulls(newQuoteId: string, rejectedQuoteId?: string): Promise<void> {
+  await recordQuoteShown(newQuoteId, true);
+
+  // Record 'another' signal for the rejected quote
+  if (rejectedQuoteId) {
+    await recordSignal(rejectedQuoteId, 'another');
+  }
 }
 
 /**

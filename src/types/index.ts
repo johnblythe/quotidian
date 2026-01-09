@@ -40,6 +40,9 @@ export interface UserPreferences {
   name: string;
   notificationTime: string; // HH:MM format
   onboardedAt: Date;
+  algorithmEnabledAt?: Date; // Date when personalization algorithm was enabled
+  personalizationCelebrated?: boolean; // True after showing "personalization unlocked" message
+  lastTimingCalculationDate?: string; // YYYY-MM-DD of last weekly timing recalculation
 }
 
 /** A quote saved to favorites */
@@ -55,4 +58,57 @@ export interface QuoteHistory {
   quoteId: string;
   shownAt: Date;
   freshPull: boolean; // true if user requested "another quote"
+}
+
+/** Signal types for tracking user behavior */
+export type SignalType =
+  | 'favorite'
+  | 'reflected'
+  | 'reflected_long'
+  | 'viewed'
+  | 'another'
+  | 'unfavorited';
+
+/** User behavior signal for algorithm learning */
+export interface Signal {
+  id?: number;
+  quoteId: string;
+  signal: SignalType;
+  timestamp: Date;
+  themes: Theme[];
+}
+
+/** Theme affinity score for algorithm */
+export interface ThemeAffinity {
+  theme: Theme;
+  score: number;
+}
+
+/** User's active or completed journey */
+export interface UserJourney {
+  id?: number;
+  journeyId: string; // References journey definition ID
+  startedAt: Date;
+  completedAt?: Date; // Undefined until journey completes
+  day: number; // Current day in the journey (1-indexed)
+  quotesShown: string[]; // Array of quote IDs shown during this journey
+}
+
+/** Journey definition for curated quote sequences */
+export interface JourneyDefinition {
+  id: string;
+  title: string;
+  description: string;
+  emoji: string;
+  duration: number; // Number of days
+  filterType: 'author' | 'authors' | 'theme';
+  filterValue: string | string[]; // Author name(s) or theme
+}
+
+/** Daily engagement record for smart timing */
+export interface Engagement {
+  id?: number;
+  date: string; // YYYY-MM-DD format
+  openedAt: Date; // First time app was opened this day
+  engagedAt?: Date; // When user favorited or reflected (if they did)
 }

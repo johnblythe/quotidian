@@ -1,0 +1,10 @@
+**US-V10 Complete.** 
+
+Summary of what was implemented:
+- Created `src/lib/journeys.ts` with journey management functions (getActiveJourney, startJourney, deleteActiveJourney, etc.)
+- Updated journeys page with Start button on each journey card
+- Implemented warning modal when user tries to start a journey while one is active
+- Shows "Day X of Y" status for the currently active journey
+- Redirects to home page after starting a journey
+
+The next story to implement is **US-V11: Update homepage for active journey display**.

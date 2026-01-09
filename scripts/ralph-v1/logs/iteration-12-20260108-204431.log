@@ -1,0 +1,8 @@
+**US-V12 Complete.** 
+
+Implemented:
+- Added "Exit Journey" button to JourneyHeader component (displays when onExit prop provided)
+- Confirmation modal on homepage when user clicks Exit
+- On confirm: deletes active journey, resets to normal quote selection, shows toast
+
+There are still stories with `passes: false` in the PRD (US-V13 through US-V19), so another iteration will pick up the next story.

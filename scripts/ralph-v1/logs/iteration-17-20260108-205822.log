@@ -1,0 +1,10 @@
+**US-V17 Complete.**
+
+**Summary:**
+- Created `calculateOptimalTime()` function in `src/lib/engagement.ts`
+- Averages engagement times from last 7 days
+- Returns HH:MM formatted string or null if insufficient data (< 3 days)
+- Typecheck and build pass
+- Committed: `feat: US-V17 - Calculate suggested notification time`
+
+There are still stories with `passes: false` (US-V18 and US-V19), so another iteration will pick up the next story.

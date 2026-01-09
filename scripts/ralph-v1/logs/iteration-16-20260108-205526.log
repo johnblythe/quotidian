@@ -1,0 +1,10 @@
+There are still 3 stories with `passes: false` (US-V17, US-V18, US-V19). The next iteration will pick up US-V17.
+
+**Summary: US-V16 - Record engagement times on app open - COMPLETED**
+
+Implemented:
+- Created `src/lib/engagement.ts` with `recordAppOpen()` and `recordEngagement()` functions
+- `recordAppOpen()` called on homepage load when user is onboarded
+- `recordEngagement()` called when user favorites a quote or saves a new journal entry
+- One record per day (upsert pattern using unique date index)
+- `openedAt` captures first app open; `engagedAt` captures first engagement

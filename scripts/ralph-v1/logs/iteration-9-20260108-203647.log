@@ -1,0 +1,8 @@
+**US-V09 Complete.**
+
+Summary of what was implemented:
+- Created `/src/app/journeys/page.tsx` - lists all 7 journeys with emoji, title, description, and duration
+- Added "Journeys" navigation item in `Navigation.tsx` with a layers icon, positioned between Favorites and Settings
+- Both typecheck and build pass
+
+Next story remaining: US-V10 (Implement start journey flow) and others (US-V10 through US-V19 still have `passes: false`).

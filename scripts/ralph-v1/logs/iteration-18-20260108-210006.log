@@ -1,0 +1,12 @@
+There is still 1 story with `passes: false` (US-V19). My iteration is complete.
+
+**US-V18: Show timing suggestion in settings** - ✅ COMPLETED
+
+### Summary
+- Added `suggestedTime` state to settings page
+- Loads `calculateOptimalTime()` on page load  
+- Shows "Suggested: X:XX AM based on your habits" only when sufficient engagement data exists (3+ days)
+- "Use suggested time" button updates the notification time preference
+- Added `formatTimeDisplay()` helper for 12-hour AM/PM format
+- Both `npm run typecheck` and `npm run build` pass
+- Committed: `feat: US-V18 - Show timing suggestion in settings`

@@ -1,9 +1,12 @@
 import { db } from './db';
+import { recordSignal } from '@/lib/signals';
+import { recordEngagement } from '@/lib/engagement';
 import type { JournalEntry } from '@/types';
 
 /**
  * Save or update a journal entry for a quote
  * Updates existing entry if present, creates new if not
+ * Records 'reflected' signal (weight: +2) or 'reflected_long' if > 500 chars (weight: +3)
  * @returns true if this was a new entry, false if updating existing
  */
 export async function saveJournalEntry(quoteId: string, content: string): Promise<boolean> {
@@ -22,6 +25,14 @@ export async function saveJournalEntry(quoteId: string, content: string): Promis
       createdAt: new Date(),
       updatedAt: new Date(),
     });
+
+    // Record reflection signal for algorithm (only on new entries)
+    const signalType = content.length > 500 ? 'reflected_long' : 'reflected';
+    await recordSignal(quoteId, signalType);
+
+    // Record engagement for smart timing
+    await recordEngagement();
+
     return true;
   }
 }

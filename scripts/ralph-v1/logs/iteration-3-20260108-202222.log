@@ -1,0 +1,13 @@
+US-V03 is complete. There are still stories with `passes: false` (US-V04 through US-V19), so another iteration will pick up the next story.
+
+**Summary: US-V03 Complete**
+
+Implemented `getThemeAffinities()` function that:
+- Fetches all signals from IndexedDB
+- Aggregates signal weights by theme
+- Returns sorted list of themes with scores (highest first)
+- Handles empty signals case
+
+Files changed:
+- `src/lib/signals.ts` - added function
+- `src/types/index.ts` - added ThemeAffinity interface

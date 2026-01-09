@@ -1,0 +1,9 @@
+**US-V07 Complete.** 
+
+Summary of what was done:
+- Added `UserJourney` interface with fields: id, journeyId, startedAt, completedAt (optional), day, quotesShown[]
+- Added `journeys` table to Dexie schema (version 3)
+- Both typecheck and build pass
+- Committed: `feat: US-V07 - Create journeys table in IndexedDB`
+
+There are still stories with `passes: false` (US-V08 through US-V19), so another iteration will pick up the next story.

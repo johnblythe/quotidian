@@ -2,6 +2,31 @@
 
 All notable changes to Quotidian will be documented in this file.
 
+## [1.0.0] - 2026-01-08
+
+### Added
+
+#### Personalization Algorithm
+- Signal tracking (favorites, reflections, skips)
+- Theme affinity calculation
+- Weighted quote selection based on user behavior
+- Cold start logic (random for first 14 days)
+- "Personalization unlocked" celebration on day 15
+
+#### Journeys
+- Multi-day themed quote experiences
+- 7 preset journeys (Seneca, Alan Watts, Stoic Fundamentals, etc.)
+- Journey progress tracking
+- Completion celebrations
+- Exit journey with confirmation
+
+#### Smart Timing
+- Engagement time tracking
+- Suggested notification time based on habits
+- Weekly recalculation
+
+---
+
 ## [0.2.0] - 2026-01-08 (Beta)
 
 ### Added

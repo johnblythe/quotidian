@@ -11,7 +11,8 @@
       "Bash(gh repo edit:*)",
       "Bash(git stash:*)",
       "Bash(git pull:*)",
-      "Bash(./scripts/ralph-beta/ralph.sh:*)"
+      "Bash(./scripts/ralph-beta/ralph.sh:*)",
+      "Bash(./scripts/ralph-v1/ralph.sh:*)"
     ]
   }
 }
