@@ -1,0 +1,10 @@
+US-V08 is complete. Let me verify the status of all stories to check if there are more to complete.
+
+Looking at the PRD, there are still stories US-V09 through US-V19 with `passes: false`. The next iteration will pick up US-V09: Create Journeys page in settings.
+
+**Summary of US-V08 completion:**
+- Created `src/data/journeys.json` with 7 curated journey definitions
+- Added `JourneyDefinition` interface to types
+- All 7 journeys match the acceptance criteria with proper author/theme filters
+- Typecheck and build pass
+- Changes committed with proper message

@@ -1,0 +1,12 @@
+US-V05 is complete. There are still more stories with `passes: false` (US-V06 through US-V19), so the work continues.
+
+**Summary of US-V05 implementation:**
+- Added `algorithmEnabledAt` field to `UserPreferences` type
+- Created `getFirstSignalDate()` to find earliest signal timestamp
+- Created `shouldEnableAlgorithm()` - checks if 14+ days since first signal
+- Created `checkAlgorithmStatus()` - returns enabled state and whether just enabled
+- Refactored `selectNextQuote()` to:
+  - During cold start (<14 days): use pure random selection
+  - After cold start: use weighted algorithm
+  - Return `{ quote, algorithmJustEnabled }` for US-V06 celebration feature
+- Both `npm run typecheck` and `npm run build` pass

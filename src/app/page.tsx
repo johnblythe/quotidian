@@ -19,7 +19,7 @@ import { getPreferences, markPersonalizationCelebrated, hasPersonalizationCelebr
 import { checkAlgorithmStatus } from "@/lib/signals";
 import { isFavorite, addFavorite, removeFavorite, getFavorites } from "@/lib/favorites";
 import { getFreshPullsToday, incrementFreshPulls, recordQuoteShown } from "@/lib/history";
-import { getActiveJourney, addQuoteToJourney, deleteActiveJourney } from "@/lib/journeys";
+import { getActiveJourney, addQuoteToJourney, deleteActiveJourney, completeActiveJourney, advanceJourneyDay } from "@/lib/journeys";
 import journeysData from "@/data/journeys.json";
 import type { Quote as QuoteType, JourneyDefinition, UserJourney } from "@/types";
 
@@ -30,6 +30,7 @@ const KeyboardShortcutsHelp = dynamic(() => import("@/components/KeyboardShortcu
 const PhilosopherModeActivated = dynamic(() => import("@/components/PhilosopherMode").then(mod => ({ default: mod.PhilosopherModeActivated })), { ssr: false });
 const Confetti = dynamic(() => import("@/components/Confetti").then(mod => ({ default: mod.Confetti })), { ssr: false });
 const PersonalizationUnlocked = dynamic(() => import("@/components/PersonalizationUnlocked").then(mod => ({ default: mod.PersonalizationUnlocked })), { ssr: false });
+const JourneyCompletion = dynamic(() => import("@/components/JourneyCompletion").then(mod => ({ default: mod.JourneyCompletion })), { ssr: false });
 
 type PageState = "loading" | "onboarding" | "quote";
 
@@ -48,6 +49,7 @@ export default function Home() {
   const [activeJourney, setActiveJourney] = useState<UserJourney | null>(null);
   const [journeyDefinition, setJourneyDefinition] = useState<JourneyDefinition | null>(null);
   const [showExitConfirmation, setShowExitConfirmation] = useState(false);
+  const [showJourneyCompletion, setShowJourneyCompletion] = useState(false);
   const { showToast } = useToast();
 
   // Konami code easter egg
@@ -124,21 +126,41 @@ export default function Home() {
         // Check for active journey
         const journey = await getActiveJourney();
         if (journey) {
-          setActiveJourney(journey);
           const journeyDef = journeyDefinitions.find(j => j.id === journey.journeyId);
           if (journeyDef) {
-            setJourneyDefinition(journeyDef);
-            // Get a journey-specific quote
-            const journeyQuote = getJourneyQuote(
-              journeyDef.filterType,
-              journeyDef.filterValue,
-              journey.quotesShown
-            );
-            if (journeyQuote) {
-              setCurrentQuote(journeyQuote);
-              // Track this quote in the journey
-              await addQuoteToJourney(journeyQuote.id);
-              await recordQuoteShown(journeyQuote.id, false);
+            // Check if journey is complete (day exceeds duration)
+            if (journey.day > journeyDef.duration) {
+              // Journey is complete - show celebration
+              setActiveJourney(journey);
+              setJourneyDefinition(journeyDef);
+              setShowJourneyCompletion(true);
+              // Mark as completed
+              await completeActiveJourney();
+              // Show today's regular quote
+              await recordQuoteShown(getTodaysQuote().id, false);
+            } else {
+              // Journey is still in progress
+              setActiveJourney(journey);
+              setJourneyDefinition(journeyDef);
+              // Get a journey-specific quote
+              const journeyQuote = getJourneyQuote(
+                journeyDef.filterType,
+                journeyDef.filterValue,
+                journey.quotesShown
+              );
+              if (journeyQuote) {
+                setCurrentQuote(journeyQuote);
+                // Track this quote in the journey
+                await addQuoteToJourney(journeyQuote.id);
+                await recordQuoteShown(journeyQuote.id, false);
+                // Advance to next day for tomorrow
+                await advanceJourneyDay();
+              } else {
+                // No more quotes available for this journey - complete early
+                setShowJourneyCompletion(true);
+                await completeActiveJourney();
+                await recordQuoteShown(getTodaysQuote().id, false);
+              }
             }
           }
         } else {
@@ -234,6 +256,18 @@ export default function Home() {
 
   const handleCancelExit = () => {
     setShowExitConfirmation(false);
+  };
+
+  const handleJourneyCompletionDismiss = () => {
+    setShowJourneyCompletion(false);
+    setActiveJourney(null);
+    setJourneyDefinition(null);
+  };
+
+  const handleStartAnotherJourney = () => {
+    setShowJourneyCompletion(false);
+    setActiveJourney(null);
+    setJourneyDefinition(null);
   };
 
   if (pageState === "loading") {
@@ -334,6 +368,14 @@ export default function Home() {
             </div>
           </div>
         </div>
+      )}
+      {showJourneyCompletion && journeyDefinition && (
+        <JourneyCompletion
+          journeyTitle={journeyDefinition.title}
+          journeyEmoji={journeyDefinition.emoji}
+          onDismiss={handleJourneyCompletionDismiss}
+          onStartAnother={handleStartAnotherJourney}
+        />
       )}
     </>
   );

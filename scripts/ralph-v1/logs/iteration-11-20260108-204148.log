@@ -1,0 +1,11 @@
+US-V11 is complete. There are still stories with `passes: false` (US-V12 through US-V19), so this iteration ends normally for the next one to pick up US-V12.
+
+**Summary of US-V11 completion:**
+
+- Created `JourneyHeader` component showing "Day X of Y" with journey emoji and title
+- Added `getJourneyQuote()`, `getQuotesByAuthors()`, and `getQuotesByTheme()` to quotes.ts
+- Updated homepage to detect active journey on load
+- When journey active: displays JourneyHeader, selects filtered quote, tracks in quotesShown array
+- When no journey: shows normal Greeting and daily quote
+- All quality checks pass (typecheck + build)
+- Committed as `feat: US-V11 - Update homepage for active journey display`
