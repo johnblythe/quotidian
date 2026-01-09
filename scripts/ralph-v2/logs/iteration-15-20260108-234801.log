@@ -1,0 +1,12 @@
+There are still 5 stories with `passes: false` (US-C16 through US-C20). Ending this iteration - another iteration will pick up US-C16.
+
+**Summary: US-C15 Complete**
+
+Implemented follow collection functionality:
+- Added `followCollection`, `isFollowingCollection`, `getFollowerCount` to collections.ts
+- Updated collection detail page with Follow button for public collections
+- Button shows "Follow" → "Following" with checkmark after following
+- Displays follower count for public collections
+- Both empty and non-empty collection states updated
+- Typecheck and build pass ✓
+- Committed as `feat: US-C15 - Implement follow collection`

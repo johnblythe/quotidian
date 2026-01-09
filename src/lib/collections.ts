@@ -419,3 +419,31 @@ export async function getFollowerCount(collectionId: string): Promise<number> {
 
   return count || 0;
 }
+
+/**
+ * Unfollow a collection
+ * Deletes the record from collection_follows
+ * @returns Object with success boolean and optional error message
+ */
+export async function unfollowCollection(
+  collectionId: string,
+  userId: string
+): Promise<{ success: boolean; error?: string }> {
+  const supabase = getSupabase();
+  if (!supabase) {
+    return { success: false, error: "Supabase not configured" };
+  }
+
+  const { error } = await supabase
+    .from("collection_follows")
+    .delete()
+    .eq("collection_id", collectionId)
+    .eq("user_id", userId);
+
+  if (error) {
+    console.error("Failed to unfollow collection:", error);
+    return { success: false, error: "Failed to unfollow collection" };
+  }
+
+  return { success: true };
+}

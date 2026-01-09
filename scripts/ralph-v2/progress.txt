@@ -14,6 +14,7 @@ Started: 2026-01-08
 - Collections lib: `src/lib/collections.ts` has addQuoteToCollection, removeQuoteFromCollection, getCollection, getUserCollections, updateCollection, deleteCollection, getPopularCollections, getNewCollections
 - PopularCollection type in collections.ts includes follower_count field
 - NewCollection type in collections.ts includes quote_count field
+- Collections lib also has: followCollection, isFollowingCollection, getFollowerCount
 
 ---
 
@@ -272,4 +273,25 @@ Started: 2026-01-08
   - Supabase `.gte("field", isoString)` for date range filtering
   - Use Promise.all for parallel fetches in useEffect
   - quote_count can be derived client-side from quote_ids.length - no DB aggregate needed
+---
+
+## 2026-01-08 - US-C15: Implement follow collection
+- Modified `src/lib/collections.ts`:
+  - Added `followCollection(collectionId, userId)` - inserts into collection_follows
+  - Added `isFollowingCollection(collectionId, userId)` - checks if user follows collection
+  - Added `getFollowerCount(collectionId)` - returns count of followers
+- Modified `src/app/collections/[id]/page.tsx`:
+  - Added isFollowing, followerCount, isFollowingAction state
+  - Loads follower count for public collections on mount
+  - Loads follow status when user/collection changes
+  - Added Follow button for public collections (not owned by user)
+  - Button shows "Follow" with + icon, changes to "Following" with checkmark after follow
+  - Updates follower count display in real-time
+  - Added follower count display to both empty and non-empty collection states
+- Files changed: `src/lib/collections.ts`, `src/app/collections/[id]/page.tsx`
+- **Learnings:**
+  - Use `{ count: "exact", head: true }` with Supabase for efficient count queries
+  - Error code "23505" is PostgreSQL unique constraint violation (already following)
+  - Error code "PGRST116" means no rows found in .single() - useful for "not following" state
+  - Separate useEffect for follow status so it updates when user changes without refetching collection
 ---

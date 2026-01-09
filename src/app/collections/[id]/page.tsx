@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useAuth } from "@/hooks/useAuth";
 import { getSupabase } from "@/lib/supabase";
 import { getQuoteById } from "@/lib/quotes";
-import { removeQuoteFromCollection, deleteCollection, updateCollection, followCollection, isFollowingCollection, getFollowerCount } from "@/lib/collections";
+import { removeQuoteFromCollection, deleteCollection, updateCollection, followCollection, unfollowCollection, isFollowingCollection, getFollowerCount } from "@/lib/collections";
 import { useRouter } from "next/navigation";
 import { Quote } from "@/components/Quote";
 import { PageTransition } from "@/components/PageTransition";
@@ -35,6 +35,8 @@ export default function CollectionDetailPage() {
   const [isFollowing, setIsFollowing] = useState(false);
   const [followerCount, setFollowerCount] = useState(0);
   const [isFollowingAction, setIsFollowingAction] = useState(false);
+  const [showUnfollowConfirm, setShowUnfollowConfirm] = useState(false);
+  const [isUnfollowing, setIsUnfollowing] = useState(false);
 
   useEffect(() => {
     const loadCollection = async () => {
@@ -214,6 +216,24 @@ export default function CollectionDetailPage() {
     }
   };
 
+  // Handle unfollow collection
+  const handleUnfollow = async () => {
+    if (!user || !collection || isUnfollowing) return;
+
+    setIsUnfollowing(true);
+    const result = await unfollowCollection(collectionId, user.id);
+    setIsUnfollowing(false);
+
+    if (result.success) {
+      setIsFollowing(false);
+      setFollowerCount((prev) => Math.max(0, prev - 1));
+      setShowUnfollowConfirm(false);
+      setToast("Unfollowed collection");
+    } else {
+      setToast(result.error || "Failed to unfollow collection");
+    }
+  };
+
   // Loading state
   if (loading || authLoading) {
     return (
@@ -355,49 +375,50 @@ export default function CollectionDetailPage() {
               {/* Follow button for public collections (not owned by user) */}
               {collection.visibility === "public" && !isOwner && user && (
                 <div className="mt-4">
-                  <button
-                    onClick={handleFollow}
-                    disabled={isFollowing || isFollowingAction}
-                    className={`inline-flex items-center gap-2 px-4 py-2 rounded-md body-text text-sm transition-colors ${
-                      isFollowing
-                        ? "bg-foreground/10 text-foreground/60 cursor-default"
-                        : "bg-foreground text-background hover:bg-foreground/90"
-                    }`}
-                  >
-                    {isFollowing ? (
-                      <>
-                        <svg
-                          className="w-4 h-4"
-                          fill="currentColor"
-                          viewBox="0 0 24 24"
-                          aria-hidden="true"
-                        >
-                          <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
-                        </svg>
-                        Following
-                      </>
-                    ) : isFollowingAction ? (
-                      "Following..."
-                    ) : (
-                      <>
-                        <svg
-                          className="w-4 h-4"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                          aria-hidden="true"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M12 4v16m8-8H4"
-                          />
-                        </svg>
-                        Follow
-                      </>
-                    )}
-                  </button>
+                  {isFollowing ? (
+                    <button
+                      onClick={() => setShowUnfollowConfirm(true)}
+                      className="inline-flex items-center gap-2 px-4 py-2 rounded-md body-text text-sm transition-colors bg-foreground/10 text-foreground/60 hover:bg-foreground/15 hover:text-foreground/80"
+                    >
+                      <svg
+                        className="w-4 h-4"
+                        fill="currentColor"
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                      >
+                        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                      </svg>
+                      Following
+                    </button>
+                  ) : (
+                    <button
+                      onClick={handleFollow}
+                      disabled={isFollowingAction}
+                      className="inline-flex items-center gap-2 px-4 py-2 rounded-md body-text text-sm transition-colors bg-foreground text-background hover:bg-foreground/90 disabled:opacity-50"
+                    >
+                      {isFollowingAction ? (
+                        "Following..."
+                      ) : (
+                        <>
+                          <svg
+                            className="w-4 h-4"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M12 4v16m8-8H4"
+                            />
+                          </svg>
+                          Follow
+                        </>
+                      )}
+                    </button>
+                  )}
                 </div>
               )}
             </div>
@@ -521,6 +542,49 @@ export default function CollectionDetailPage() {
               </div>
             </div>
           )}
+
+          {/* Unfollow confirmation dialog (empty state) */}
+          {showUnfollowConfirm && (
+            <div
+              className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+              onClick={() => setShowUnfollowConfirm(false)}
+            >
+              <div
+                className="bg-background rounded-lg shadow-xl max-w-sm w-full p-6"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <h3 className="quote-text text-lg text-foreground/80 mb-2">
+                  Unfollow collection?
+                </h3>
+                <p className="body-text text-foreground/60 text-sm mb-6">
+                  You will no longer see &ldquo;{collection.title}&rdquo; in your followed collections.
+                </p>
+                <div className="flex gap-3 justify-end">
+                  <button
+                    onClick={() => setShowUnfollowConfirm(false)}
+                    className="body-text text-sm text-foreground/60 hover:text-foreground/80 px-4 py-2 transition-colors"
+                    disabled={isUnfollowing}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleUnfollow}
+                    disabled={isUnfollowing}
+                    className="body-text text-sm bg-foreground/80 hover:bg-foreground text-background px-4 py-2 rounded-md transition-colors disabled:opacity-50"
+                  >
+                    {isUnfollowing ? "Unfollowing..." : "Unfollow"}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Toast notification (empty state) */}
+          {toast && (
+            <div className="fixed bottom-4 left-1/2 -translate-x-1/2 bg-foreground text-background px-4 py-2 rounded-lg shadow-lg body-text text-sm z-50">
+              {toast}
+            </div>
+          )}
         </div>
       </PageTransition>
     );
@@ -585,49 +649,50 @@ export default function CollectionDetailPage() {
             {/* Follow button for public collections (not owned by user) */}
             {collection.visibility === "public" && !isOwner && user && (
               <div className="mt-4">
-                <button
-                  onClick={handleFollow}
-                  disabled={isFollowing || isFollowingAction}
-                  className={`inline-flex items-center gap-2 px-4 py-2 rounded-md body-text text-sm transition-colors ${
-                    isFollowing
-                      ? "bg-foreground/10 text-foreground/60 cursor-default"
-                      : "bg-foreground text-background hover:bg-foreground/90"
-                  }`}
-                >
-                  {isFollowing ? (
-                    <>
-                      <svg
-                        className="w-4 h-4"
-                        fill="currentColor"
-                        viewBox="0 0 24 24"
-                        aria-hidden="true"
-                      >
-                        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
-                      </svg>
-                      Following
-                    </>
-                  ) : isFollowingAction ? (
-                    "Following..."
-                  ) : (
-                    <>
-                      <svg
-                        className="w-4 h-4"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                        aria-hidden="true"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M12 4v16m8-8H4"
-                        />
-                      </svg>
-                      Follow
-                    </>
-                  )}
-                </button>
+                {isFollowing ? (
+                  <button
+                    onClick={() => setShowUnfollowConfirm(true)}
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-md body-text text-sm transition-colors bg-foreground/10 text-foreground/60 hover:bg-foreground/15 hover:text-foreground/80"
+                  >
+                    <svg
+                      className="w-4 h-4"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                      aria-hidden="true"
+                    >
+                      <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                    </svg>
+                    Following
+                  </button>
+                ) : (
+                  <button
+                    onClick={handleFollow}
+                    disabled={isFollowingAction}
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-md body-text text-sm transition-colors bg-foreground text-background hover:bg-foreground/90 disabled:opacity-50"
+                  >
+                    {isFollowingAction ? (
+                      "Following..."
+                    ) : (
+                      <>
+                        <svg
+                          className="w-4 h-4"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                          aria-hidden="true"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M12 4v16m8-8H4"
+                          />
+                        </svg>
+                        Follow
+                      </>
+                    )}
+                  </button>
+                )}
               </div>
             )}
             {isOwner && (
@@ -929,6 +994,42 @@ export default function CollectionDetailPage() {
                   className="body-text text-sm bg-foreground text-background px-4 py-2 rounded-md transition-colors disabled:opacity-50 hover:bg-foreground/90"
                 >
                   {isSaving ? "Saving..." : "Save"}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Unfollow confirmation dialog */}
+        {showUnfollowConfirm && (
+          <div
+            className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+            onClick={() => setShowUnfollowConfirm(false)}
+          >
+            <div
+              className="bg-background rounded-lg shadow-xl max-w-sm w-full p-6"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <h3 className="quote-text text-lg text-foreground/80 mb-2">
+                Unfollow collection?
+              </h3>
+              <p className="body-text text-foreground/60 text-sm mb-6">
+                You will no longer see &ldquo;{collection.title}&rdquo; in your followed collections.
+              </p>
+              <div className="flex gap-3 justify-end">
+                <button
+                  onClick={() => setShowUnfollowConfirm(false)}
+                  className="body-text text-sm text-foreground/60 hover:text-foreground/80 px-4 py-2 transition-colors"
+                  disabled={isUnfollowing}
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleUnfollow}
+                  disabled={isUnfollowing}
+                  className="body-text text-sm bg-foreground/80 hover:bg-foreground text-background px-4 py-2 rounded-md transition-colors disabled:opacity-50"
+                >
+                  {isUnfollowing ? "Unfollowing..." : "Unfollow"}
                 </button>
               </div>
             </div>
