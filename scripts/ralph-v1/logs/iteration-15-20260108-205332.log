@@ -1,0 +1,7 @@
+US-V15 is complete. There are still stories with `passes: false` (US-V16 through US-V19), so another iteration will pick up the next story.
+
+**Summary of US-V15 implementation:**
+- Added `Engagement` interface to types with fields: `id`, `date` (YYYY-MM-DD), `openedAt`, `engagedAt` (optional)
+- Added `engagements` table to Dexie DB at version 4 with unique index on date
+- All quality checks pass (typecheck + build)
+- Changes committed with message: `feat: US-V15 - Create engagement table in IndexedDB`

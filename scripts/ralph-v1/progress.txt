@@ -331,3 +331,25 @@ Started: 2026-01-08
   - Clicking "Use suggested time" only updates state; user must still click "Save" to persist
   - formatTimeDisplay helper handles 12-hour format with AM/PM conversion
 ---
+
+## 2026-01-08 - US-V19: Implement weekly timing recalculation
+- What was implemented:
+  - Added lastTimingCalculationDate field to UserPreferences type
+  - Created isSunday() helper to check if recalculation is due
+  - Created shouldRecalculateTiming() to check if calculation hasn't been done this week
+  - Created getTimeDifferenceMinutes() and isSignificantTimeDifference() for time comparison
+  - Added saveTimingCalculationDate() and getLastTimingCalculationDate() to preferences lib
+  - Updated settings page to check for weekly recalculation on load
+  - Shows notification banner when suggestion differs from current by > 30 min
+  - Saves calculation date to prevent repeat notifications during same week
+- Files changed:
+  - src/types/index.ts - added lastTimingCalculationDate to UserPreferences
+  - src/lib/engagement.ts - added isSunday, shouldRecalculateTiming, getTimeDifferenceMinutes, isSignificantTimeDifference functions
+  - src/lib/preferences.ts - added saveTimingCalculationDate and getLastTimingCalculationDate functions
+  - src/app/settings/page.tsx - added weekly recalculation check and notification banner UI
+- **Learnings for future iterations:**
+  - Weekly recalculation triggers only on Sunday (day 0 in JS Date.getDay())
+  - lastTimingCalculationDate stored as YYYY-MM-DD string for simple date comparison
+  - Notification only shows if difference > 30 minutes (uses isSignificantTimeDifference)
+  - Amber/yellow styling used for notification banner to indicate suggestion without alarm
+---
