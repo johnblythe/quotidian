@@ -82,3 +82,13 @@ export interface ThemeAffinity {
   theme: Theme;
   score: number;
 }
+
+/** User's active or completed journey */
+export interface UserJourney {
+  id?: number;
+  journeyId: string; // References journey definition ID
+  startedAt: Date;
+  completedAt?: Date; // Undefined until journey completes
+  day: number; // Current day in the journey (1-indexed)
+  quotesShown: string[]; // Array of quote IDs shown during this journey
+}

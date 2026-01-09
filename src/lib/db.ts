@@ -1,5 +1,5 @@
 import Dexie, { type EntityTable } from 'dexie';
-import type { JournalEntry, UserPreferences, FavoriteQuote, QuoteHistory, Signal } from '@/types';
+import type { JournalEntry, UserPreferences, FavoriteQuote, QuoteHistory, Signal, UserJourney } from '@/types';
 
 /**
  * Quotidian IndexedDB database using Dexie
@@ -10,6 +10,7 @@ class QuotidianDB extends Dexie {
   favorites!: EntityTable<FavoriteQuote, 'id'>;
   quoteHistory!: EntityTable<QuoteHistory, 'id'>;
   signals!: EntityTable<Signal, 'id'>;
+  journeys!: EntityTable<UserJourney, 'id'>;
 
   constructor() {
     super('QuotidianDB');
@@ -27,6 +28,15 @@ class QuotidianDB extends Dexie {
       favorites: '++id, quoteId, savedAt',
       quoteHistory: '++id, quoteId, shownAt',
       signals: '++id, quoteId, signal, timestamp',
+    });
+
+    this.version(3).stores({
+      preferences: '++id',
+      journalEntries: '++id, quoteId, updatedAt',
+      favorites: '++id, quoteId, savedAt',
+      quoteHistory: '++id, quoteId, shownAt',
+      signals: '++id, quoteId, signal, timestamp',
+      journeys: '++id, journeyId, startedAt, completedAt',
     });
   }
 }
