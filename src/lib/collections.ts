@@ -142,3 +142,29 @@ export async function getUserCollections(
 
   return (data as Collection[]) || [];
 }
+
+/**
+ * Delete a collection
+ * Removes the collection from Supabase (cascade deletes follows)
+ * @returns Object with success boolean and optional error message
+ */
+export async function deleteCollection(
+  collectionId: string
+): Promise<{ success: boolean; error?: string }> {
+  const supabase = getSupabase();
+  if (!supabase) {
+    return { success: false, error: "Supabase not configured" };
+  }
+
+  const { error } = await supabase
+    .from("collections")
+    .delete()
+    .eq("id", collectionId);
+
+  if (error) {
+    console.error("Failed to delete collection:", error);
+    return { success: false, error: "Failed to delete collection" };
+  }
+
+  return { success: true };
+}

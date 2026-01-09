@@ -153,3 +153,19 @@ Started: 2026-01-08
   - Return `{ success: boolean; error?: string }` pattern for async operations
   - Keep local duplicate check for immediate feedback, lib does server-side check
 ---
+
+## 2026-01-08 - US-C09: Implement remove quote from collection
+- Modified `src/app/collections/[id]/page.tsx`:
+  - Added remove button (X icon) on each quote in collection view
+  - Button only visible to collection owner (isOwner check)
+  - Added confirmation dialog with quote preview
+  - Integrated `removeQuoteFromCollection` from lib
+  - Updates local state after successful removal
+  - Shows success/error toast with auto-hide
+- Files changed: `src/app/collections/[id]/page.tsx`
+- **Learnings:**
+  - Reuse existing lib functions - removeQuoteFromCollection was already in collections.ts
+  - Confirmation dialog pattern: fixed inset-0 backdrop + centered modal, click-outside-to-close
+  - Local state update after successful API call for instant UI feedback
+  - Toast pattern: fixed bottom-4 center with auto-dismiss via setTimeout in useEffect
+---

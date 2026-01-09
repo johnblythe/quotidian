@@ -1,0 +1,24 @@
+US-C09 is complete. Let me check the remaining user stories:
+
+From the PRD, there are still user stories with `passes: false`:
+- US-C10: Implement delete collection
+- US-C11: Implement edit collection
+- US-C12: Create Discover page
+- US-C13: Implement popular collections query
+- US-C14: Implement new collections query
+- US-C15: Implement follow collection
+- US-C16: Implement unfollow collection
+- US-C17: Show followed collections in My Collections
+- US-C18: Extend Journey type for collections
+- US-C19: Add 'Start Journey' button on collection
+- US-C20: Implement collection-based journey flow
+
+There are still 11 stories with `passes: false`, so the work continues.
+
+**Summary of US-C09 completion:**
+- Added X remove button to each quote in collection detail view (owner-only)
+- Created confirmation dialog with quote text preview
+- Integrated `removeQuoteFromCollection` from collections lib
+- Added success toast with auto-hide after 3 seconds
+- Local state updates immediately after removal for instant UI feedback
+- Typecheck and build pass

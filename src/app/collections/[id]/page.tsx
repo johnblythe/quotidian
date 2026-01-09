@@ -6,7 +6,8 @@ import Link from "next/link";
 import { useAuth } from "@/hooks/useAuth";
 import { getSupabase } from "@/lib/supabase";
 import { getQuoteById } from "@/lib/quotes";
-import { removeQuoteFromCollection } from "@/lib/collections";
+import { removeQuoteFromCollection, deleteCollection } from "@/lib/collections";
+import { useRouter } from "next/navigation";
 import { Quote } from "@/components/Quote";
 import { PageTransition } from "@/components/PageTransition";
 import type { Collection } from "@/types";
@@ -14,6 +15,7 @@ import type { Quote as QuoteType } from "@/types";
 
 export default function CollectionDetailPage() {
   const params = useParams();
+  const router = useRouter();
   const collectionId = params.id as string;
   const { user, isLoading: authLoading } = useAuth();
   const [collection, setCollection] = useState<Collection | null>(null);
@@ -23,6 +25,8 @@ export default function CollectionDetailPage() {
   const [quoteToRemove, setQuoteToRemove] = useState<QuoteType | null>(null);
   const [isRemoving, setIsRemoving] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     const loadCollection = async () => {
@@ -99,6 +103,22 @@ export default function CollectionDetailPage() {
     }
 
     setQuoteToRemove(null);
+  };
+
+  // Handle delete collection
+  const handleDeleteCollection = async () => {
+    if (!collection) return;
+
+    setIsDeleting(true);
+    const result = await deleteCollection(collectionId);
+    setIsDeleting(false);
+
+    if (result.success) {
+      router.push("/collections");
+    } else {
+      setShowDeleteConfirm(false);
+      setToast(result.error || "Failed to delete collection");
+    }
   };
 
   // Loading state
@@ -261,15 +281,78 @@ export default function CollectionDetailPage() {
                   This collection is empty.
                   {isOwner && " Add quotes using the + button on any quote."}
                 </p>
-                <Link
-                  href="/"
-                  className="inline-flex items-center gap-2 body-text text-sm text-foreground/60 hover:text-foreground/80 transition-colors btn-nav px-4 py-2"
-                >
-                  Browse quotes
-                </Link>
+                <div className="flex flex-col items-center gap-3">
+                  <Link
+                    href="/"
+                    className="inline-flex items-center gap-2 body-text text-sm text-foreground/60 hover:text-foreground/80 transition-colors btn-nav px-4 py-2"
+                  >
+                    Browse quotes
+                  </Link>
+                  {isOwner && (
+                    <button
+                      onClick={() => setShowDeleteConfirm(true)}
+                      className="inline-flex items-center gap-2 body-text text-xs text-red-500/70 hover:text-red-500 transition-colors"
+                    >
+                      <svg
+                        className="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                        />
+                      </svg>
+                      Delete collection
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
           </div>
+
+          {/* Delete collection confirmation dialog */}
+          {showDeleteConfirm && (
+            <div
+              className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+              onClick={() => setShowDeleteConfirm(false)}
+            >
+              <div
+                className="bg-background rounded-lg shadow-xl max-w-sm w-full p-6"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <h3 className="quote-text text-lg text-foreground/80 mb-2">
+                  Delete collection?
+                </h3>
+                <p className="body-text text-foreground/60 text-sm mb-2">
+                  &ldquo;{collection.title}&rdquo;
+                </p>
+                <p className="body-text text-red-500/80 text-xs mb-6">
+                  This action cannot be undone.
+                </p>
+                <div className="flex gap-3 justify-end">
+                  <button
+                    onClick={() => setShowDeleteConfirm(false)}
+                    className="body-text text-sm text-foreground/60 hover:text-foreground/80 px-4 py-2 transition-colors"
+                    disabled={isDeleting}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleDeleteCollection}
+                    disabled={isDeleting}
+                    className="body-text text-sm bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md transition-colors disabled:opacity-50"
+                  >
+                    {isDeleting ? "Deleting..." : "Delete"}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </PageTransition>
     );
@@ -326,6 +409,28 @@ export default function CollectionDetailPage() {
             <p className="body-text text-foreground/40 text-xs">
               {quotes.length} quote{quotes.length !== 1 ? "s" : ""}
             </p>
+            {isOwner && (
+              <button
+                onClick={() => setShowDeleteConfirm(true)}
+                className="mt-4 inline-flex items-center gap-2 body-text text-xs text-red-500/70 hover:text-red-500 transition-colors"
+              >
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                  />
+                </svg>
+                Delete collection
+              </button>
+            )}
           </div>
 
           {/* Quotes list */}
@@ -425,6 +530,45 @@ export default function CollectionDetailPage() {
                   className="body-text text-sm bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md transition-colors disabled:opacity-50"
                 >
                   {isRemoving ? "Removing..." : "Remove"}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Delete collection confirmation dialog */}
+        {showDeleteConfirm && (
+          <div
+            className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+            onClick={() => setShowDeleteConfirm(false)}
+          >
+            <div
+              className="bg-background rounded-lg shadow-xl max-w-sm w-full p-6"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <h3 className="quote-text text-lg text-foreground/80 mb-2">
+                Delete collection?
+              </h3>
+              <p className="body-text text-foreground/60 text-sm mb-2">
+                &ldquo;{collection.title}&rdquo;
+              </p>
+              <p className="body-text text-red-500/80 text-xs mb-6">
+                This action cannot be undone. All quotes will remain saved but will be removed from this collection.
+              </p>
+              <div className="flex gap-3 justify-end">
+                <button
+                  onClick={() => setShowDeleteConfirm(false)}
+                  className="body-text text-sm text-foreground/60 hover:text-foreground/80 px-4 py-2 transition-colors"
+                  disabled={isDeleting}
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleDeleteCollection}
+                  disabled={isDeleting}
+                  className="body-text text-sm bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md transition-colors disabled:opacity-50"
+                >
+                  {isDeleting ? "Deleting..." : "Delete"}
                 </button>
               </div>
             </div>
