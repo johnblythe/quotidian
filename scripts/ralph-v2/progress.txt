@@ -81,3 +81,39 @@ Started: 2026-01-08
   - Supabase queries: `.from().select().eq().order()` with destructured { data, error }
   - Dynamic imports: `dynamic(() => import().then(mod => ({ default: mod.Component })), { ssr: false })`
 ---
+
+## 2026-01-08 - US-C05: Create 'New collection' form
+- Modified `src/components/AddToCollectionModal.tsx`:
+  - Added "+ New Collection" button with dashed border below collection list
+  - Clicking button shows inline form with:
+    - Title field (required) with placeholder
+    - Description textarea (optional)
+    - Visibility toggle buttons (Private/Public) with lock/globe icons
+    - Cancel/Create action buttons
+  - Create button inserts new collection to Supabase via `.insert().select().single()`
+  - New collection auto-added to list and auto-selected
+  - Form resets when cancelled or after successful creation
+- **Learnings:**
+  - Supabase insert + return data: `.insert({...}).select().single()` returns the created row
+  - Toggle button pattern: flex buttons with conditional border/bg classes
+  - Form inside modal: use separate state for form visibility (showNewForm) vs modal visibility (isOpen)
+  - Reset form state in useEffect when modal closes, not just on cancel
+---
+
+## 2026-01-08 - US-C06: Create My Collections page
+- Created `src/app/collections/page.tsx`:
+  - Lists user's collections with title, quote count, visibility icon
+  - Shows follower count for public collections with user icon
+  - Links to collection detail page at /collections/[id]
+  - Sign-in prompt for unauthenticated users
+  - Empty state with CTA to browse quotes
+  - Loading skeleton while fetching
+- Modified `src/components/Navigation.tsx`:
+  - Added Collections nav item between Favorites and Journeys
+  - Used collection/box icon for visual consistency
+- **Learnings:**
+  - Supabase aggregates: `.select('*, collection_follows(count)')` returns `{ count: number }[]`
+  - Need explicit type casting for aggregate responses: `(data as CollectionRow[])`
+  - Use `getSupabase()` not `createClient` - check for null before querying
+  - Follow FavoritesPage pattern for page structure: loading → empty → content states
+---
