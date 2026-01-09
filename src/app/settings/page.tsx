@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { getPreferences, savePreferences, saveTimingCalculationDate, getLastTimingCalculationDate } from '@/lib/preferences';
 import { PageTransition } from '@/components/PageTransition';
 import { useToast } from '@/components/Toast';
@@ -189,6 +190,46 @@ export default function SettingsPage() {
             >
               Saved!
             </div>
+          </div>
+
+          {/* Account link */}
+          <div className="pt-4 border-t border-foreground/10">
+            <Link
+              href="/account"
+              className="flex items-center justify-between py-3 text-foreground/70 hover:text-foreground transition-colors group"
+            >
+              <div className="flex items-center gap-3">
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={1.5}
+                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                  />
+                </svg>
+                <span className="body-text">Account &amp; Sync</span>
+              </div>
+              <svg
+                className="w-5 h-5 text-foreground/40 group-hover:text-foreground/60 transition-colors"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={1.5}
+                  d="M9 5l7 7-7 7"
+                />
+              </svg>
+            </Link>
           </div>
         </div>
       </main>

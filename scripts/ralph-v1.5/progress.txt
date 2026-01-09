@@ -1,7 +1,20 @@
 # Ralph Progress Log - v1.5
-Started: (pending)
+Started: 2026-01-08
 
 ## Codebase Patterns
-(Inherited from previous phases)
+- Supabase client in src/lib/supabase.ts - uses lazy init via getSupabase() to avoid build failures
+- .gitignore allows .env*.example files for documentation
+- Lib files use JSDoc comments for exports
 
+---
+
+## 2026-01-08 - US-S01: Set up Supabase project and auth
+- Installed @supabase/supabase-js
+- Created src/lib/supabase.ts with getSupabase() and isSupabaseConfigured()
+- Added .env.local.example with NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY
+- Updated .gitignore to allow .env*.example
+- **Learnings:**
+  - Cannot throw at module init time when env vars missing - breaks build
+  - Use lazy initialization pattern: getSupabase() returns null if not configured
+  - .env* in .gitignore needs !.env*.example exception
 ---
