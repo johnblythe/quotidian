@@ -147,3 +147,61 @@ Started: 2026-01-08
   - Use composite key quoteId:shownAt.toISOString() for deduplication
   - Append-only data patterns are simpler - no delete logic needed
 ---
+
+## 2026-01-08 - US-S11: Implement offline queue for pending syncs
+- Added pending_syncs table to IndexedDB (version 5 schema)
+- Created PendingSync type with SyncType enum ('preferences' | 'journal' | 'favorites' | 'history')
+- Created src/lib/sync/queue.ts with queue management:
+  - queueSync(type): queues a sync operation, deduplicates by type
+  - processPendingSyncs(): processes all pending syncs when online
+  - syncOrQueue(type): either syncs immediately or queues for later
+  - syncAll(): runs full sync of all data types
+  - setupSyncListeners(): sets up online/offline event handlers
+- Created src/hooks/useSyncStatus.ts hook for reactive sync status
+- Updated Navigation SyncIndicator to show sync status:
+  - Green dot: synced
+  - Yellow dot: pending syncs or offline
+  - Blue pulsing: actively syncing
+- **Learnings:**
+  - Dexie schema versions must repeat all previous stores, not just add new ones
+  - Online/offline detection uses navigator.onLine and window events
+  - Deduplicating by sync type prevents queue bloat (only one pending per type)
+  - useSyncStatus hook auto-processes queue when coming back online
+---
+
+## 2026-01-08 - US-S12: Implement conflict resolution (last-write-wins)
+- Created src/lib/sync/conflicts.ts with centralized conflict resolution:
+  - resolveConflict(): compares timestamps, logs to console.debug, returns winner
+  - getConflictLog(): returns in-memory log of recent conflicts (max 100)
+  - getConflictSummary(): returns aggregate stats by type and winner
+  - clearConflictLog(): clears log for testing
+- Updated src/lib/sync/preferences.ts to use resolveConflict()
+- Updated src/lib/sync/journal.ts to use resolveConflict() in both push and pull
+- Conflict resolution is automatic - no user-facing dialogs
+- **Learnings:**
+  - Centralized conflict module makes logging consistent across all sync types
+  - console.debug for conflict logs - won't show in production unless devtools level lowered
+  - In-memory log capped at 100 entries to avoid memory issues
+  - Favorites and history don't need conflict resolution (set-based and append-only)
+---
+
+## 2026-01-08 - US-S13: Create share card generator (canvas)
+- Created src/lib/shareCard.ts with:
+  - generateShareCard(quote): returns PNG Blob using HTML5 Canvas
+  - generateShareCardDataUrl(quote): returns object URL for preview display
+- Canvas dimensions: 1200x630 (standard OG image size)
+- Layout features:
+  - Background #fafaf8 (matching app warm paper aesthetic)
+  - Quote text in italic Georgia serif, centered
+  - Auto-calculates optimal font size (24-48px) based on text length
+  - Auto-wraps text to fit within padding
+  - Author attribution with em dash below quote
+  - Source displayed if available
+  - "quotidian.app" branding at bottom
+- Helper functions: wrapText() and calculateFontSize() for text layout
+- **Learnings:**
+  - canvas.toBlob() is async - wrap in Promise for clean API
+  - measureText().width returns pixel width for text wrapping logic
+  - Georgia is safe web font that renders on all platforms
+  - lineHeight = fontSize * 1.4 gives good readability for quotes
+---

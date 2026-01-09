@@ -170,8 +170,8 @@
         "npm run typecheck passes"
       ],
       "priority": 11,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Queue in src/lib/sync/queue.ts. Functions: queueSync(), processPendingSyncs(), syncOrQueue(), syncAll(). useSyncStatus hook provides reactive UI state. Navigation SyncIndicator shows green (synced), yellow (pending), or blue pulsing (syncing)."
     },
     {
       "id": "US-S12",
@@ -185,8 +185,8 @@
         "npm run typecheck passes"
       ],
       "priority": 12,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Conflict resolution module at src/lib/sync/conflicts.ts. resolveConflict() compares timestamps and logs to console.debug. In-memory log available via getConflictLog() and getConflictSummary(). Preferences and journal sync services refactored to use the module."
     },
     {
       "id": "US-S13",
@@ -203,8 +203,8 @@
         "npm run typecheck passes"
       ],
       "priority": 13,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Share card generator at src/lib/shareCard.ts. generateShareCard(quote) returns PNG Blob. Uses HTML5 Canvas with 1200x630 dimensions. Auto-wraps text and calculates optimal font size. Georgia serif for quote text, system sans-serif for branding."
     },
     {
       "id": "US-S14",
