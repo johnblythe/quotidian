@@ -4,10 +4,12 @@ import { useState, useEffect } from 'react';
 import { getPreferences, savePreferences } from '@/lib/preferences';
 import { PageTransition } from '@/components/PageTransition';
 import { useToast } from '@/components/Toast';
+import { calculateOptimalTime } from '@/lib/engagement';
 
 export default function SettingsPage() {
   const [name, setName] = useState('');
   const [notificationTime, setNotificationTime] = useState('08:00');
+  const [suggestedTime, setSuggestedTime] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [showSaved, setShowSaved] = useState(false);
@@ -20,10 +22,30 @@ export default function SettingsPage() {
         setName(prefs.name);
         setNotificationTime(prefs.notificationTime);
       }
+
+      // Load suggested time based on engagement patterns
+      const optimal = await calculateOptimalTime();
+      setSuggestedTime(optimal);
+
       setIsLoading(false);
     }
     loadPreferences();
   }, []);
+
+  // Format HH:MM to user-friendly display (e.g., "8:30 AM")
+  const formatTimeDisplay = (time: string): string => {
+    const [hours, minutes] = time.split(':').map(Number);
+    const period = hours >= 12 ? 'PM' : 'AM';
+    const displayHours = hours % 12 || 12;
+    return `${displayHours}:${minutes.toString().padStart(2, '0')} ${period}`;
+  };
+
+  const handleUseSuggestedTime = () => {
+    if (suggestedTime) {
+      setNotificationTime(suggestedTime);
+      showToast('Suggested time applied');
+    }
+  };
 
   const handleSave = async () => {
     setIsSaving(true);
@@ -80,6 +102,23 @@ export default function SettingsPage() {
             <p className="body-text text-xs text-foreground/60">
               We&apos;ll remind you to reflect at this time
             </p>
+
+            {/* Suggested time based on habits */}
+            {suggestedTime && (
+              <div className="mt-4 p-3 bg-foreground/5 rounded-lg">
+                <p className="body-text text-sm text-foreground/80">
+                  Suggested: <span className="font-medium">{formatTimeDisplay(suggestedTime)}</span>
+                  <span className="text-foreground/60"> based on your habits</span>
+                </p>
+                <button
+                  type="button"
+                  onClick={handleUseSuggestedTime}
+                  className="mt-2 body-text text-sm text-foreground/80 underline hover:text-foreground transition-colors"
+                >
+                  Use suggested time
+                </button>
+              </div>
+            )}
           </div>
 
           {/* Save button */}

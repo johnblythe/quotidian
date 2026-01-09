@@ -299,3 +299,35 @@ Started: 2026-01-08
   - recordEngagement only updates if engagedAt not already set (captures first engagement)
   - Date string format YYYY-MM-DD used for day-based upsert pattern
 ---
+
+## 2026-01-08 - US-V17: Calculate suggested notification time
+- What was implemented:
+  - Created calculateOptimalTime() function in src/lib/engagement.ts
+  - Gets engagement records from last 7 days via getRecentEngagements(7)
+  - Filters to only engagements where user actually engaged (has engagedAt)
+  - Requires at least 3 days of data for meaningful average (returns null otherwise)
+  - Averages engagement times by converting to minutes from midnight
+  - Returns formatted HH:MM string
+- Files changed:
+  - src/lib/engagement.ts - added calculateOptimalTime() function
+- **Learnings for future iterations:**
+  - calculateOptimalTime() returns null when insufficient data (< 3 days of engagement)
+  - Time averaging uses minutes from midnight for accurate calculation
+  - Function is async, returns Promise<string | null>
+---
+
+## 2026-01-08 - US-V18: Show timing suggestion in settings
+- What was implemented:
+  - Added suggestedTime state to settings page
+  - Load calculateOptimalTime() on page load (alongside user preferences)
+  - Display "Suggested: X:XX AM based on your habits" only when suggestion available
+  - Added formatTimeDisplay() helper to convert HH:MM to user-friendly format (e.g., "8:30 AM")
+  - Added "Use suggested time" button that updates notificationTime state
+  - Toast notification confirms when suggested time is applied
+- Files changed:
+  - src/app/settings/page.tsx - added import, state, helper functions, and UI for timing suggestion
+- **Learnings for future iterations:**
+  - suggestedTime is only shown when calculateOptimalTime() returns non-null (3+ days engagement data)
+  - Clicking "Use suggested time" only updates state; user must still click "Save" to persist
+  - formatTimeDisplay helper handles 12-hour format with AM/PM conversion
+---
