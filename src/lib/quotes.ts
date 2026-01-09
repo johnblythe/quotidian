@@ -121,3 +121,49 @@ export function getRandomQuoteByAuthor(author: string, excludeId?: string): Quot
 
   return authorQuotes[Math.floor(Math.random() * authorQuotes.length)];
 }
+
+/**
+ * Get quotes by multiple authors
+ */
+export function getQuotesByAuthors(authors: string[]): Quote[] {
+  return quotes.filter(q => authors.includes(q.author));
+}
+
+/**
+ * Get quotes by a specific theme
+ */
+export function getQuotesByTheme(theme: string): Quote[] {
+  return quotes.filter(q => q.themes?.some(t => t === theme));
+}
+
+/**
+ * Get a quote for a journey, excluding already-shown quotes
+ * Supports filtering by author, multiple authors, or theme
+ */
+export function getJourneyQuote(
+  filterType: 'author' | 'authors' | 'theme',
+  filterValue: string | string[],
+  excludeIds: string[]
+): Quote | null {
+  let candidates: Quote[];
+
+  if (filterType === 'author' && typeof filterValue === 'string') {
+    candidates = getQuotesByAuthor(filterValue);
+  } else if (filterType === 'authors' && Array.isArray(filterValue)) {
+    candidates = getQuotesByAuthors(filterValue);
+  } else if (filterType === 'theme' && typeof filterValue === 'string') {
+    candidates = getQuotesByTheme(filterValue);
+  } else {
+    return null;
+  }
+
+  // Exclude already-shown quotes
+  const available = candidates.filter(q => !excludeIds.includes(q.id));
+
+  if (available.length === 0) {
+    // All quotes shown - return null to signal journey completion
+    return null;
+  }
+
+  return available[Math.floor(Math.random() * available.length)];
+}

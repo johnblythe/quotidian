@@ -5,20 +5,25 @@ import dynamic from "next/dynamic";
 import { Quote } from "@/components/Quote";
 import { Onboarding } from "@/components/Onboarding";
 import { Greeting } from "@/components/Greeting";
+import { JourneyHeader } from "@/components/JourneyHeader";
 import { ActionButtons } from "@/components/ActionButtons";
 import { ReflectionEditor } from "@/components/ReflectionEditor";
 import { PageTransition } from "@/components/PageTransition";
 import { QuoteSkeleton } from "@/components/Skeleton";
 import { useToast } from "@/components/Toast";
 import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
-import { getTodaysQuote, getRandomQuote, getRandomAuthor, getTodaysQuoteByAuthor, getRandomQuoteByAuthor } from "@/lib/quotes";
+import { getTodaysQuote, getRandomQuote, getRandomAuthor, getTodaysQuoteByAuthor, getRandomQuoteByAuthor, getJourneyQuote } from "@/lib/quotes";
 import { useKonamiCode } from "@/hooks/useKonamiCode";
 import { hasShownFirstFavoriteConfetti, markFirstFavoriteConfettiShown } from "@/components/Confetti";
 import { getPreferences, markPersonalizationCelebrated, hasPersonalizationCelebrated } from "@/lib/preferences";
 import { checkAlgorithmStatus } from "@/lib/signals";
 import { isFavorite, addFavorite, removeFavorite, getFavorites } from "@/lib/favorites";
 import { getFreshPullsToday, incrementFreshPulls, recordQuoteShown } from "@/lib/history";
-import type { Quote as QuoteType } from "@/types";
+import { getActiveJourney, addQuoteToJourney } from "@/lib/journeys";
+import journeysData from "@/data/journeys.json";
+import type { Quote as QuoteType, JourneyDefinition, UserJourney } from "@/types";
+
+const journeyDefinitions = journeysData as JourneyDefinition[];
 
 // Lazy load rarely-used modal components
 const KeyboardShortcutsHelp = dynamic(() => import("@/components/KeyboardShortcutsHelp").then(mod => ({ default: mod.KeyboardShortcutsHelp })), { ssr: false });
@@ -40,6 +45,8 @@ export default function Home() {
   const [showPhilosopherActivated, setShowPhilosopherActivated] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
   const [showPersonalizationUnlocked, setShowPersonalizationUnlocked] = useState(false);
+  const [activeJourney, setActiveJourney] = useState<UserJourney | null>(null);
+  const [journeyDefinition, setJourneyDefinition] = useState<JourneyDefinition | null>(null);
   const { showToast } = useToast();
 
   // Konami code easter egg
@@ -112,8 +119,31 @@ export default function Home() {
         // Check remaining pulls for today
         const pullsUsed = await getFreshPullsToday();
         setRemainingPulls(Math.max(0, 3 - pullsUsed));
-        // Record today's quote being shown
-        await recordQuoteShown(getTodaysQuote().id, false);
+
+        // Check for active journey
+        const journey = await getActiveJourney();
+        if (journey) {
+          setActiveJourney(journey);
+          const journeyDef = journeyDefinitions.find(j => j.id === journey.journeyId);
+          if (journeyDef) {
+            setJourneyDefinition(journeyDef);
+            // Get a journey-specific quote
+            const journeyQuote = getJourneyQuote(
+              journeyDef.filterType,
+              journeyDef.filterValue,
+              journey.quotesShown
+            );
+            if (journeyQuote) {
+              setCurrentQuote(journeyQuote);
+              // Track this quote in the journey
+              await addQuoteToJourney(journeyQuote.id);
+              await recordQuoteShown(journeyQuote.id, false);
+            }
+          }
+        } else {
+          // Record today's quote being shown (non-journey)
+          await recordQuoteShown(getTodaysQuote().id, false);
+        }
 
         // Check if personalization was just enabled and hasn't been celebrated
         const alreadyCelebrated = await hasPersonalizationCelebrated();
@@ -214,7 +244,16 @@ export default function Home() {
       <PageTransition>
         <div className="flex min-h-screen items-center justify-center">
           <main className="w-full">
-            {userName && <Greeting name={userName} />}
+            {activeJourney && journeyDefinition ? (
+              <JourneyHeader
+                emoji={journeyDefinition.emoji}
+                title={journeyDefinition.title}
+                currentDay={activeJourney.day}
+                totalDays={journeyDefinition.duration}
+              />
+            ) : (
+              userName && <Greeting name={userName} />
+            )}
             <Quote quote={currentQuote} />
             <ActionButtons
               onSave={handleSave}
