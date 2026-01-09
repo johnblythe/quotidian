@@ -1,0 +1,7 @@
+**US-B21 completed.** The archive empty state now shows:
+- Open book icon in a circular background
+- "Your journey begins" heading
+- Helper text explaining the archive purpose
+- CTA link to see today's quote
+
+There are still stories with `passes: false` (US-B22 through US-B25), so the next iteration will pick up US-B22.

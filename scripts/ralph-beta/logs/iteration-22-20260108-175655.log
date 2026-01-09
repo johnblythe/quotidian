@@ -1,0 +1,13 @@
+There are still 3 stories with `passes: false` (US-B23 Accessibility audit, US-B24 Performance optimization, US-B25 Cross-browser testing).
+
+**Summary of US-B22 completion:**
+
+- **Story:** Design and implement empty state for reflections
+- **Implementation:** Added a `ReflectionEmptyState` internal component to `ReflectionEditor.tsx`
+- **Features:**
+  - Shows a subtle pencil icon with the prompt "Wisdom grows when written" in italic serif
+  - Displays when user opens reflection editor on a quote with no saved reflection
+  - Clicking the empty state transitions to the textarea for writing
+  - Tracks `hasStartedWriting` state to avoid showing empty state after user clears their text
+- **Quality:** `npm run typecheck` and `npm run build` both pass
+- **Commit:** `bdb8aad` - feat: US-B22 - Design and implement empty state for reflections

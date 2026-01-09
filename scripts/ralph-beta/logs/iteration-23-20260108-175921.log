@@ -1,0 +1,22 @@
+There are 2 remaining stories. This iteration is complete.
+
+**Summary - US-B23: Accessibility audit and fixes**
+
+Completed all acceptance criteria:
+- **Color contrast:** Fixed low-contrast text (foreground/40 → /60, placeholder /30 → /50)
+- **Focus indicators:** Added global :focus-visible styles for all interactive elements
+- **Screen reader support:** ARIA attributes already present, added skip-to-content link
+- **Keyboard navigation:** Added focus traps to modals with Tab cycling and Escape close
+- **Reduced motion:** All animations respect prefers-reduced-motion
+
+Files modified:
+- `src/app/globals.css` - Added focus-visible styles, skip-to-content, reduced motion
+- `src/app/layout.tsx` - Added skip-to-content link and main-content wrapper
+- `src/components/KeyboardShortcutsHelp.tsx` - Added focus trap
+- `src/components/MilestoneCelebration.tsx` - Added focus trap  
+- `src/components/Toast.tsx` - Added toast-dismiss-btn class for focus
+- `src/components/Onboarding.tsx` - Fixed placeholder contrast
+- `src/components/ReflectionEditor.tsx` - Fixed text contrast
+- `src/app/archive/page.tsx` - Fixed text contrast
+- `src/app/favorites/page.tsx` - Fixed text contrast
+- `src/app/settings/page.tsx` - Fixed text contrast

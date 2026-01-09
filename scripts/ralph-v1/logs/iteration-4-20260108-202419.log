@@ -1,0 +1,6 @@
+**US-V04 Complete.** Implemented the weighted quote selection algorithm with:
+- `selectNextQuote()` function that filters out quotes shown in last 30 days
+- Scoring: base random + theme bonus (+0.5/theme) + author bonus (+0.3) - recency penalty (-0.2)
+- Helper functions for fetching shown quote IDs, favorited authors, and high-affinity themes
+
+The PRD still has 15 stories with `passes: false` (US-V05 through US-V19).

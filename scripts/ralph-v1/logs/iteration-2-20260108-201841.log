@@ -1,0 +1,14 @@
+US-V02 is complete. Let me verify there are more stories to complete by checking the PRD.
+
+There are still many stories with `passes: false` (US-V03 through US-V19), so this iteration is complete but the overall project is not done yet.
+
+**Summary of US-V02 Implementation:**
+
+- Created `src/lib/signals.ts` with `recordSignal()` function and `SIGNAL_WEIGHTS` constant
+- Signal recording integrated into:
+  - `favorites.ts`: 'favorite' (+3) and 'unfavorited' (-2) signals
+  - `journal.ts`: 'reflected' (+2) and 'reflected_long' (+3 when > 500 chars) signals
+  - `history.ts`: 'viewed' (0) and 'another' (-1) signals
+- Updated `page.tsx` to capture the rejected quote ID when user requests another quote
+- All quality checks pass (typecheck and build)
+- Committed: `feat: US-V02 - Record signals on user actions`

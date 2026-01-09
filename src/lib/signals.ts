@@ -1,5 +1,6 @@
 import { db } from './db';
 import { getQuoteById, getAllQuotes } from './quotes';
+import { getPreferences } from './preferences';
 import type { SignalType, Theme, ThemeAffinity, Quote } from '@/types';
 
 /**
@@ -55,6 +56,35 @@ export async function getAllSignals() {
  */
 export async function getSignalCount(): Promise<number> {
   return db.signals.count();
+}
+
+/**
+ * Get the date of the first recorded signal
+ * Used to determine cold start period
+ * @returns Date of first signal, or null if no signals
+ */
+export async function getFirstSignalDate(): Promise<Date | null> {
+  const firstSignal = await db.signals.orderBy('timestamp').first();
+  return firstSignal?.timestamp ?? null;
+}
+
+/**
+ * Check if enough data has been collected for personalization
+ * Requires at least 14 days of signal history
+ * @returns Whether the algorithm should be enabled
+ */
+export async function shouldEnableAlgorithm(): Promise<boolean> {
+  const firstSignalDate = await getFirstSignalDate();
+
+  if (!firstSignalDate) {
+    return false;
+  }
+
+  const daysSinceFirstSignal = Math.floor(
+    (Date.now() - firstSignalDate.getTime()) / (1000 * 60 * 60 * 24)
+  );
+
+  return daysSinceFirstSignal >= 14;
 }
 
 /**
@@ -178,13 +208,63 @@ function scoreQuote(
 }
 
 /**
- * Select next quote using weighted algorithm
+ * Select a random quote from available candidates
+ * @param candidates - Array of quotes to choose from
+ * @returns Randomly selected quote
+ */
+function selectRandomQuote(candidates: Quote[]): Quote {
+  const index = Math.floor(Math.random() * candidates.length);
+  return candidates[index];
+}
+
+/**
+ * Check and potentially update algorithmEnabledAt in preferences
+ * Called when algorithm becomes enabled for the first time
+ */
+async function markAlgorithmEnabled(): Promise<void> {
+  const prefs = await getPreferences();
+  if (prefs && !prefs.algorithmEnabledAt) {
+    await db.preferences.update(prefs.id!, {
+      algorithmEnabledAt: new Date(),
+    });
+  }
+}
+
+/**
+ * Check if user is still in cold start period
+ * Cold start = less than 14 days of signals
+ * @returns Object with isEnabled and wasJustEnabled flags
+ */
+export async function checkAlgorithmStatus(): Promise<{
+  isEnabled: boolean;
+  wasJustEnabled: boolean;
+}> {
+  const prefs = await getPreferences();
+
+  // Already enabled
+  if (prefs?.algorithmEnabledAt) {
+    return { isEnabled: true, wasJustEnabled: false };
+  }
+
+  // Check if should be enabled now
+  const shouldEnable = await shouldEnableAlgorithm();
+
+  if (shouldEnable) {
+    await markAlgorithmEnabled();
+    return { isEnabled: true, wasJustEnabled: true };
+  }
+
+  return { isEnabled: false, wasJustEnabled: false };
+}
+
+/**
+ * Select next quote using weighted algorithm (for personalized users)
  * - Filters out quotes shown in last 30 days
  * - Scores remaining quotes with theme/author bonuses and recency penalty
  * - Returns highest scoring quote
  * @returns Selected quote, or random quote if no valid candidates
  */
-export async function selectNextQuote(): Promise<Quote> {
+async function selectWeightedQuote(): Promise<Quote> {
   const allQuotes = getAllQuotes();
 
   // Get filtering and scoring data
@@ -200,8 +280,7 @@ export async function selectNextQuote(): Promise<Quote> {
 
   // If no candidates (all shown recently), fall back to all quotes
   if (candidates.length === 0) {
-    const index = Math.floor(Math.random() * allQuotes.length);
-    return allQuotes[index];
+    return selectRandomQuote(allQuotes);
   }
 
   // Score each candidate
@@ -217,4 +296,34 @@ export async function selectNextQuote(): Promise<Quote> {
   }
 
   return bestQuote;
+}
+
+/**
+ * Select next quote with cold start handling
+ * - During cold start (<14 days of signals): pure random selection
+ * - After cold start: weighted algorithm based on user preferences
+ * @returns Selected quote and whether algorithm was just enabled
+ */
+export async function selectNextQuote(): Promise<{
+  quote: Quote;
+  algorithmJustEnabled: boolean;
+}> {
+  const allQuotes = getAllQuotes();
+  const { isEnabled, wasJustEnabled } = await checkAlgorithmStatus();
+
+  // Cold start: pure random selection (still filter recently shown)
+  if (!isEnabled) {
+    const shown30Days = await getQuoteIdsShownInDays(30);
+    const candidates = allQuotes.filter(q => !shown30Days.has(q.id));
+
+    const quote = candidates.length > 0
+      ? selectRandomQuote(candidates)
+      : selectRandomQuote(allQuotes);
+
+    return { quote, algorithmJustEnabled: false };
+  }
+
+  // Algorithm enabled: use weighted selection
+  const quote = await selectWeightedQuote();
+  return { quote, algorithmJustEnabled: wasJustEnabled };
 }

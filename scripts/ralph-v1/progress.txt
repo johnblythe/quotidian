@@ -1,7 +1,81 @@
 # Ralph Progress Log - v1
-Started: (pending)
+Started: 2026-01-08
 
 ## Codebase Patterns
-(Inherited from previous phases)
+- Dexie DB in src/lib/db.ts - bump version() when adding tables
+- Types in src/types/index.ts - export interfaces for DB tables
+- Theme type already exists for quote categorization
 
+---
+
+## 2026-01-08 - US-V01: Create signals table in IndexedDB
+- What was implemented:
+  - Added SignalType union type ('favorite', 'reflected', 'reflected_long', 'viewed', 'another', 'unfavorited')
+  - Added Signal interface with fields: id, quoteId, signal, timestamp, themes
+  - Added signals table to Dexie schema (version 2)
+  - Indexed on: id (auto), quoteId, signal, timestamp
+- Files changed:
+  - src/types/index.ts - added SignalType and Signal exports
+  - src/lib/db.ts - added signals table, bumped to version 2
+- **Learnings for future iterations:**
+  - When adding new tables, create version(N+1) with all tables listed (Dexie migration requirement)
+  - Signal themes array stores Theme[] from the quote at signal time
+---
+
+## 2026-01-08 - US-V02: Record signals on user actions
+- What was implemented:
+  - Created src/lib/signals.ts with recordSignal() function and SIGNAL_WEIGHTS constant
+  - Integrated 'favorite' signal (weight: +3) in addFavorite()
+  - Integrated 'unfavorited' signal (weight: -2) in removeFavorite()
+  - Integrated 'reflected' (weight: +2) and 'reflected_long' (weight: +3 when > 500 chars) in saveJournalEntry()
+  - Integrated 'another' signal (weight: -1) in incrementFreshPulls() for rejected quote
+  - Integrated 'viewed' signal (weight: 0) in recordQuoteShown() for non-fresh pulls
+  - Updated page.tsx handleAnother() to pass rejectedQuoteId
+- Files created:
+  - src/lib/signals.ts - signal recording module with weights
+- Files changed:
+  - src/lib/favorites.ts - added recordSignal calls
+  - src/lib/history.ts - added recordSignal calls, modified incrementFreshPulls signature
+  - src/lib/journal.ts - added recordSignal call for new reflections
+  - src/app/page.tsx - updated handleAnother to capture rejected quote ID
+- **Learnings for future iterations:**
+  - Signal for 'another' should capture the rejected quote, not the new one
+  - 'viewed' signal only recorded for non-fresh pulls to avoid double-recording
+  - Signals module exports SIGNAL_WEIGHTS for future algorithm use
+---
+
+## 2026-01-08 - US-V03: Calculate theme affinity scores from signals
+- What was implemented:
+  - Created getThemeAffinities() function in src/lib/signals.ts
+  - Aggregates signal weights by theme using SIGNAL_WEIGHTS constant
+  - Returns sorted array of ThemeAffinity[] (highest score first)
+  - Handles empty signals case (returns empty array)
+  - Added ThemeAffinity interface to src/types/index.ts
+- Files changed:
+  - src/lib/signals.ts - added getThemeAffinities() function
+  - src/types/index.ts - added ThemeAffinity interface export
+- **Learnings for future iterations:**
+  - ThemeAffinity type exported from types for use in algorithm functions
+  - Uses Map<Theme, number> for efficient score aggregation
+  - getAllSignals() already exists for fetching all signal data
+---
+
+## 2026-01-08 - US-V04: Implement weighted quote selection algorithm
+- What was implemented:
+  - Created selectNextQuote() function in src/lib/signals.ts
+  - Helper: getQuoteIdsShownInDays(days) - returns Set of quote IDs from history
+  - Helper: getFavoritedAuthors() - returns Set of authors from user's favorites
+  - Helper: getHighAffinityThemes() - returns Set of themes with positive affinity scores
+  - Helper: scoreQuote() - calculates score with base random + bonuses - penalties
+  - Filters out quotes shown in last 30 days
+  - Theme bonus: +0.5 per matching high-affinity theme
+  - Author bonus: +0.3 if user favorited quotes from same author
+  - Recency penalty: -0.2 if shown in last 60 days
+  - Falls back to random if all quotes shown recently
+- Files changed:
+  - src/lib/signals.ts - added selectNextQuote() and helper functions
+- **Learnings for future iterations:**
+  - Uses Promise.all for parallel data fetching
+  - selectNextQuote() exported for use in quote selection flow
+  - Cold start logic (US-V05) will wrap this function
 ---

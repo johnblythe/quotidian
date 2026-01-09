@@ -40,6 +40,7 @@ export interface UserPreferences {
   name: string;
   notificationTime: string; // HH:MM format
   onboardedAt: Date;
+  algorithmEnabledAt?: Date; // Date when personalization algorithm was enabled
 }
 
 /** A quote saved to favorites */
