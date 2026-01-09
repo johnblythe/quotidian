@@ -144,6 +144,37 @@ export async function getUserCollections(
 }
 
 /**
+ * Update a collection's details
+ * Updates title, description, and visibility in Supabase
+ * @returns Object with success boolean and optional error message
+ */
+export async function updateCollection(
+  collectionId: string,
+  updates: {
+    title?: string;
+    description?: string;
+    visibility?: "private" | "public";
+  }
+): Promise<{ success: boolean; error?: string }> {
+  const supabase = getSupabase();
+  if (!supabase) {
+    return { success: false, error: "Supabase not configured" };
+  }
+
+  const { error } = await supabase
+    .from("collections")
+    .update(updates)
+    .eq("id", collectionId);
+
+  if (error) {
+    console.error("Failed to update collection:", error);
+    return { success: false, error: "Failed to update collection" };
+  }
+
+  return { success: true };
+}
+
+/**
  * Delete a collection
  * Removes the collection from Supabase (cascade deletes follows)
  * @returns Object with success boolean and optional error message

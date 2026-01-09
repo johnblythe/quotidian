@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useAuth } from "@/hooks/useAuth";
 import { getSupabase } from "@/lib/supabase";
 import { getQuoteById } from "@/lib/quotes";
-import { removeQuoteFromCollection, deleteCollection } from "@/lib/collections";
+import { removeQuoteFromCollection, deleteCollection, updateCollection } from "@/lib/collections";
 import { useRouter } from "next/navigation";
 import { Quote } from "@/components/Quote";
 import { PageTransition } from "@/components/PageTransition";
@@ -27,6 +27,11 @@ export default function CollectionDetailPage() {
   const [toast, setToast] = useState<string | null>(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [showEditForm, setShowEditForm] = useState(false);
+  const [editTitle, setEditTitle] = useState("");
+  const [editDescription, setEditDescription] = useState("");
+  const [editVisibility, setEditVisibility] = useState<"private" | "public">("private");
+  const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     const loadCollection = async () => {
@@ -118,6 +123,46 @@ export default function CollectionDetailPage() {
     } else {
       setShowDeleteConfirm(false);
       setToast(result.error || "Failed to delete collection");
+    }
+  };
+
+  // Open edit form and populate fields
+  const openEditForm = () => {
+    if (!collection) return;
+    setEditTitle(collection.title);
+    setEditDescription(collection.description || "");
+    setEditVisibility(collection.visibility);
+    setShowEditForm(true);
+  };
+
+  // Handle save collection edits
+  const handleSaveEdit = async () => {
+    if (!collection || !editTitle.trim()) return;
+
+    setIsSaving(true);
+    const result = await updateCollection(collectionId, {
+      title: editTitle.trim(),
+      description: editDescription.trim() || undefined,
+      visibility: editVisibility,
+    });
+    setIsSaving(false);
+
+    if (result.success) {
+      // Update local state
+      setCollection((prev) =>
+        prev
+          ? {
+              ...prev,
+              title: editTitle.trim(),
+              description: editDescription.trim() || null,
+              visibility: editVisibility,
+            }
+          : null
+      );
+      setShowEditForm(false);
+      setToast("Collection updated");
+    } else {
+      setToast(result.error || "Failed to update collection");
     }
   };
 
@@ -289,26 +334,48 @@ export default function CollectionDetailPage() {
                     Browse quotes
                   </Link>
                   {isOwner && (
-                    <button
-                      onClick={() => setShowDeleteConfirm(true)}
-                      className="inline-flex items-center gap-2 body-text text-xs text-red-500/70 hover:text-red-500 transition-colors"
-                    >
-                      <svg
-                        className="w-4 h-4"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                        aria-hidden="true"
+                    <div className="flex items-center gap-4">
+                      <button
+                        onClick={openEditForm}
+                        className="inline-flex items-center gap-2 body-text text-xs text-foreground/60 hover:text-foreground/80 transition-colors"
                       >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                        />
-                      </svg>
-                      Delete collection
-                    </button>
+                        <svg
+                          className="w-4 h-4"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                          aria-hidden="true"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                          />
+                        </svg>
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => setShowDeleteConfirm(true)}
+                        className="inline-flex items-center gap-2 body-text text-xs text-red-500/70 hover:text-red-500 transition-colors"
+                      >
+                        <svg
+                          className="w-4 h-4"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                          aria-hidden="true"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                          />
+                        </svg>
+                        Delete
+                      </button>
+                    </div>
                   )}
                 </div>
               </div>
@@ -410,26 +477,48 @@ export default function CollectionDetailPage() {
               {quotes.length} quote{quotes.length !== 1 ? "s" : ""}
             </p>
             {isOwner && (
-              <button
-                onClick={() => setShowDeleteConfirm(true)}
-                className="mt-4 inline-flex items-center gap-2 body-text text-xs text-red-500/70 hover:text-red-500 transition-colors"
-              >
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  aria-hidden="true"
+              <div className="mt-4 flex items-center justify-center gap-4">
+                <button
+                  onClick={openEditForm}
+                  className="inline-flex items-center gap-2 body-text text-xs text-foreground/60 hover:text-foreground/80 transition-colors"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                  />
-                </svg>
-                Delete collection
-              </button>
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                    />
+                  </svg>
+                  Edit
+                </button>
+                <button
+                  onClick={() => setShowDeleteConfirm(true)}
+                  className="inline-flex items-center gap-2 body-text text-xs text-red-500/70 hover:text-red-500 transition-colors"
+                >
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                    />
+                  </svg>
+                  Delete
+                </button>
+              </div>
             )}
           </div>
 
@@ -569,6 +658,123 @@ export default function CollectionDetailPage() {
                   className="body-text text-sm bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md transition-colors disabled:opacity-50"
                 >
                   {isDeleting ? "Deleting..." : "Delete"}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Edit collection form modal */}
+        {showEditForm && (
+          <div
+            className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+            onClick={() => setShowEditForm(false)}
+          >
+            <div
+              className="bg-background rounded-lg shadow-xl max-w-sm w-full p-6"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <h3 className="quote-text text-lg text-foreground/80 mb-4">
+                Edit collection
+              </h3>
+              <div className="space-y-4">
+                <div>
+                  <label className="body-text text-xs text-foreground/60 block mb-1">
+                    Title
+                  </label>
+                  <input
+                    type="text"
+                    value={editTitle}
+                    onChange={(e) => setEditTitle(e.target.value)}
+                    className="w-full px-3 py-2 border border-foreground/20 rounded-md bg-transparent body-text text-sm focus:outline-none focus:border-foreground/40"
+                    placeholder="Collection title"
+                    autoFocus
+                  />
+                </div>
+                <div>
+                  <label className="body-text text-xs text-foreground/60 block mb-1">
+                    Description (optional)
+                  </label>
+                  <textarea
+                    value={editDescription}
+                    onChange={(e) => setEditDescription(e.target.value)}
+                    className="w-full px-3 py-2 border border-foreground/20 rounded-md bg-transparent body-text text-sm focus:outline-none focus:border-foreground/40 resize-none"
+                    placeholder="What is this collection about?"
+                    rows={3}
+                  />
+                </div>
+                <div>
+                  <label className="body-text text-xs text-foreground/60 block mb-2">
+                    Visibility
+                  </label>
+                  <div className="flex gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setEditVisibility("private")}
+                      className={`flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-md border body-text text-sm transition-colors ${
+                        editVisibility === "private"
+                          ? "border-foreground/40 bg-foreground/5"
+                          : "border-foreground/20 hover:border-foreground/30"
+                      }`}
+                    >
+                      <svg
+                        className="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                        />
+                      </svg>
+                      Private
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setEditVisibility("public")}
+                      className={`flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-md border body-text text-sm transition-colors ${
+                        editVisibility === "public"
+                          ? "border-foreground/40 bg-foreground/5"
+                          : "border-foreground/20 hover:border-foreground/30"
+                      }`}
+                    >
+                      <svg
+                        className="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                        />
+                      </svg>
+                      Public
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div className="flex gap-3 justify-end mt-6">
+                <button
+                  onClick={() => setShowEditForm(false)}
+                  className="body-text text-sm text-foreground/60 hover:text-foreground/80 px-4 py-2 transition-colors"
+                  disabled={isSaving}
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleSaveEdit}
+                  disabled={isSaving || !editTitle.trim()}
+                  className="body-text text-sm bg-foreground text-background px-4 py-2 rounded-md transition-colors disabled:opacity-50 hover:bg-foreground/90"
+                >
+                  {isSaving ? "Saving..." : "Save"}
                 </button>
               </div>
             </div>

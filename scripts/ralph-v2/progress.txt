@@ -11,7 +11,7 @@ Started: 2026-01-08
 - Foreign keys reference auth.users(id) with ON DELETE CASCADE
 - useAuth hook: `import { useAuth } from '@/hooks/useAuth'` provides `{ user, isLoading, isSupabaseConfigured, isSignedIn }`
 - ActionButtons component takes optional callbacks + boolean props to conditionally render buttons
-- Collections lib: `src/lib/collections.ts` has addQuoteToCollection, removeQuoteFromCollection, getCollection, getUserCollections
+- Collections lib: `src/lib/collections.ts` has addQuoteToCollection, removeQuoteFromCollection, getCollection, getUserCollections, updateCollection, deleteCollection
 
 ---
 
@@ -168,4 +168,47 @@ Started: 2026-01-08
   - Confirmation dialog pattern: fixed inset-0 backdrop + centered modal, click-outside-to-close
   - Local state update after successful API call for instant UI feedback
   - Toast pattern: fixed bottom-4 center with auto-dismiss via setTimeout in useEffect
+---
+
+## 2026-01-08 - US-C10: Implement delete collection
+- Modified `src/lib/collections.ts`:
+  - Added `deleteCollection(collectionId)` function
+  - Uses Supabase `.delete().eq('id', collectionId)`
+  - RLS policy ensures only owner can delete
+  - Cascade delete handles associated collection_follows
+- Modified `src/app/collections/[id]/page.tsx`:
+  - Added delete button with trash icon below quote count
+  - Button only visible to collection owner (isOwner check)
+  - Confirmation dialog with warning message
+  - On success, redirects to /collections via router.push()
+  - Shows error toast on failure
+  - Added delete button to empty collection state too
+- Files changed: `src/lib/collections.ts`, `src/app/collections/[id]/page.tsx`
+- **Learnings:**
+  - Supabase cascade delete via foreign key ON DELETE CASCADE handles related records
+  - Use `useRouter` from next/navigation for programmatic navigation after async action
+  - Include delete option in both empty and non-empty collection states for consistency
+  - Warning text in confirmation dialogs helps prevent accidental deletion
+---
+
+## 2026-01-08 - US-C11: Implement edit collection
+- Modified `src/lib/collections.ts`:
+  - Added `updateCollection(collectionId, updates)` function
+  - Accepts partial updates for title, description, visibility
+  - Uses Supabase `.update(updates).eq('id', collectionId)`
+  - Returns `{ success, error? }` pattern
+- Modified `src/app/collections/[id]/page.tsx`:
+  - Added edit state: showEditForm, editTitle, editDescription, editVisibility, isSaving
+  - Added openEditForm() to populate form with current values
+  - Added handleSaveEdit() to call updateCollection and update local state
+  - Edit button with pencil icon next to delete button (owner only)
+  - Edit form modal with title input, description textarea, visibility toggle
+  - Success toast on save, error toast on failure
+  - Button placement consistent in both empty and non-empty collection states
+- Files changed: `src/lib/collections.ts`, `src/app/collections/[id]/page.tsx`
+- **Learnings:**
+  - Reuse toggle button UI pattern from AddToCollectionModal for visibility
+  - Update local state after successful API call for instant UI feedback
+  - Partial updates in Supabase: just pass the fields you want to change
+  - Form population: set edit state values from collection in openEditForm before showing
 ---
