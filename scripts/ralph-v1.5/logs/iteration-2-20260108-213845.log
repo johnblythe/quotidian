@@ -1,0 +1,11 @@
+There are still 20 stories with `passes: false`. Story US-S02 is complete.
+
+**Summary of US-S02 completion:**
+
+- Created `/account` page with three states:
+  - Supabase not configured (warning message)
+  - Signed out (sign-in prompt)
+  - Signed in (user email, sync status, sign-out button)
+- Added "Account & Sync" link in the Settings page
+- All quality checks pass (typecheck + build)
+- Committed: `feat: US-S02 - Create account settings page`

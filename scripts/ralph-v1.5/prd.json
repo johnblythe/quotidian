@@ -16,8 +16,8 @@
         "npm run typecheck passes"
       ],
       "priority": 1,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Supabase project setup is manual - .env.local.example provided. Client uses lazy initialization to avoid build failures when env vars not set."
     },
     {
       "id": "US-S02",
@@ -31,8 +31,8 @@
         "npm run typecheck passes"
       ],
       "priority": 2,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Account page at /account. Link added to settings page. Shows 3 states: Supabase not configured, signed out, signed in."
     },
     {
       "id": "US-S03",
@@ -47,8 +47,8 @@
         "npm run typecheck passes"
       ],
       "priority": 3,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Sign-in page at /account/signin. Callback handler at /account/callback parses URL hash for tokens."
     },
     {
       "id": "US-S04",
@@ -63,8 +63,8 @@
         "npm run typecheck passes"
       ],
       "priority": 4,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "SignOutButton component already implemented in US-S02. Uses onAuthStateChange to auto-update UI on sign-out. Local IndexedDB data untouched."
     },
     {
       "id": "US-S05",
@@ -77,8 +77,8 @@
         "npm run typecheck passes"
       ],
       "priority": 5,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "useAuth hook in src/hooks/useAuth.ts. Green dot indicator on Settings nav item when signed in. Account page refactored to use useAuth hook."
     },
     {
       "id": "US-S06",
@@ -95,8 +95,8 @@
         "npm run typecheck passes"
       ],
       "priority": 6,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Schema in supabase/migrations/001_initial_schema.sql. TypeScript types in src/types/supabase.ts. All tables have RLS with user-scoped policies."
     },
     {
       "id": "US-S07",
@@ -110,8 +110,8 @@
         "npm run typecheck passes"
       ],
       "priority": 7,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Sync service at src/lib/sync/preferences.ts. Functions: pushPreferences(), pullPreferences(), syncPreferences(). Uses upsert with last-write-wins based on updated_at timestamp. Preserves digest_enabled setting when updating existing remote."
     },
     {
       "id": "US-S08",
@@ -125,8 +125,8 @@
         "npm run typecheck passes"
       ],
       "priority": 8,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Sync service at src/lib/sync/journal.ts. Push/pull/sync functions with last-write-wins conflict resolution based on updated_at timestamp. Uses quote_id as unique key per user."
     },
     {
       "id": "US-S09",
@@ -140,8 +140,8 @@
         "npm run typecheck passes"
       ],
       "priority": 9,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Sync service at src/lib/sync/favorites.ts. Push adds missing to remote, removes unfavorited. Pull adds missing to local, removes deleted remotely. syncFavorites() does pull-then-push for bidirectional sync."
     },
     {
       "id": "US-S10",
@@ -155,8 +155,8 @@
         "npm run typecheck passes"
       ],
       "priority": 10,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Sync service at src/lib/sync/history.ts. Uses quoteId+shownAt as unique key for deduplication. History is append-only (no deletes/conflicts). Push/pull/sync functions follow same pattern as favorites."
     },
     {
       "id": "US-S11",
@@ -170,8 +170,8 @@
         "npm run typecheck passes"
       ],
       "priority": 11,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Queue in src/lib/sync/queue.ts. Functions: queueSync(), processPendingSyncs(), syncOrQueue(), syncAll(). useSyncStatus hook provides reactive UI state. Navigation SyncIndicator shows green (synced), yellow (pending), or blue pulsing (syncing)."
     },
     {
       "id": "US-S12",
@@ -185,8 +185,8 @@
         "npm run typecheck passes"
       ],
       "priority": 12,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Conflict resolution module at src/lib/sync/conflicts.ts. resolveConflict() compares timestamps and logs to console.debug. In-memory log available via getConflictLog() and getConflictSummary(). Preferences and journal sync services refactored to use the module."
     },
     {
       "id": "US-S13",
@@ -203,8 +203,8 @@
         "npm run typecheck passes"
       ],
       "priority": 13,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Share card generator at src/lib/shareCard.ts. generateShareCard(quote) returns PNG Blob. Uses HTML5 Canvas with 1200x630 dimensions. Auto-wraps text and calculates optimal font size. Georgia serif for quote text, system sans-serif for branding."
     },
     {
       "id": "US-S14",
@@ -217,8 +217,8 @@
         "npm run typecheck passes"
       ],
       "priority": 14,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Share button added to ActionButtons component. ShareModal component shows preview of generated share card. Buttons for copy/download/share are placeholder (implemented in US-S15, US-S16, US-S17)."
     },
     {
       "id": "US-S15",
@@ -232,8 +232,8 @@
         "npm run typecheck passes"
       ],
       "priority": 15,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Copy button in ShareModal uses ClipboardItem API for PNG blob. Falls back to text copy if image clipboard not supported. Toast shows success/error status with auto-dismiss."
     },
     {
       "id": "US-S16",
@@ -246,8 +246,8 @@
         "npm run typecheck passes"
       ],
       "priority": 16,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Download button in ShareModal generates fresh PNG blob, creates invisible anchor element with download attribute, triggers click, then cleans up. Filename format: quotidian-{quote.id}.png. Status indicators for downloading/success/error."
     },
     {
       "id": "US-S17",
@@ -261,8 +261,8 @@
         "npm run typecheck passes"
       ],
       "priority": 17,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Share button in ShareModal uses Web Share API with navigator.canShare() feature detection. Shares image + text when supported, falls back to text-only sharing, and displays error message directing to Copy/Download on unsupported browsers. User cancellation handled gracefully (no error shown)."
     },
     {
       "id": "US-S18",
@@ -276,8 +276,8 @@
         "npm run typecheck passes"
       ],
       "priority": 18,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Resend installed. src/lib/email.ts has sendEmail(), sendTestEmail(), isResendConfigured(). Uses lazy init pattern. RESEND_API_KEY added to .env.local.example."
     },
     {
       "id": "US-S19",
@@ -291,8 +291,8 @@
         "npm run typecheck passes"
       ],
       "priority": 19,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Template at src/lib/email/digestTemplate.ts. generateDigestEmail() returns {html, text, subject}. Includes greeting, quote of week, reflection highlight, week stats, CTA button, unsubscribe link. Georgia serif font, warm #fafaf8 background, responsive tables for email clients."
     },
     {
       "id": "US-S20",
@@ -307,8 +307,8 @@
         "npm run typecheck passes"
       ],
       "priority": 20,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Edge Function at supabase/functions/weekly-digest/index.ts. Queries preferences for digest_enabled users, fetches week's data (favorites, journal, history), builds personalized digest, sends via Resend API. Cron setup via pg_cron documented in README. API routes /api/quotes and /api/quotes/[id] added for quote data access."
     },
     {
       "id": "US-S21",
@@ -322,8 +322,8 @@
         "npm run typecheck passes"
       ],
       "priority": 21,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Toggle added to settings page. Shows only when signed in with Supabase. Displays user email. Uses getDigestEnabled/setDigestEnabled functions in sync/preferences.ts. Sign-in prompt shown when not authenticated."
     },
     {
       "id": "US-S22",
@@ -337,8 +337,8 @@
         "npm run typecheck passes"
       ],
       "priority": 22,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Unsubscribe page at /unsubscribe. Token utils in src/lib/unsubscribe.ts (encode/decode base64 user ID). API route POST /api/unsubscribe validates token and updates preferences via service role. Page shows loading/success/error/invalid states with appropriate UI feedback."
     }
   ]
 }

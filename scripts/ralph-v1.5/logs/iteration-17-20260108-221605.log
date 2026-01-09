@@ -1,0 +1,8 @@
+There are still 5 stories with `passes: false` (US-S18 through US-S22). Story US-S17 is now complete.
+
+**Summary of US-S17 implementation:**
+- Added native share (Web Share API) functionality to ShareModal
+- Feature detection: checks `navigator.share` and `navigator.canShare`
+- Shares image + quote text when supported, falls back to text-only, then shows error directing to Copy/Download
+- User cancellation handled gracefully (no error shown)
+- Full status indicators: idle, sharing, success, error

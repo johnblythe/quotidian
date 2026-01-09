@@ -1,0 +1,11 @@
+US-S19 is complete. There are still stories with `passes: false` (US-S20, US-S21, US-S22), so the next iteration will pick up the next story.
+
+**Summary:** Completed US-S19 - Create digest email template
+
+Created `src/lib/email/digestTemplate.ts` with:
+- `DigestData` interface for template input
+- `generateDigestHtml()` - full HTML email with header, greeting, quote of week, reflection highlight, week stats, CTA, footer
+- `generateDigestText()` - plain text fallback
+- `generateDigestEmail()` - convenience function returning {html, text, subject}
+
+The template matches the app's aesthetic (Georgia serif, warm colors, generous whitespace) and is responsive for email clients using table-based layouts and inline styles.

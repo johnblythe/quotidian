@@ -1,0 +1,25 @@
+There's still one story remaining (US-S22: Implement unsubscribe flow). This iteration is complete - another iteration will pick up the next story.
+
+---
+
+**Summary - US-S21 Complete:**
+
+Implemented the digest settings toggle with:
+
+1. **Settings page UI** (`src/app/settings/page.tsx`):
+   - Toggle switch (iOS-style) that shows only when signed in
+   - Displays user's email address
+   - Sign-in prompt when not authenticated
+   - Loading state while saving
+
+2. **Sync functions** (`src/lib/sync/preferences.ts`):
+   - `getDigestEnabled()` - fetches setting from Supabase
+   - `setDigestEnabled(enabled)` - updates/creates preferences row
+
+All acceptance criteria met:
+- ✅ Toggle in settings: 'Send weekly digest'
+- ✅ Requires signed-in account
+- ✅ Show email that will receive digest
+- ✅ Save preference to Supabase
+- ✅ npm run typecheck passes
+- ✅ npm run build passes

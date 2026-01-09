@@ -1,0 +1,12 @@
+**US-S01 completed.** 
+
+There are still 21 stories with `passes: false` (US-S02 through US-S22), so I'll end my response here for the next iteration to continue.
+
+**Summary:**
+- Completed **US-S01: Set up Supabase project and auth**
+- Installed `@supabase/supabase-js`
+- Created `src/lib/supabase.ts` with lazy initialization pattern
+- Added `.env.local.example` with required environment variables
+- Updated `.gitignore` to allow example env files
+- All quality checks pass (typecheck + build)
+- Committed: `3df3539`

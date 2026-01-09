@@ -1,0 +1,10 @@
+US-S09 is complete. There are still stories with `passes: false` (US-S10 through US-S22), so the work continues in the next iteration.
+
+**Completed: US-S09 - Create sync service for favorites**
+
+- Created `src/lib/sync/favorites.ts` with:
+  - `pushFavorites()`: adds local-only favorites to Supabase, removes unfavorited from remote
+  - `pullFavorites()`: adds remote-only favorites to local, removes deleted remotely
+  - `syncFavorites()`: bidirectional sync (pull then push)
+- Typecheck and build pass
+- Committed to `ralph/v1.5-sync` branch

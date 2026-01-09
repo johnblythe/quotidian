@@ -1,0 +1,10 @@
+**US-S15: Implement copy to clipboard** is complete.
+
+**Summary:**
+- Added copy functionality to ShareModal using ClipboardItem API with PNG blob
+- Button shows different states: idle → copying (spinner) → success (checkmark)
+- Toast notification displays success or fallback messages
+- Fallback to text copy when image clipboard not supported or fails
+- All acceptance criteria met: typecheck and build pass
+
+There are still stories with `passes: false` (US-S16 through US-S22), so another iteration will pick up the next story.

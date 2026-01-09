@@ -1,5 +1,5 @@
 import Dexie, { type EntityTable } from 'dexie';
-import type { JournalEntry, UserPreferences, FavoriteQuote, QuoteHistory, Signal, UserJourney, Engagement } from '@/types';
+import type { JournalEntry, UserPreferences, FavoriteQuote, QuoteHistory, Signal, UserJourney, Engagement, PendingSync } from '@/types';
 
 /**
  * Quotidian IndexedDB database using Dexie
@@ -12,6 +12,7 @@ class QuotidianDB extends Dexie {
   signals!: EntityTable<Signal, 'id'>;
   journeys!: EntityTable<UserJourney, 'id'>;
   engagements!: EntityTable<Engagement, 'id'>;
+  pendingSyncs!: EntityTable<PendingSync, 'id'>;
 
   constructor() {
     super('QuotidianDB');
@@ -48,6 +49,17 @@ class QuotidianDB extends Dexie {
       signals: '++id, quoteId, signal, timestamp',
       journeys: '++id, journeyId, startedAt, completedAt',
       engagements: '++id, &date', // &date = unique index on date
+    });
+
+    this.version(5).stores({
+      preferences: '++id',
+      journalEntries: '++id, quoteId, updatedAt',
+      favorites: '++id, quoteId, savedAt',
+      quoteHistory: '++id, quoteId, shownAt',
+      signals: '++id, quoteId, signal, timestamp',
+      journeys: '++id, journeyId, startedAt, completedAt',
+      engagements: '++id, &date',
+      pendingSyncs: '++id, type, createdAt', // Queue for offline sync operations
     });
   }
 }

@@ -1,0 +1,17 @@
+There are still 17 stories with `passes: false`. This iteration is complete.
+
+## Summary
+
+**US-S05: Show signed-in state throughout app** - COMPLETE
+
+Implemented:
+- **useAuth hook** (`src/hooks/useAuth.ts`) - Reusable hook that tracks auth state across the app. Returns `user`, `isLoading`, `isSupabaseConfigured`, and `isSignedIn`.
+- **Sync indicator** - Green dot appears on Settings nav icon when user is signed in (visible in Navigation component)
+- **Account page refactored** - Now uses useAuth hook instead of duplicating auth logic
+
+Files changed:
+- Created: `src/hooks/useAuth.ts`
+- Modified: `src/components/Navigation.tsx`
+- Modified: `src/app/account/page.tsx`
+
+All quality checks pass (typecheck + build). Committed as `feat: US-S05 - Show signed-in state throughout app`.

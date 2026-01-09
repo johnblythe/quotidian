@@ -1,7 +1,391 @@
 # Ralph Progress Log - v1.5
-Started: (pending)
+Started: 2026-01-08
 
 ## Codebase Patterns
-(Inherited from previous phases)
+- Supabase client in src/lib/supabase.ts - uses lazy init via getSupabase() to avoid build failures
+- .gitignore allows .env*.example files for documentation
+- Lib files use JSDoc comments for exports
+- Page styling: PageTransition wrapper, max-w-md mx-auto, font-serif for headings
+- Navigation is at bottom (mobile) / top (desktop) - already has 5 items, add new links in settings instead
+- Auth state: use useAuth() hook from src/hooks/useAuth.ts - returns user, isLoading, isSignedIn, isSupabaseConfigured
+- Supabase types in src/types/supabase.ts - SupabasePreferences, SupabaseJournalEntry, etc.
+- Schema migration in supabase/migrations/001_initial_schema.sql
+- Sync services in src/lib/sync/ - use upsert with onConflict for atomic operations
 
+---
+
+## 2026-01-08 - US-S01: Set up Supabase project and auth
+- Installed @supabase/supabase-js
+- Created src/lib/supabase.ts with getSupabase() and isSupabaseConfigured()
+- Added .env.local.example with NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY
+- Updated .gitignore to allow .env*.example
+- **Learnings:**
+  - Cannot throw at module init time when env vars missing - breaks build
+  - Use lazy initialization pattern: getSupabase() returns null if not configured
+  - .env* in .gitignore needs !.env*.example exception
+---
+
+## 2026-01-08 - US-S02: Create account settings page
+- Created src/app/account/page.tsx with three states:
+  - Supabase not configured: shows info message
+  - Signed out: shows sign-in prompt with link to /account/signin
+  - Signed in: shows email, sync status, sign-out button
+- Added "Account & Sync" link to settings page (src/app/settings/page.tsx)
+- Uses PageTransition and existing styling patterns
+- **Learnings:**
+  - Account link fits better in settings page than crowding nav bar (already 5 items)
+  - Import User type from @supabase/supabase-js for user state typing
+  - onAuthStateChange subscription returns cleanup function for useEffect
+---
+
+## 2026-01-08 - US-S03: Implement magic link sign-in flow
+- Created src/app/account/signin/page.tsx with email input form
+- Uses signInWithOtp({ email }) to send magic link
+- Shows "Check your email" success state after sending
+- Created src/app/account/callback/page.tsx for magic link redirect
+- Callback parses URL hash, detects session, redirects to /account
+- **Learnings:**
+  - signInWithOtp needs emailRedirectTo option for callback URL
+  - Supabase sends tokens in URL hash fragment (after #)
+  - getSession() auto-parses hash tokens when called
+  - Use router.replace() not push() to avoid back-nav loops
+---
+
+## 2026-01-08 - US-S04: Implement sign-out flow
+- Already fully implemented in US-S02 as part of account page
+- SignOutButton component calls supabase.auth.signOut()
+- onAuthStateChange listener auto-updates user state to null
+- UI automatically switches to signed-out state (no redirect needed - same page)
+- Local IndexedDB data not touched during sign-out
+- **Learnings:**
+  - Sign-out flow was already complete from US-S02 implementation
+  - The onAuthStateChange pattern handles all auth state transitions automatically
+  - No explicit redirect needed when already on account page
+---
+
+## 2026-01-08 - US-S05: Show signed-in state throughout app
+- Created src/hooks/useAuth.ts with useAuth() hook
+  - Returns user, isLoading, isSupabaseConfigured, isSignedIn
+  - Subscribes to onAuthStateChange for reactive updates
+  - Handles cleanup with mounted flag pattern
+- Updated Navigation component with SyncIndicator
+  - Green dot appears on Settings icon when signed in
+  - Uses useAuth hook to check auth state
+- Refactored account page to use useAuth hook (removes duplication)
+- **Learnings:**
+  - Reusable auth hook simplifies state management across pages
+  - Sync indicator on existing nav item better than adding new item (nav already crowded)
+  - mounted flag prevents state updates on unmounted components
+---
+
+## 2026-01-08 - US-S06: Create Supabase schema (tables, RLS)
+- Created supabase/migrations/001_initial_schema.sql with:
+  - preferences table (user settings, notification_time, digest_enabled)
+  - journal_entries table (reflections with quote_id, content, timestamps)
+  - favorites table (user_id, quote_id with unique constraint)
+  - quote_history table (quote_id, shown_at, fresh_pull flag)
+  - signals table (quote_id, signal type, themes array)
+- All tables have RLS enabled with user-scoped policies
+- Created src/types/supabase.ts with TypeScript types for all tables
+- Added updated_at trigger function for preferences and journal_entries
+- **Learnings:**
+  - Use UUID for Supabase primary keys, not auto-increment like IndexedDB
+  - UNIQUE(user_id, quote_id) prevents duplicate favorites
+  - themes stored as TEXT[] array in PostgreSQL
+  - Include digest_enabled in preferences for later email digest feature
+---
+
+## 2026-01-08 - US-S07: Create sync service for preferences
+- Created src/lib/sync/preferences.ts with:
+  - pushPreferences(): uploads local IndexedDB prefs to Supabase using upsert
+  - pullPreferences(): downloads from Supabase and merges to local using last-write-wins
+  - syncPreferences(): convenience function that pulls then pushes
+- Conversion functions between local camelCase and Supabase snake_case formats
+- Preserves digest_enabled setting when updating existing remote preferences
+- **Learnings:**
+  - Sync services live in src/lib/sync/ directory
+  - Use upsert with onConflict: 'user_id' for atomic insert-or-update
+  - PGRST116 error code means "no rows returned" - not a real error, just empty result
+  - Preserve remote-only fields (like digest_enabled) when pushing local changes
+---
+
+## 2026-01-08 - US-S08: Create sync service for journal entries
+- Created src/lib/sync/journal.ts with:
+  - pushJournalEntries(): uploads local entries to Supabase
+  - pullJournalEntries(): downloads from Supabase to local
+  - syncJournalEntries(): pulls then pushes for two-way sync
+- Uses quote_id as the unique key per user (each user has one reflection per quote)
+- Last-write-wins conflict resolution based on updated_at timestamp
+- **Learnings:**
+  - Journal entries are identified by (user_id, quote_id) tuple unlike preferences which are 1:1 with user
+  - Need to loop through all entries and compare timestamps individually
+  - Timestamps from Supabase are ISO strings, convert to Date for comparison
+---
+
+## 2026-01-08 - US-S09: Create sync service for favorites
+- Created src/lib/sync/favorites.ts with:
+  - pushFavorites(): adds local-only favorites to Supabase, removes unfavorited from remote
+  - pullFavorites(): adds remote-only favorites to local, removes deleted from local
+  - syncFavorites(): pulls then pushes for bidirectional sync
+- Favorites are simpler than journal entries - just (user_id, quote_id) with saved_at timestamp
+- No conflict resolution needed since favorites are binary (either favorited or not)
+- **Learnings:**
+  - Favorites don't have updated_at - just saved_at for when initially favorited
+  - Unlike journal entries, favorites use set difference logic (add missing, remove absent)
+  - Push removes remote favorites when local unfavorites; pull removes local when remote deleted
+---
+
+## 2026-01-08 - US-S10: Create sync service for quote history
+- Created src/lib/sync/history.ts with:
+  - pushHistory(): uploads local history entries to Supabase
+  - pullHistory(): downloads from Supabase to local
+  - syncHistory(): pulls then pushes for bidirectional sync
+- Uses quoteId+shownAt as composite unique key for deduplication
+- History is append-only (no deletes, no conflicts) - simpler than favorites
+- **Learnings:**
+  - History entries can repeat same quoteId (shown multiple times) unlike favorites
+  - Use composite key quoteId:shownAt.toISOString() for deduplication
+  - Append-only data patterns are simpler - no delete logic needed
+---
+
+## 2026-01-08 - US-S11: Implement offline queue for pending syncs
+- Added pending_syncs table to IndexedDB (version 5 schema)
+- Created PendingSync type with SyncType enum ('preferences' | 'journal' | 'favorites' | 'history')
+- Created src/lib/sync/queue.ts with queue management:
+  - queueSync(type): queues a sync operation, deduplicates by type
+  - processPendingSyncs(): processes all pending syncs when online
+  - syncOrQueue(type): either syncs immediately or queues for later
+  - syncAll(): runs full sync of all data types
+  - setupSyncListeners(): sets up online/offline event handlers
+- Created src/hooks/useSyncStatus.ts hook for reactive sync status
+- Updated Navigation SyncIndicator to show sync status:
+  - Green dot: synced
+  - Yellow dot: pending syncs or offline
+  - Blue pulsing: actively syncing
+- **Learnings:**
+  - Dexie schema versions must repeat all previous stores, not just add new ones
+  - Online/offline detection uses navigator.onLine and window events
+  - Deduplicating by sync type prevents queue bloat (only one pending per type)
+  - useSyncStatus hook auto-processes queue when coming back online
+---
+
+## 2026-01-08 - US-S12: Implement conflict resolution (last-write-wins)
+- Created src/lib/sync/conflicts.ts with centralized conflict resolution:
+  - resolveConflict(): compares timestamps, logs to console.debug, returns winner
+  - getConflictLog(): returns in-memory log of recent conflicts (max 100)
+  - getConflictSummary(): returns aggregate stats by type and winner
+  - clearConflictLog(): clears log for testing
+- Updated src/lib/sync/preferences.ts to use resolveConflict()
+- Updated src/lib/sync/journal.ts to use resolveConflict() in both push and pull
+- Conflict resolution is automatic - no user-facing dialogs
+- **Learnings:**
+  - Centralized conflict module makes logging consistent across all sync types
+  - console.debug for conflict logs - won't show in production unless devtools level lowered
+  - In-memory log capped at 100 entries to avoid memory issues
+  - Favorites and history don't need conflict resolution (set-based and append-only)
+---
+
+## 2026-01-08 - US-S13: Create share card generator (canvas)
+- Created src/lib/shareCard.ts with:
+  - generateShareCard(quote): returns PNG Blob using HTML5 Canvas
+  - generateShareCardDataUrl(quote): returns object URL for preview display
+- Canvas dimensions: 1200x630 (standard OG image size)
+- Layout features:
+  - Background #fafaf8 (matching app warm paper aesthetic)
+  - Quote text in italic Georgia serif, centered
+  - Auto-calculates optimal font size (24-48px) based on text length
+  - Auto-wraps text to fit within padding
+  - Author attribution with em dash below quote
+  - Source displayed if available
+  - "quotidian.app" branding at bottom
+- Helper functions: wrapText() and calculateFontSize() for text layout
+- **Learnings:**
+  - canvas.toBlob() is async - wrap in Promise for clean API
+  - measureText().width returns pixel width for text wrapping logic
+  - Georgia is safe web font that renders on all platforms
+  - lineHeight = fontSize * 1.4 gives good readability for quotes
+---
+
+## 2026-01-08 - US-S14: Add share button to quote display
+- Added onShare prop to ActionButtons component (optional, renders when provided)
+- Created ShareModal component at src/components/ShareModal.tsx:
+  - Shows preview of generated share card on open
+  - Uses generateShareCardDataUrl() for image preview
+  - Placeholder buttons for Copy/Download/Share (implemented in US-S15/S16/S17)
+  - Cleanup: revokes object URL when modal closes
+  - Escape key closes modal
+- Integrated ShareModal into home page (src/app/page.tsx):
+  - Added showShareModal state
+  - handleShare() opens modal
+  - ShareModal lazy-loaded via dynamic import
+- Share icon uses upload/arrow-up design (standard share icon)
+- **Learnings:**
+  - URL.createObjectURL needs cleanup via URL.revokeObjectURL() to prevent memory leaks
+  - Dynamic imports keep bundle small - ShareModal loaded only when needed
+  - Share button is optional in ActionButtons (renders conditionally) for reuse on other pages
+---
+
+## 2026-01-08 - US-S15: Implement copy to clipboard
+- Added copy functionality to ShareModal component
+- Uses ClipboardItem API with image/png blob type for modern browsers
+- Detects browser support: navigator.clipboard.write exists
+- Fallback: copies quote text if image clipboard not supported or fails
+- Toast notification shows:
+  - "Image copied to clipboard!" on success
+  - Fallback message if text was copied instead
+  - Error message if both image and text copy fail
+- Button states: idle (copy icon), copying (spinner), success (checkmark)
+- Auto-dismiss toast after 2-3 seconds
+- **Learnings:**
+  - ClipboardItem API requires fresh blob - can't reuse object URL
+  - navigator.clipboard.write exists in modern browsers but may still fail (permissions, etc.)
+  - Always have text fallback - image clipboard has quirky cross-browser support
+  - Safari requires user gesture and may need different handling in some contexts
+---
+
+## 2026-01-08 - US-S16: Implement download as PNG
+- Added handleDownload function to ShareModal component
+- Generates fresh PNG blob using generateShareCard()
+- Creates invisible anchor element with download attribute
+- Filename format: quotidian-{quote.id}.png
+- Triggers click, then cleans up (removes link, revokes object URL)
+- Status states: idle, downloading, success, error with icon changes
+- Works on mobile and desktop via standard anchor download pattern
+- **Learnings:**
+  - Anchor download attribute is widely supported and works on mobile
+  - Must generate fresh blob (can't use object URL from preview)
+  - Append link to body, click, then remove for reliable downloads
+  - URL.revokeObjectURL cleanup prevents memory leaks
+---
+
+## 2026-01-08 - US-S17: Implement native share (Web Share API)
+- Added handleShare function to ShareModal component
+- Uses Web Share API with feature detection:
+  - Checks navigator.share and navigator.canShare exist
+  - Creates File object from PNG blob for image sharing
+  - Tests canShare(shareData) before attempting share
+- Share hierarchy:
+  1. Try sharing image + text (full support)
+  2. Fallback to text-only sharing if image not supported
+  3. Show error message directing to Copy/Download if API unavailable
+- Handles user cancellation gracefully (AbortError doesn't show as failure)
+- Status states: idle, sharing (spinner), success (checkmark), error (X)
+- Toast shows success message or fallback notification
+- **Learnings:**
+  - Web Share API file sharing requires File object, not just Blob
+  - navigator.canShare() must test with actual shareData to detect file support
+  - AbortError is thrown when user cancels share - not a real error
+  - Safari/iOS has good Web Share support; Chrome desktop varies by OS
+---
+
+## 2026-01-08 - US-S18: Set up Resend integration
+- Installed resend package via npm
+- Created src/lib/email.ts with:
+  - isResendConfigured(): checks if RESEND_API_KEY is set
+  - getResend(): lazy initialization of Resend client
+  - sendEmail(options): generic email sending with full error handling
+  - sendTestEmail(to): convenience function to test configuration
+- Updated .env.local.example with RESEND_API_KEY placeholder
+- Uses same lazy init pattern as Supabase (returns null if not configured)
+- **Learnings:**
+  - Resend SDK uses camelCase (replyTo not reply_to) unlike some API docs
+  - sendEmail returns {success, id?, error?} for clean error handling
+  - Default from address uses onboarding@resend.dev (Resend's sandbox domain)
+---
+
+## 2026-01-08 - US-S19: Create digest email template
+- Created src/lib/email/digestTemplate.ts with:
+  - DigestData interface for template input data
+  - generateDigestHtml(data): returns full HTML email with all sections
+  - generateDigestText(data): returns plain text fallback
+  - generateDigestEmail(data): convenience function returning {html, text, subject}
+- Template sections:
+  - Header with Quotidian branding
+  - Personalized greeting (uses userName if provided)
+  - Quote of the Week section with styled blockquote
+  - Reflection Highlight section with excerpt
+  - Week Stats (quotes viewed, reflections written, favorites saved)
+  - CTA button ("Continue Your Journey")
+  - Footer with unsubscribe link
+- Design matches app aesthetic:
+  - Georgia serif for headers and quotes
+  - Warm #fafaf8 background
+  - #1a1a1a text color
+  - Rounded corners and subtle shadows
+- Email client compatibility:
+  - MSO conditionals for Outlook
+  - Inline styles (no external CSS)
+  - Table-based layout for consistent rendering
+  - Mobile-responsive with @media queries
+  - Preheader text for email previews
+- **Learnings:**
+  - HTML email templates use tables not divs - email clients strip CSS layouts
+  - Inline styles required - many email clients strip <style> blocks
+  - MSO conditionals (<!--[if mso]>) handle Outlook's Word rendering engine
+  - Plain text version essential for spam filters and accessibility
+  - Template strings work well for HTML emails (no React Email needed for simple templates)
+---
+
+## 2026-01-08 - US-S20: Create Supabase Edge Function for weekly send
+- Created supabase/functions/weekly-digest/index.ts Edge Function:
+  - Deno-based TypeScript function for Supabase Edge Functions
+  - POST handler that processes all users with digest_enabled = true
+  - Fetches week's data in parallel (favorites, journal entries, history)
+  - Builds personalized DigestData with quote of week, reflection highlight, stats
+  - Sends email via Resend API with both HTML and plain text versions
+  - Returns summary of processed/sent/failed counts
+- Created API routes for quote data access:
+  - GET /api/quotes - returns all quotes
+  - GET /api/quotes/[id] - returns single quote by ID
+- Updated tsconfig.json to exclude supabase/functions (Deno types conflict)
+- Added README with deployment and cron setup instructions
+- Cron setup: pg_cron schedule for Sunday 8am UTC (documented in README)
+- **Learnings:**
+  - Supabase Edge Functions use Deno runtime, not Node.js
+  - Import from esm.sh URLs for Deno package resolution
+  - tsconfig must exclude supabase/functions to avoid Deno type errors in Next.js
+  - Service role key needed to bypass RLS for querying all users
+  - auth.admin.listUsers() returns all auth users for email lookup
+  - pg_cron extension used for scheduling, setup documented in README
+  - API routes needed for Edge Function to fetch quote data dynamically
+---
+
+## 2026-01-08 - US-S21: Add digest settings toggle
+- Added weekly digest toggle to settings page (src/app/settings/page.tsx):
+  - Toggle switch with iOS-style design using Tailwind
+  - Shows only when Supabase configured AND user signed in
+  - Displays user's email address that will receive digest
+  - Loading state while saving to prevent double-clicks
+- Created helper functions in src/lib/sync/preferences.ts:
+  - getDigestEnabled(): fetches digest_enabled from Supabase preferences
+  - setDigestEnabled(enabled): updates/creates preferences row with digest setting
+- Sign-in prompt shown when Supabase configured but not signed in
+  - Links to /account for authentication
+- **Learnings:**
+  - Toggle switch needs role="switch" and aria-checked for accessibility
+  - Create preferences row if it doesn't exist when toggling digest (user may sign in before syncing)
+  - Show user email in settings so they know where digest will be sent
+---
+
+## 2026-01-08 - US-S22: Implement unsubscribe flow
+- Created src/lib/unsubscribe.ts with token utilities:
+  - generateUnsubscribeToken(): base64 encodes user ID
+  - decodeUnsubscribeToken(): decodes token to user ID
+  - isValidUnsubscribeToken(): validates token decodes to UUID format
+- Created API route POST /api/unsubscribe:
+  - Validates token format and decodes user ID
+  - Uses SUPABASE_SERVICE_ROLE_KEY to bypass RLS
+  - Updates preferences.digest_enabled to false
+- Created /unsubscribe page with Suspense boundary:
+  - Uses useSearchParams() to get token from URL
+  - Calls API to process unsubscription
+  - Shows 4 states: loading, success, error, invalid
+  - Success shows confirmation with link back to app
+  - Error/invalid states direct user to Settings
+- Edge Function already generates unsubscribe URLs with btoa(userId) token
+- **Learnings:**
+  - useSearchParams() requires Suspense boundary in Next.js 14+ for static builds
+  - API routes can use service role key for admin operations
+  - Token validation should check UUID format for security
+  - Unsubscribe API needs service role key (not anon key) to update any user's preferences
 ---

@@ -1,0 +1,10 @@
+There are still 12 stories with `passes: false`. The story US-S10 is complete. Another iteration will pick up US-S11.
+
+**Completed: US-S10 - Create sync service for quote history**
+
+Created `src/lib/sync/history.ts` with:
+- `pushHistory()` - uploads local history to Supabase
+- `pullHistory()` - downloads from Supabase to local  
+- `syncHistory()` - bidirectional sync (pull then push)
+
+Key design: Uses `quoteId:shownAt` as composite key for deduplication since the same quote can be shown multiple times. History is append-only, making it simpler than other sync services (no delete/conflict logic needed).
