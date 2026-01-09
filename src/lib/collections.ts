@@ -199,3 +199,75 @@ export async function deleteCollection(
 
   return { success: true };
 }
+
+/** Collection with follower count for discovery */
+export interface PopularCollection {
+  id: string;
+  user_id: string;
+  title: string;
+  description: string | null;
+  quote_ids: string[];
+  visibility: "private" | "public";
+  created_at: string;
+  updated_at: string;
+  follower_count: number;
+}
+
+/**
+ * Get popular public collections ordered by follower count
+ * @param limit Number of collections to return (default 10)
+ * @returns Array of collections with follower counts
+ */
+export async function getPopularCollections(
+  limit: number = 10
+): Promise<PopularCollection[]> {
+  const supabase = getSupabase();
+  if (!supabase) {
+    return [];
+  }
+
+  // Fetch public collections with follower counts
+  const { data, error } = await supabase
+    .from("collections")
+    .select(`
+      *,
+      collection_follows(count)
+    `)
+    .eq("visibility", "public")
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error("Failed to fetch popular collections:", error);
+    return [];
+  }
+
+  // Transform and sort by follower count
+  type CollectionRow = {
+    id: string;
+    user_id: string;
+    title: string;
+    description: string | null;
+    quote_ids: string[];
+    visibility: "private" | "public";
+    created_at: string;
+    updated_at: string;
+    collection_follows: { count: number }[];
+  };
+
+  const collectionsWithCounts = ((data || []) as CollectionRow[])
+    .map((collection) => ({
+      id: collection.id,
+      user_id: collection.user_id,
+      title: collection.title,
+      description: collection.description,
+      quote_ids: collection.quote_ids,
+      visibility: collection.visibility,
+      created_at: collection.created_at,
+      updated_at: collection.updated_at,
+      follower_count: collection.collection_follows?.[0]?.count || 0,
+    }))
+    .sort((a, b) => b.follower_count - a.follower_count)
+    .slice(0, limit);
+
+  return collectionsWithCounts;
+}

@@ -1,0 +1,9 @@
+US-C10 is complete. There are still stories with `passes: false` (US-C11 through US-C20), so another iteration will continue the work.
+
+**Summary of US-C10: Implement delete collection**
+- Added `deleteCollection` function to `src/lib/collections.ts`
+- Added delete button with trash icon on collection detail page (visible only to owner)
+- Added confirmation dialog with warning about irreversible action
+- Redirects to /collections after successful deletion
+- Works for both empty and non-empty collection states
+- All quality checks pass (typecheck + build)

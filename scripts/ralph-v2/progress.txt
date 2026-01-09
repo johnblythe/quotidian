@@ -212,3 +212,20 @@ Started: 2026-01-08
   - Partial updates in Supabase: just pass the fields you want to change
   - Form population: set edit state values from collection in openEditForm before showing
 ---
+
+## 2026-01-08 - US-C12: Create Discover page
+- Created `src/app/discover/page.tsx`:
+  - PageTransition wrapper for consistent page transitions
+  - Header: "Discover Collections" using quote-text styling
+  - "Popular" section with placeholder (for US-C13)
+  - "New" section with placeholder (for US-C14)
+  - Follows same layout pattern as collections page
+- Modified `src/components/Navigation.tsx`:
+  - Added Discover nav item between Collections and Journeys
+  - Used compass icon (circle with diamond pointer) for visual consistency
+- Files changed: `src/app/discover/page.tsx` (new), `src/components/Navigation.tsx`
+- **Learnings:**
+  - Discover page is public-facing - no auth required, simple structure
+  - Compass icon from Lucide: circle + polygon points
+  - Placeholder pattern: bg-foreground/5 rounded-lg with centered text
+---
