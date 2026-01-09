@@ -213,6 +213,19 @@ export interface PopularCollection {
   follower_count: number;
 }
 
+/** Collection with quote count for "New" section */
+export interface NewCollection {
+  id: string;
+  user_id: string;
+  title: string;
+  description: string | null;
+  quote_ids: string[];
+  visibility: "private" | "public";
+  created_at: string;
+  updated_at: string;
+  quote_count: number;
+}
+
 /**
  * Get popular public collections ordered by follower count
  * @param limit Number of collections to return (default 10)
@@ -268,6 +281,56 @@ export async function getPopularCollections(
     }))
     .sort((a, b) => b.follower_count - a.follower_count)
     .slice(0, limit);
+
+  return collectionsWithCounts;
+}
+
+/**
+ * Get new public collections from the last 30 days, ordered by created_at desc
+ * @param limit Number of collections to return (default 10)
+ * @returns Array of collections with quote counts
+ */
+export async function getNewCollections(
+  limit: number = 10
+): Promise<NewCollection[]> {
+  const supabase = getSupabase();
+  if (!supabase) {
+    return [];
+  }
+
+  // Calculate date 30 days ago
+  const thirtyDaysAgo = new Date();
+  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+  const thirtyDaysAgoISO = thirtyDaysAgo.toISOString();
+
+  // Fetch public collections created in last 30 days
+  const { data, error } = await supabase
+    .from("collections")
+    .select("*")
+    .eq("visibility", "public")
+    .gte("created_at", thirtyDaysAgoISO)
+    .order("created_at", { ascending: false })
+    .limit(limit);
+
+  if (error) {
+    console.error("Failed to fetch new collections:", error);
+    return [];
+  }
+
+  // Transform to include quote_count
+  const collectionsWithCounts = ((data || []) as Collection[]).map(
+    (collection) => ({
+      id: collection.id,
+      user_id: collection.user_id,
+      title: collection.title,
+      description: collection.description,
+      quote_ids: collection.quote_ids,
+      visibility: collection.visibility,
+      created_at: collection.created_at,
+      updated_at: collection.updated_at,
+      quote_count: collection.quote_ids?.length || 0,
+    })
+  );
 
   return collectionsWithCounts;
 }

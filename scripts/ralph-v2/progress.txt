@@ -11,7 +11,9 @@ Started: 2026-01-08
 - Foreign keys reference auth.users(id) with ON DELETE CASCADE
 - useAuth hook: `import { useAuth } from '@/hooks/useAuth'` provides `{ user, isLoading, isSupabaseConfigured, isSignedIn }`
 - ActionButtons component takes optional callbacks + boolean props to conditionally render buttons
-- Collections lib: `src/lib/collections.ts` has addQuoteToCollection, removeQuoteFromCollection, getCollection, getUserCollections, updateCollection, deleteCollection
+- Collections lib: `src/lib/collections.ts` has addQuoteToCollection, removeQuoteFromCollection, getCollection, getUserCollections, updateCollection, deleteCollection, getPopularCollections, getNewCollections
+- PopularCollection type in collections.ts includes follower_count field
+- NewCollection type in collections.ts includes quote_count field
 
 ---
 
@@ -228,4 +230,46 @@ Started: 2026-01-08
   - Discover page is public-facing - no auth required, simple structure
   - Compass icon from Lucide: circle + polygon points
   - Placeholder pattern: bg-foreground/5 rounded-lg with centered text
+---
+
+## 2026-01-08 - US-C13: Implement popular collections query
+- Modified `src/lib/collections.ts`:
+  - Added `PopularCollection` interface with follower_count field
+  - Added `getPopularCollections(limit)` function
+  - Queries public collections with follower counts via aggregate
+  - Sorts by follower_count descending, returns top N
+- Modified `src/app/discover/page.tsx`:
+  - Added state for popularCollections and loadingPopular
+  - Fetches popular collections on mount via useEffect
+  - Replaces placeholder with actual collection cards
+  - Shows loading skeleton during fetch
+  - Shows empty state if no public collections
+  - Each card shows: title, follower count, public icon
+  - Links to collection detail page
+- Files changed: `src/lib/collections.ts`, `src/app/discover/page.tsx`
+- **Learnings:**
+  - Supabase doesn't support ORDER BY aggregate directly, need to sort in JS
+  - Reuse CollectionRow type pattern for aggregate responses
+  - Export both function and type from lib for consumer use
+---
+
+## 2026-01-08 - US-C14: Implement new collections query
+- Modified `src/lib/collections.ts`:
+  - Added `NewCollection` interface with quote_count field
+  - Added `getNewCollections(limit)` function
+  - Filters to public collections from last 30 days via `.gte("created_at", ...)`
+  - Orders by created_at descending with `.limit(limit)` at DB level
+  - Returns collections with quote_count derived from quote_ids.length
+- Modified `src/app/discover/page.tsx`:
+  - Added state for newCollections and loadingNew
+  - Fetches both popular and new collections in parallel via Promise.all
+  - Replaced placeholder with actual collection cards
+  - Each card shows: title, quote count (document icon), public icon
+  - Links to collection detail page
+  - Shows empty state for no new collections in last 30 days
+- Files changed: `src/lib/collections.ts`, `src/app/discover/page.tsx`
+- **Learnings:**
+  - Supabase `.gte("field", isoString)` for date range filtering
+  - Use Promise.all for parallel fetches in useEffect
+  - quote_count can be derived client-side from quote_ids.length - no DB aggregate needed
 ---
