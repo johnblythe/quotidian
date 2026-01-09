@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import type { Quote } from "@/types";
-import { generateShareCardDataUrl } from "@/lib/shareCard";
+import { generateShareCard, generateShareCardDataUrl } from "@/lib/shareCard";
 
 interface ShareModalProps {
   quote: Quote;
@@ -18,6 +18,63 @@ export function ShareModal({ quote, isOpen, onClose }: ShareModalProps) {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [copyStatus, setCopyStatus] = useState<"idle" | "copying" | "success" | "error">("idle");
+  const [copyError, setCopyError] = useState<string | null>(null);
+
+  // Check if browser supports image clipboard
+  const supportsClipboardImage = typeof navigator !== "undefined" &&
+    "clipboard" in navigator &&
+    "write" in navigator.clipboard;
+
+  // Copy image to clipboard
+  const handleCopy = async () => {
+    if (!imageUrl) return;
+
+    setCopyStatus("copying");
+    setCopyError(null);
+
+    try {
+      // Generate a fresh blob for clipboard (can't reuse object URL)
+      const blob = await generateShareCard(quote);
+
+      if (!supportsClipboardImage) {
+        // Fallback: copy quote text instead
+        await navigator.clipboard.writeText(`"${quote.text}" — ${quote.author}`);
+        setCopyStatus("success");
+        setCopyError("Image clipboard not supported. Quote text copied instead.");
+        setTimeout(() => {
+          setCopyStatus("idle");
+          setCopyError(null);
+        }, 3000);
+        return;
+      }
+
+      // Use ClipboardItem API to copy image
+      const clipboardItem = new ClipboardItem({
+        "image/png": blob,
+      });
+
+      await navigator.clipboard.write([clipboardItem]);
+      setCopyStatus("success");
+      setTimeout(() => setCopyStatus("idle"), 2000);
+    } catch (err) {
+      console.error("Failed to copy to clipboard:", err);
+      setCopyStatus("error");
+
+      // Fallback: try copying text
+      try {
+        await navigator.clipboard.writeText(`"${quote.text}" — ${quote.author}`);
+        setCopyError("Couldn't copy image. Quote text copied instead.");
+      } catch {
+        setCopyError("Failed to copy. Please try downloading instead.");
+      }
+
+      setTimeout(() => {
+        setCopyStatus("idle");
+        setCopyError(null);
+      }, 3000);
+    }
+  };
 
   // Generate share card when modal opens
   useEffect(() => {
@@ -117,29 +174,82 @@ export function ShareModal({ quote, isOpen, onClose }: ShareModalProps) {
           </div>
         </div>
 
+        {/* Toast notification for copy status */}
+        {(copyStatus === "success" || copyStatus === "error") && (
+          <div className="px-4">
+            <div
+              className={`px-4 py-2 rounded-md text-sm text-center ${
+                copyStatus === "success"
+                  ? "bg-green-100 text-green-800"
+                  : "bg-red-100 text-red-800"
+              }`}
+            >
+              {copyStatus === "success" && !copyError
+                ? "Image copied to clipboard!"
+                : copyError || "Failed to copy"}
+            </div>
+          </div>
+        )}
+
         {/* Actions */}
         <div className="p-4 pt-0 flex flex-wrap gap-3 justify-center">
           <button
-            disabled={!imageUrl}
+            onClick={handleCopy}
+            disabled={!imageUrl || copyStatus === "copying"}
             className="btn-nav px-4 py-2 text-sm border border-foreground/20 rounded-md hover:bg-foreground/5 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
-            aria-label="Copy image (coming soon)"
-            title="Coming soon"
+            aria-label="Copy image to clipboard"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
-              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
-            </svg>
-            Copy
+            {copyStatus === "copying" ? (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="animate-spin"
+              >
+                <circle cx="12" cy="12" r="10" opacity="0.25" />
+                <path d="M12 2a10 10 0 0 1 10 10" />
+              </svg>
+            ) : copyStatus === "success" ? (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+            ) : (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+              </svg>
+            )}
+            {copyStatus === "copying"
+              ? "Copying..."
+              : copyStatus === "success"
+              ? "Copied!"
+              : "Copy"}
           </button>
           <button
             disabled={!imageUrl}
