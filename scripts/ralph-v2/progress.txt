@@ -11,6 +11,7 @@ Started: 2026-01-08
 - Foreign keys reference auth.users(id) with ON DELETE CASCADE
 - useAuth hook: `import { useAuth } from '@/hooks/useAuth'` provides `{ user, isLoading, isSupabaseConfigured, isSignedIn }`
 - ActionButtons component takes optional callbacks + boolean props to conditionally render buttons
+- Collections lib: `src/lib/collections.ts` has addQuoteToCollection, removeQuoteFromCollection, getCollection, getUserCollections
 
 ---
 
@@ -135,4 +136,20 @@ Started: 2026-01-08
   - RLS automatically filters - if collection not found, could be private or deleted
   - Supabase error code "PGRST116" = row not found in .single() query
   - Track isOwner via `user?.id === collection.user_id` for conditional UI
+---
+
+## 2026-01-08 - US-C08: Implement add quote to collection
+- Created `src/lib/collections.ts`:
+  - `addQuoteToCollection(collectionId, quoteId)` - adds quote, prevents duplicates
+  - `removeQuoteFromCollection(collectionId, quoteId)` - removes quote from array
+  - `getCollection(collectionId)` - fetches single collection
+  - `getUserCollections(userId)` - fetches all user's collections
+- Updated `src/components/AddToCollectionModal.tsx`:
+  - Imported and uses `addQuoteToCollection` from lib
+  - Simplified `handleConfirm` to use the extracted function
+  - Success toast already shows via `onSuccess` callback
+- **Learnings:**
+  - Extract Supabase operations to `src/lib/` for reusability
+  - Return `{ success: boolean; error?: string }` pattern for async operations
+  - Keep local duplicate check for immediate feedback, lib does server-side check
 ---

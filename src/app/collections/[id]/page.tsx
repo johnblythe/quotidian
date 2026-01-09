@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useAuth } from "@/hooks/useAuth";
 import { getSupabase } from "@/lib/supabase";
 import { getQuoteById } from "@/lib/quotes";
+import { removeQuoteFromCollection } from "@/lib/collections";
 import { Quote } from "@/components/Quote";
 import { PageTransition } from "@/components/PageTransition";
 import type { Collection } from "@/types";
@@ -19,6 +20,9 @@ export default function CollectionDetailPage() {
   const [quotes, setQuotes] = useState<(QuoteType | undefined)[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [quoteToRemove, setQuoteToRemove] = useState<QuoteType | null>(null);
+  const [isRemoving, setIsRemoving] = useState(false);
+  const [toast, setToast] = useState<string | null>(null);
 
   useEffect(() => {
     const loadCollection = async () => {
@@ -61,6 +65,41 @@ export default function CollectionDetailPage() {
       loadCollection();
     }
   }, [collectionId, authLoading]);
+
+  // Auto-hide toast
+  useEffect(() => {
+    if (toast) {
+      const timer = setTimeout(() => setToast(null), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [toast]);
+
+  // Handle remove quote from collection
+  const handleRemoveQuote = async () => {
+    if (!quoteToRemove || !collection) return;
+
+    setIsRemoving(true);
+    const result = await removeQuoteFromCollection(collectionId, quoteToRemove.id);
+    setIsRemoving(false);
+
+    if (result.success) {
+      // Update local state
+      setQuotes((prev) => prev.filter((q) => q?.id !== quoteToRemove.id));
+      setCollection((prev) =>
+        prev
+          ? {
+              ...prev,
+              quote_ids: prev.quote_ids.filter((id) => id !== quoteToRemove.id),
+            }
+          : null
+      );
+      setToast("Quote removed from collection");
+    } else {
+      setToast(result.error || "Failed to remove quote");
+    }
+
+    setQuoteToRemove(null);
+  };
 
   // Loading state
   if (loading || authLoading) {
@@ -297,7 +336,30 @@ export default function CollectionDetailPage() {
                 className="border-b border-foreground/10 pb-6"
               >
                 {quote ? (
-                  <Quote quote={quote} />
+                  <div className="relative">
+                    <Quote quote={quote} />
+                    {isOwner && (
+                      <button
+                        onClick={() => setQuoteToRemove(quote)}
+                        className="absolute top-0 right-0 p-2 text-foreground/30 hover:text-red-500 transition-colors"
+                        aria-label="Remove from collection"
+                      >
+                        <svg
+                          className="w-5 h-5"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M6 18L18 6M6 6l12 12"
+                          />
+                        </svg>
+                      </button>
+                    )}
+                  </div>
                 ) : (
                   <p className="body-text text-foreground/60 italic text-center py-8">
                     Quote no longer available
@@ -331,6 +393,50 @@ export default function CollectionDetailPage() {
             </Link>
           </div>
         </div>
+
+        {/* Remove confirmation dialog */}
+        {quoteToRemove && (
+          <div
+            className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+            onClick={() => setQuoteToRemove(null)}
+          >
+            <div
+              className="bg-background rounded-lg shadow-xl max-w-sm w-full p-6"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <h3 className="quote-text text-lg text-foreground/80 mb-4">
+                Remove from collection?
+              </h3>
+              <p className="body-text text-foreground/60 text-sm mb-6">
+                &ldquo;{quoteToRemove.text.slice(0, 60)}
+                {quoteToRemove.text.length > 60 ? "..." : ""}&rdquo;
+              </p>
+              <div className="flex gap-3 justify-end">
+                <button
+                  onClick={() => setQuoteToRemove(null)}
+                  className="body-text text-sm text-foreground/60 hover:text-foreground/80 px-4 py-2 transition-colors"
+                  disabled={isRemoving}
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleRemoveQuote}
+                  disabled={isRemoving}
+                  className="body-text text-sm bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md transition-colors disabled:opacity-50"
+                >
+                  {isRemoving ? "Removing..." : "Remove"}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Toast notification */}
+        {toast && (
+          <div className="fixed bottom-4 left-1/2 -translate-x-1/2 bg-foreground text-background px-4 py-2 rounded-lg shadow-lg body-text text-sm z-50">
+            {toast}
+          </div>
+        )}
       </div>
     </PageTransition>
   );
