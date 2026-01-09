@@ -134,3 +134,16 @@ Started: 2026-01-08
   - Unlike journal entries, favorites use set difference logic (add missing, remove absent)
   - Push removes remote favorites when local unfavorites; pull removes local when remote deleted
 ---
+
+## 2026-01-08 - US-S10: Create sync service for quote history
+- Created src/lib/sync/history.ts with:
+  - pushHistory(): uploads local history entries to Supabase
+  - pullHistory(): downloads from Supabase to local
+  - syncHistory(): pulls then pushes for bidirectional sync
+- Uses quoteId+shownAt as composite unique key for deduplication
+- History is append-only (no deletes, no conflicts) - simpler than favorites
+- **Learnings:**
+  - History entries can repeat same quoteId (shown multiple times) unlike favorites
+  - Use composite key quoteId:shownAt.toISOString() for deduplication
+  - Append-only data patterns are simpler - no delete logic needed
+---

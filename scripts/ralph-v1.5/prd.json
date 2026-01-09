@@ -155,8 +155,8 @@
         "npm run typecheck passes"
       ],
       "priority": 10,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Sync service at src/lib/sync/history.ts. Uses quoteId+shownAt as unique key for deduplication. History is append-only (no deletes/conflicts). Push/pull/sync functions follow same pattern as favorites."
     },
     {
       "id": "US-S11",
