@@ -314,6 +314,13 @@ export default function SettingsPage() {
               </svg>
             </Link>
           </div>
+
+          {/* Affiliate disclosure */}
+          <div className="pt-8 mt-4">
+            <p className="body-text text-[10px] text-foreground/30 text-center leading-relaxed">
+              Some links to source materials are affiliate links. We may earn a small commission if you purchase through them, at no extra cost to you.
+            </p>
+          </div>
         </div>
       </main>
     </PageTransition>

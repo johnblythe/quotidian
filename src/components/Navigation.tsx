@@ -18,12 +18,12 @@ const navItems: NavItem[] = [
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        width="20"
-        height="20"
+        width="14"
+        height="14"
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
-        strokeWidth="1.5"
+        strokeWidth="1"
         strokeLinecap="round"
         strokeLinejoin="round"
       >
@@ -38,12 +38,12 @@ const navItems: NavItem[] = [
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        width="20"
-        height="20"
+        width="14"
+        height="14"
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
-        strokeWidth="1.5"
+        strokeWidth="1"
         strokeLinecap="round"
         strokeLinejoin="round"
       >
@@ -58,12 +58,12 @@ const navItems: NavItem[] = [
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        width="20"
-        height="20"
+        width="14"
+        height="14"
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
-        strokeWidth="1.5"
+        strokeWidth="1"
         strokeLinecap="round"
         strokeLinejoin="round"
       >
@@ -77,12 +77,12 @@ const navItems: NavItem[] = [
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        width="20"
-        height="20"
+        width="14"
+        height="14"
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
-        strokeWidth="1.5"
+        strokeWidth="1"
         strokeLinecap="round"
         strokeLinejoin="round"
       >
@@ -96,12 +96,12 @@ const navItems: NavItem[] = [
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        width="20"
-        height="20"
+        width="14"
+        height="14"
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
-        strokeWidth="1.5"
+        strokeWidth="1"
         strokeLinecap="round"
         strokeLinejoin="round"
       >
@@ -116,12 +116,12 @@ const navItems: NavItem[] = [
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        width="20"
-        height="20"
+        width="14"
+        height="14"
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
-        strokeWidth="1.5"
+        strokeWidth="1"
         strokeLinecap="round"
         strokeLinejoin="round"
       >
@@ -137,12 +137,12 @@ const navItems: NavItem[] = [
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        width="20"
-        height="20"
+        width="14"
+        height="14"
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
-        strokeWidth="1.5"
+        strokeWidth="1"
         strokeLinecap="round"
         strokeLinejoin="round"
       >
@@ -198,9 +198,9 @@ export function Navigation() {
   const pathname = usePathname();
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-background border-t border-foreground/10 lg:top-0 lg:bottom-auto lg:border-t-0 lg:border-b z-50 nav-safe-area lg:pb-0">
-      <div className="max-w-2xl mx-auto px-4 safe-area-inset-x">
-        <ul className="flex items-center justify-around lg:justify-center lg:gap-12 py-2 lg:py-3">
+    <nav className="fixed bottom-0 left-0 right-0 bg-background/80 backdrop-blur-sm border-t border-foreground/5 lg:top-0 lg:bottom-auto lg:border-t-0 lg:border-b z-50 nav-safe-area lg:pb-0">
+      <div className="max-w-2xl mx-auto px-2 safe-area-inset-x">
+        <ul className="flex items-center justify-around lg:justify-center lg:gap-6 py-1 lg:py-1.5">
           {navItems.map((item) => {
             const isActive = pathname === item.href;
             const isSettings = item.href === "/settings";
@@ -208,15 +208,16 @@ export function Navigation() {
               <li key={item.href}>
                 <Link
                   href={item.href}
-                  className={`btn-nav flex flex-col items-center gap-1 px-3 py-1 relative ${
+                  className={`btn-nav flex items-center justify-center p-2 relative transition-all duration-200 ease-out ${
                     isActive
-                      ? "text-foreground"
-                      : "text-foreground/50 hover:text-foreground/80"
+                      ? "text-foreground opacity-100 scale-105"
+                      : "text-foreground/25 hover:text-foreground/50 hover:scale-105"
                   }`}
                   aria-current={isActive ? "page" : undefined}
+                  aria-label={item.label}
+                  title={item.label}
                 >
                   {item.icon}
-                  <span className="text-xs body-text">{item.label}</span>
                   {isSettings && <SyncIndicator />}
                 </Link>
               </li>
