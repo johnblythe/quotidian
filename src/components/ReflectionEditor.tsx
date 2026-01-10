@@ -3,7 +3,6 @@
 import { useState, useRef, useEffect, useMemo, useCallback } from "react";
 import dynamic from "next/dynamic";
 import { saveJournalEntry, getJournalEntry, getTotalReflectionCount } from "@/lib/journal";
-import { useToast } from "@/components/Toast";
 import {
   shouldShowMilestone,
   markMilestoneShown,
@@ -76,7 +75,6 @@ export function ReflectionEditor({
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const debounceRef = useRef<NodeJS.Timeout | null>(null);
   const savedTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const { showToast } = useToast();
 
   const editorState = useMemo(() => getEditorState(content.length), [content.length]);
   const wordCount = useMemo(() => countWords(content), [content]);
@@ -115,34 +113,37 @@ export function ReflectionEditor({
       }
 
       debounceRef.current = setTimeout(async () => {
-        const isNewEntry = await saveJournalEntry(quoteId, newContent);
+        try {
+          const isNewEntry = await saveJournalEntry(quoteId, newContent);
 
-        // Show saved indicator
-        setShowSaved(true);
-        showToast("Reflection saved");
+          // Show saved indicator
+          setShowSaved(true);
 
-        // Check for milestone celebration on new entries
-        if (isNewEntry) {
-          const count = await getTotalReflectionCount();
-          const milestone = shouldShowMilestone(count);
-          if (milestone) {
-            setMilestoneToShow(milestone);
-            markMilestoneShown(milestone);
+          // Check for milestone celebration on new entries
+          if (isNewEntry) {
+            const count = await getTotalReflectionCount();
+            const milestone = shouldShowMilestone(count);
+            if (milestone) {
+              setMilestoneToShow(milestone);
+              markMilestoneShown(milestone);
+            }
           }
-        }
 
-        // Clear any existing saved timeout
-        if (savedTimeoutRef.current) {
-          clearTimeout(savedTimeoutRef.current);
-        }
+          // Clear any existing saved timeout
+          if (savedTimeoutRef.current) {
+            clearTimeout(savedTimeoutRef.current);
+          }
 
-        // Hide saved indicator after 2 seconds
-        savedTimeoutRef.current = setTimeout(() => {
-          setShowSaved(false);
-        }, 2000);
+          // Hide saved indicator after 1.5 seconds (brief whisper)
+          savedTimeoutRef.current = setTimeout(() => {
+            setShowSaved(false);
+          }, 1500);
+        } catch (error) {
+          console.error('Failed to save reflection:', error);
+        }
       }, 1000); // 1 second debounce
     },
-    [quoteId, showToast]
+    [quoteId]
   );
 
   // Cleanup timeouts on unmount
@@ -231,7 +232,7 @@ export function ReflectionEditor({
               className={`w-full bg-transparent resize-none outline-none
                          font-serif leading-relaxed
                          placeholder:text-foreground/50
-                         border-none focus:ring-0
+                         border-none focus:ring-0 focus:outline-none focus:border-none
                          textarea-smooth-resize ${
                 editorState === "minimal"
                   ? "min-h-[80px] text-base"
@@ -241,24 +242,20 @@ export function ReflectionEditor({
               }`}
               data-quote-id={quoteId}
             />
-            <div className="flex justify-between items-center text-sm text-foreground/60">
-              <span
-                className={`transition-opacity duration-300 ${
-                  showSaved ? "opacity-100" : "opacity-0"
-                }`}
-              >
-                Saved
-              </span>
-              <span
-                className={`transition-opacity duration-300 ${
-                  editorState === "focused" ? "opacity-100" : "opacity-0"
-                }`}
-              >
-                {wordCount} {wordCount === 1 ? "word" : "words"}
-              </span>
-            </div>
           </>
         )}
+      </div>
+
+      {/* Peripheral save indicator - fixed to viewport edge, Tesla-style */}
+      <div
+        className={`fixed bottom-20 right-4 transition-all duration-500 ease-out ${
+          showSaved
+            ? "opacity-50 translate-x-0"
+            : "opacity-0 translate-x-2"
+        }`}
+        aria-hidden="true"
+      >
+        <div className="w-1.5 h-1.5 rounded-full bg-foreground/60" />
       </div>
 
       <MilestoneCelebration

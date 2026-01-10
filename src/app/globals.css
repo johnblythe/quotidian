@@ -182,10 +182,106 @@ body {
   }
 }
 
+/* ===========================================
+   REFLECTION MODE ANIMATIONS
+   =========================================== */
+
+/* Custom easing for organic, flowing motion - like water */
+:root {
+  --ease-fluid: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-gentle: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --ease-breathe: cubic-bezier(0.45, 0, 0.15, 1);
+}
+
+/* Reflection mode - slow, flowing transitions like water */
+.reflection-fade {
+  transition:
+    opacity 1000ms var(--ease-breathe),
+    transform 1200ms var(--ease-gentle),
+    filter 1000ms var(--ease-fluid);
+}
+
+.reflection-fade-delay-1 {
+  transition-delay: 0ms;
+}
+
+.reflection-fade-delay-2 {
+  transition-delay: 150ms;
+}
+
+.reflection-fade-delay-3 {
+  transition-delay: 300ms;
+}
+
+/* Active reflection state styles - subtle, dreamlike */
+.reflection-active-greeting {
+  opacity: 0.25;
+  transform: scale(0.97) translateY(-12px);
+  filter: blur(2px);
+}
+
+.reflection-active-quote {
+  opacity: 0.45;
+  transform: scale(0.98) translateY(-4px);
+}
+
+.reflection-active-actions {
+  opacity: 0.2;
+  transform: scale(0.95) translateY(8px);
+  filter: blur(1px);
+}
+
+/* Reflection editor entrance - gentle rise like a bubble */
+.reflection-editor-enter {
+  animation: reflection-editor-in 900ms var(--ease-breathe) forwards;
+  animation-delay: 200ms;
+  opacity: 0;
+}
+
+@keyframes reflection-editor-in {
+  0% {
+    opacity: 0;
+    transform: translateY(30px) scale(0.97);
+  }
+  60% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Main container shift when reflecting - slow drift */
+.reflection-container {
+  transition:
+    padding 1000ms var(--ease-breathe),
+    align-items 1000ms var(--ease-breathe);
+}
+
+.reflection-container-active {
+  padding-top: 2rem;
+}
+
+@media (min-width: 1024px) {
+  .reflection-container-active {
+    padding-top: 4rem;
+  }
+}
+
 /* Smooth textarea auto-resize */
 .textarea-smooth-resize {
   transition: height 150ms ease-out;
   overflow: hidden;
+}
+
+/* Remove focus outline from reflection textarea - it's a content area, not a button */
+.textarea-smooth-resize,
+.textarea-smooth-resize:focus,
+.textarea-smooth-resize:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+  border: none !important;
 }
 
 /* Respect reduced motion for textarea */

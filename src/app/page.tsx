@@ -367,41 +367,55 @@ export default function Home() {
   return (
     <>
       <PageTransition>
-        <div className="flex min-h-screen items-center justify-center">
+        <div className={`flex min-h-screen reflection-container ${
+          showReflection
+            ? "items-start reflection-container-active"
+            : "items-center justify-center"
+        }`}>
           <main className="w-full">
-            {activeJourney && journeyDefinition ? (
-              <JourneyHeader
-                emoji={journeyDefinition.emoji}
-                title={journeyDefinition.title}
-                currentDay={activeJourney.day}
-                totalDays={journeyDefinition.duration}
-                onExit={handleExitJourney}
+            {/* Greeting - fades first with slight upward drift */}
+            <div className={`reflection-fade reflection-fade-delay-1 ${showReflection ? "reflection-active-greeting" : ""}`}>
+              {activeJourney && journeyDefinition ? (
+                <JourneyHeader
+                  emoji={journeyDefinition.emoji}
+                  title={journeyDefinition.title}
+                  currentDay={activeJourney.day}
+                  totalDays={journeyDefinition.duration}
+                  onExit={handleExitJourney}
+                />
+              ) : activeJourney && journeyCollection ? (
+                <JourneyHeader
+                  emoji="📚"
+                  title={journeyCollection.title}
+                  currentDay={activeJourney.day}
+                  totalDays={journeyCollection.quote_ids.length}
+                  onExit={handleExitJourney}
+                />
+              ) : (
+                userName && <Greeting name={userName} />
+              )}
+            </div>
+            {/* Quote - fades second, stays more visible as context */}
+            <Quote quote={currentQuote} isReflecting={showReflection} />
+            {/* Actions - fade last and most dramatically */}
+            <div className={`reflection-fade reflection-fade-delay-3 ${showReflection ? "reflection-active-actions" : ""}`}>
+              <ActionButtons
+                onSave={handleSave}
+                onReflect={handleReflect}
+                onAnother={handleAnother}
+                onShare={handleShare}
+                onAddToCollection={handleAddToCollection}
+                isSaved={isSaved}
+                isReflecting={showReflection}
+                remainingPulls={remainingPulls}
+                isSignedIn={isSignedIn}
               />
-            ) : activeJourney && journeyCollection ? (
-              <JourneyHeader
-                emoji="📚"
-                title={journeyCollection.title}
-                currentDay={activeJourney.day}
-                totalDays={journeyCollection.quote_ids.length}
-                onExit={handleExitJourney}
-              />
-            ) : (
-              userName && <Greeting name={userName} />
-            )}
-            <Quote quote={currentQuote} />
-            <ActionButtons
-              onSave={handleSave}
-              onReflect={handleReflect}
-              onAnother={handleAnother}
-              onShare={handleShare}
-              onAddToCollection={handleAddToCollection}
-              isSaved={isSaved}
-              isReflecting={showReflection}
-              remainingPulls={remainingPulls}
-              isSignedIn={isSignedIn}
-            />
+            </div>
+            {/* Reflection editor - slides up gracefully */}
             {showReflection && (
-              <ReflectionEditor quoteId={currentQuote.id} />
+              <div className="reflection-editor-enter">
+                <ReflectionEditor quoteId={currentQuote.id} />
+              </div>
             )}
           </main>
         </div>
